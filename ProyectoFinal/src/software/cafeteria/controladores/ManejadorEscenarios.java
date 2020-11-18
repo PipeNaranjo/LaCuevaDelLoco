@@ -44,10 +44,11 @@ public class ManejadorEscenarios {
 	private ReciboController facturaControlador;
 	private Recibo reciboTemp;
 	public static InformeFiscal informe;
-	private String rutaRecibos = System.getProperty("user.home") + "/Desktop/recibos/";
-	private String rutaInformesFiscales = System.getProperty("user.home") + "/Desktop/informesFiscales/";
+	private String rutaRecibos = System.getProperty("user.home") + "/Desktop/Facturas/";
+	private String rutaInformesFiscales = System.getProperty("user.home")
+			+ "/Desktop/informesFiscales (Cuadre de Caja)/";
 
-	private String archivo = "src/cafeteria.dat";
+	private String archivo = System.getProperty("user.home") + "/AppData/Local/cafeteria.dat";
 
 	public ManejadorEscenarios(Stage stage) {
 
@@ -62,6 +63,7 @@ public class ManejadorEscenarios {
 		} else {
 			tienda = new Tienda();
 		}
+		verificarDirectorios();
 		iva = listarIva();
 		productos = listarProductos();
 		empresas = listarEmpresas();
@@ -72,6 +74,18 @@ public class ManejadorEscenarios {
 
 		ventanaPrincipal();
 
+	}
+
+	public void verificarDirectorios() {
+		File directorio = new File(rutaInformesFiscales);
+		if (!directorio.exists()) {
+			directorio.mkdirs();
+		}
+		directorio = new File(rutaRecibos);
+
+		if (!directorio.exists()) {
+			directorio.mkdirs();
+		}
 	}
 
 	public void ventanaPrincipal() {
