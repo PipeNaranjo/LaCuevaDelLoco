@@ -82,9 +82,12 @@ public class ReciboController {
 	@FXML
 	private TextField cant_bolsas;
 
+	private int numeroBolsas;
+
 	@FXML
 	public void initialize() {
 
+		numeroBolsas = 0;
 		nombre1.setCellValueFactory(nombre -> nombre.getValue().getNombre());
 		precio1.setCellValueFactory(precio -> precio.getValue().getPrecio());
 		nombre2.setCellValueFactory(nombre -> nombre.getValue().getNombre());
@@ -177,7 +180,7 @@ public class ReciboController {
 									alert.show();
 								}
 							}
-							double valor = 0;
+							int valor = numeroBolsas * 50;
 							for (int j = 0; j < carrito.getItems().size(); j++) {
 								productos.add(carrito.getItems().get(j));
 								valor += Integer.parseInt(carrito.getItems().get(j).getPrecio().getValue())
@@ -188,6 +191,7 @@ public class ReciboController {
 							carrito.getItems().addAll(productos);
 
 							valorTotal.setText(valor + "");
+							cambiarTotal();
 
 						});
 					}
@@ -232,7 +236,7 @@ public class ReciboController {
 								ProductoObservable producto = carrito.getItems().get(indice);
 								producto.setCantidad(new SimpleStringProperty(cantidad + ""));
 
-								double valor = 0;
+								int valor = numeroBolsas * 50;
 								for (int j = 0; j < carrito.getItems().size(); j++) {
 									productos.add(carrito.getItems().get(j));
 									valor += Integer.parseInt(carrito.getItems().get(j).getPrecio().getValue())
@@ -243,6 +247,7 @@ public class ReciboController {
 								carrito.getItems().addAll(productos);
 
 								valorTotal.setText(valor + "");
+								cambiarTotal();
 
 							}
 
@@ -307,7 +312,7 @@ public class ReciboController {
 
 									productoCarrito.setCantidad(new SimpleStringProperty(cantidadCarrito + ""));
 
-									double valor = 0;
+									int valor = numeroBolsas * 50;
 									for (int j = 0; j < carrito.getItems().size(); j++) {
 										productos.add(carrito.getItems().get(j));
 										valor += Integer.parseInt(carrito.getItems().get(j).getPrecio().getValue())
@@ -318,6 +323,7 @@ public class ReciboController {
 									carrito.getItems().addAll(productos);
 
 									valorTotal.setText(valor + "");
+									cambiarTotal();
 
 									if (cantidadCarrito == cantidad) {
 										Alert alert = new Alert(AlertType.WARNING, "Las existencias se agotaron",
@@ -368,7 +374,7 @@ public class ReciboController {
 
 							carrito.getItems().remove(indice);
 
-							double valor = 0;
+							int valor = 0;
 							for (int j = 0; j < carrito.getItems().size(); j++) {
 
 								valor += Integer.parseInt(carrito.getItems().get(j).getPrecio().getValue())
@@ -429,9 +435,7 @@ public class ReciboController {
 			}
 			recibo.setValorBolsas(cantidad_bolsas * 50);
 			if (seleccion) {
-				manejador.adjuntarRecibo(recibo);
-				manejador.abrirCrearFactura();
-				stage.close();
+				manejador.ventanaConfirmar(recibo);
 			} else {
 				manejador.ingresarEfectivo(recibo);
 
@@ -456,6 +460,31 @@ public class ReciboController {
 
 		} else if (action.get() == ButtonType.NO) {
 
+		}
+	}
+
+	@FXML
+	void cambiarTotal() {
+
+		try {
+			if (!(valorTotal.getText().equals("0"))) {
+
+				int valor = Integer.parseInt(valorTotal.getText()) - (numeroBolsas * 50);
+
+				if (cant_bolsas.getText().equals("")) {
+					numeroBolsas = 0;
+				} else {
+					numeroBolsas = Integer.parseInt(cant_bolsas.getText());
+				}
+				System.out.println(numeroBolsas);
+				int bolsas = numeroBolsas * 50;
+				int valortotal = (valor + bolsas);
+				valorTotal.setText(valortotal + "");
+
+			}
+		} catch (NumberFormatException e) {
+			Alert alert = new Alert(AlertType.WARNING, "Valor de bolsa inválido", ButtonType.OK);
+			alert.show();
 		}
 	}
 
@@ -488,6 +517,9 @@ public class ReciboController {
 				productoO.setCantidad(new SimpleStringProperty(producto.getCantidad() + ""));
 				carrito.getItems().add(productoO);
 
+			}
+			if (recibo.getTarjeta()) {
+				tarjeta.setSelected(true);
 			}
 			cant_bolsas.setText(recibo.getValorBolsas() / 50 + "");
 			valorTotal.setText(recibo.getPrecioTotal() + "");

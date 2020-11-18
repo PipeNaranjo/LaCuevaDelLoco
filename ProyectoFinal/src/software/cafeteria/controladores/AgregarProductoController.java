@@ -55,18 +55,49 @@ public class AgregarProductoController {
 
 	@FXML
 	public void agregarProducto() {
+		boolean validar = true;
 
-		try {
-			if (!(codigoBarras.getText().equals("") || nombreProducto.getText().equals("")
-					|| costoProducto.getText().equals("") || presentacionProducto.getText().equals("")
-					|| precioProducto.getText().equals("") || cantidad.getText().equals(""))) {
-				String codigo_Barras = codigoBarras.getText();
-				String nombre_Producto = nombreProducto.getText();
-				int costo_Producto = Integer.parseInt(costoProducto.getText());
-				int presentacion_Producto = Integer.parseInt(presentacionProducto.getText());
-				int precio_Producto = Integer.parseInt(precioProducto.getText());
-				int iva_ = -1;
-				String seleccion = iva.getSelectionModel().getSelectedItem();
+		if (!(codigoBarras.getText().equals("") || nombreProducto.getText().equals("")
+				|| costoProducto.getText().equals("") || presentacionProducto.getText().equals("")
+				|| precioProducto.getText().equals("") || cantidad.getText().equals(""))) {
+
+			String codigo_Barras = codigoBarras.getText();
+			String nombre_Producto = nombreProducto.getText();
+			int costo_Producto = 0;
+			try {
+				costo_Producto = Integer.parseInt(costoProducto.getText());
+			} catch (NumberFormatException e) {
+				validar = false;
+				Alert alert = new Alert(AlertType.ERROR, "Valor no numérico \nCampo costo del producto", ButtonType.OK);
+				alert.showAndWait();
+			}
+			int presentacion_Producto = 0;
+			if(validar){
+				try {
+					presentacion_Producto = Integer.parseInt(presentacionProducto.getText());
+				} catch (NumberFormatException e) {
+					validar = false;
+					Alert alert = new Alert(AlertType.ERROR, "Valor no numérico \nCampo presentación del producto",
+							ButtonType.OK);
+					alert.showAndWait();
+
+				}
+			}
+			int precio_Producto = 0;
+			if(validar){
+				try {
+					precio_Producto = Integer.parseInt(precioProducto.getText());
+				} catch (NumberFormatException e) {
+					validar = false;
+					Alert alert = new Alert(AlertType.ERROR, "Valor no numérico \nCampo precio del producto",
+							ButtonType.OK);
+					alert.showAndWait();
+
+				}
+			}
+			int iva_ = -1;
+			String seleccion = iva.getSelectionModel().getSelectedItem();
+			if (seleccion != null && validar) {
 				if (seleccion.equals("5")) {
 					iva_ = 5;
 				} else if (seleccion.equals("19")) {
@@ -74,34 +105,56 @@ public class AgregarProductoController {
 				} else if (seleccion.equals("Exento")) {
 					iva_ = 0;
 				}
-				String tipo_Producto = tipoProducto.getSelectionModel().getSelectedItem();
-				int cantidad_ = Integer.parseInt(cantidad.getText());
-				String empresa = empresaDistri.getSelectionModel().getSelectedItem();
-				boolean res = manejador.agregarProducto(codigo_Barras, nombre_Producto, costo_Producto,
-						presentacion_Producto, precio_Producto, iva_, tipo_Producto, cantidad_, empresa);
-
-				if (res) {
-					Alert alert = new Alert(AlertType.INFORMATION, "Se agregó con exito el Producto", ButtonType.OK);
-					alert.showAndWait();
-					agregar.close();
-				} else {
-					Alert alert = new Alert(AlertType.ERROR,
-							"El producto con el código " + codigo_Barras + " ya se encuentra registrado.",
+			} else {
+				validar = false;
+				Alert alert = new Alert(AlertType.ERROR, "Seleccione un valor en Iva", ButtonType.OK);
+				alert.showAndWait();
+			}
+			String tipo_Producto = tipoProducto.getSelectionModel().getSelectedItem();
+			if (tipo_Producto == null && validar) {
+				validar = false;
+				Alert alert = new Alert(AlertType.ERROR, "Seleccione un valor en tipo Producto", ButtonType.OK);
+				alert.showAndWait();
+			}
+			int cantidad_ = 0;
+			if(validar){
+				try {
+					cantidad_ = Integer.parseInt(cantidad.getText());
+				} catch (NumberFormatException e) {
+					validar = false;
+					Alert alert = new Alert(AlertType.ERROR, "Valor no numérico \nCampo cantidad del producto",
 							ButtonType.OK);
 					alert.showAndWait();
 				}
-			} else {
-				Alert alert = new Alert(AlertType.ERROR, "Ingrese valores en todos los campos", ButtonType.OK);
+			}
+			String empresa = empresaDistri.getSelectionModel().getSelectedItem();
+
+			if (empresa == null && validar) {
+				validar = false;
+				Alert alert = new Alert(AlertType.ERROR, "Seleccione un valor en empresa", ButtonType.OK);
 				alert.showAndWait();
 			}
+			boolean res = false;
 
-		} catch (NullPointerException e) {
-			Alert alert = new Alert(AlertType.ERROR, "Seleccione valores válidos", ButtonType.OK);
-			alert.showAndWait();
-		} catch (NumberFormatException e) {
-			Alert alert = new Alert(AlertType.ERROR, "Valores no númericos, ingrese valores válidos", ButtonType.OK);
+			if (validar) {
+				res = manejador.agregarProducto(codigo_Barras, nombre_Producto, costo_Producto, presentacion_Producto,
+						precio_Producto, iva_, tipo_Producto, cantidad_, empresa);
+			}
+
+			if (res) {
+				Alert alert = new Alert(AlertType.INFORMATION, "Se agregó con exito el Producto", ButtonType.OK);
+				alert.showAndWait();
+				agregar.close();
+			} else if(res == false && validar == true){
+				Alert alert = new Alert(AlertType.ERROR,
+						"El producto con el código " + codigo_Barras + " ya se encuentra registrado.", ButtonType.OK);
+				alert.showAndWait();
+			}
+		} else {
+			Alert alert = new Alert(AlertType.ERROR, "Ingrese valores en todos los campos", ButtonType.OK);
 			alert.showAndWait();
 		}
+
 	}
 
 	@FXML

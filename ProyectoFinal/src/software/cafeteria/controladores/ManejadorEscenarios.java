@@ -13,12 +13,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.image.Image;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import software.cafeteria.Main;
+import software.cafeteria.delegado.Impressor;
 import software.cafeteria.delegado.ProductoObservable;
 import software.cafeteria.entidades.Empresa;
 import software.cafeteria.entidades.InformeFiscal;
@@ -47,8 +49,9 @@ public class ManejadorEscenarios {
 	private String rutaRecibos = System.getProperty("user.home") + "/Desktop/Facturas/";
 	private String rutaInformesFiscales = System.getProperty("user.home")
 			+ "/Desktop/informesFiscales (Cuadre de Caja)/";
-
-	private String archivo = System.getProperty("user.home") + "/AppData/Local/cafeteria.dat";
+	private Impressor impressor;
+	private int bolsas = 0;
+	private String archivo = "src/cafeteria.dat";
 
 	public ManejadorEscenarios(Stage stage) {
 
@@ -63,6 +66,8 @@ public class ManejadorEscenarios {
 		} else {
 			tienda = new Tienda();
 		}
+
+		impressor = new Impressor();
 		verificarDirectorios();
 		iva = listarIva();
 		productos = listarProductos();
@@ -119,9 +124,13 @@ public class ManejadorEscenarios {
 
 				}
 			});
+
+			stage.setResizable(false);
 			stage.setTitle("Ventana Principal");
 			Scene scene = new Scene(page);
+
 			stage.setScene(scene);
+			stage.getIcons().add(new Image("file:src/software/cafeteria/images/icono_ventana.png"));
 
 			// se carga el controlador
 			ventanaInicioController = loader.getController();
@@ -130,6 +139,52 @@ public class ManejadorEscenarios {
 
 			// se crea el escenario
 			stage.show();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public void ventanaConfirmarCompra() {
+
+		try {
+
+			// se carga la interfaz
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(Main.class.getResource("view/tarjeta.fxml"));
+			BorderPane page = (BorderPane) loader.load();
+
+			// se crea el escenario
+			Stage escenario = new Stage();
+			escenario.setResizable(false);
+			escenario.getIcons().add(new Image("file:src/software/cafeteria/images/icono_ventana.png"));
+			escenario.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				@Override
+				public void handle(WindowEvent event) {
+
+					Alert alert = new Alert(AlertType.CONFIRMATION, "¿Seguro quieres salir?", ButtonType.YES,
+							ButtonType.NO);
+					Optional<ButtonType> action = alert.showAndWait();
+					if (action.get() == ButtonType.YES) {
+						abrirCrearFactura();
+					} else if (action.get() == ButtonType.NO) {
+						event.consume();
+					}
+
+				}
+			});
+			escenario.setTitle("Ingresar Efectivo");
+			Scene scene = new Scene(page);
+			escenario.setScene(scene);
+
+			// se carga el controlador
+			Factura1Controller facturaControlador = loader.getController();
+			facturaControlador.setManejador(this);
+			facturaControlador.setStage(escenario);
+
+			// se crea el escenario
+			escenario.show();
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -150,7 +205,7 @@ public class ManejadorEscenarios {
 			Stage escenario = new Stage();
 			escenario.setTitle("Realizar Venta");
 			Scene scene = new Scene(page);
-
+			escenario.setResizable(false);
 			escenario.setScene(scene);
 			escenario.setOnCloseRequest(new EventHandler<WindowEvent>() {
 				@Override
@@ -170,7 +225,7 @@ public class ManejadorEscenarios {
 
 				}
 			});
-
+			escenario.getIcons().add(new Image("file:src/software/cafeteria/images/icono_ventana.png"));
 			// se carga el controlador
 			facturaControlador = loader.getController();
 			facturaControlador.setManejador(this);
@@ -194,7 +249,9 @@ public class ManejadorEscenarios {
 			BorderPane page = (BorderPane) loader.load();
 
 			Stage escenario = new Stage();
+			escenario.getIcons().add(new Image("file:src/software/cafeteria/images/icono_ventana.png"));
 			escenario.setTitle("Inventario");
+			escenario.setResizable(false);
 			escenario.setOnCloseRequest(new EventHandler<WindowEvent>() {
 				@Override
 				public void handle(WindowEvent event) {
@@ -229,6 +286,8 @@ public class ManejadorEscenarios {
 
 			// se crea el escenario
 			Stage escenario = new Stage();
+			escenario.setResizable(false);
+			escenario.getIcons().add(new Image("file:src/software/cafeteria/images/icono_ventana.png"));
 			escenario.setTitle("Agregar Empresa");
 			Scene scene = new Scene(page);
 			escenario.setScene(scene);
@@ -256,6 +315,8 @@ public class ManejadorEscenarios {
 
 			// se crea el escenario
 			Stage escenario = new Stage();
+			escenario.setResizable(false);
+			escenario.getIcons().add(new Image("file:src/software/cafeteria/images/icono_ventana.png"));
 			escenario.setTitle("Agregar Tipo de Producto");
 			Scene scene = new Scene(page);
 			escenario.setScene(scene);
@@ -286,6 +347,8 @@ public class ManejadorEscenarios {
 			// agregar.setTitle("Agregar Producto");
 			Scene scene = new Scene(page);
 			agregar.setScene(scene);
+			agregar.setResizable(false);
+			agregar.getIcons().add(new Image("file:src/software/cafeteria/images/icono_ventana.png"));
 
 			// se carga el controlador
 			AgregarProductoController agregarProductoControlador = loader.getController();
@@ -311,6 +374,8 @@ public class ManejadorEscenarios {
 
 			// se crea el escenario
 			Stage escenario = new Stage();
+			escenario.setResizable(false);
+			escenario.getIcons().add(new Image("file:src/software/cafeteria/images/icono_ventana.png"));
 			escenario.setTitle("Modificar un producto");
 			Scene scene = new Scene(page);
 			escenario.setScene(scene);
@@ -338,6 +403,8 @@ public class ManejadorEscenarios {
 
 			// se crea el escenario
 			Stage escenario = new Stage();
+			escenario.setResizable(false);
+			escenario.getIcons().add(new Image("file:src/software/cafeteria/images/icono_ventana.png"));
 			escenario.setTitle("Agregar nuevo Iva");
 			Scene scene = new Scene(page);
 			escenario.setScene(scene);
@@ -365,6 +432,8 @@ public class ManejadorEscenarios {
 
 			// se crea el escenario
 			Stage escenario = new Stage();
+			escenario.setResizable(false);
+			escenario.getIcons().add(new Image("file:src/software/cafeteria/images/icono_ventana.png"));
 			escenario.setOnCloseRequest(new EventHandler<WindowEvent>() {
 				@Override
 				public void handle(WindowEvent event) {
@@ -624,6 +693,7 @@ public class ManejadorEscenarios {
 	public void adjuntarRecibo(Recibo recibo) {
 		tienda.getRegistroVentas().adjuntarUnRecibo(recibo, tienda.getInventario());
 		imprimirRecibo(recibo);
+
 		try {
 			Persistencia.guardarObjetos(tienda, archivo);
 
@@ -826,6 +896,7 @@ public class ManejadorEscenarios {
 					+ (fecha.get(Calendar.MONTH) + 1) + "-" + fecha.get(Calendar.DAY_OF_MONTH) + ".txt";
 
 			Persistencia.escribirArchivo(rutaInformesFiscales + nombreArchivo, renglones);
+			impressor.imprimirArchivo(rutaInformesFiscales + nombreArchivo);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -893,8 +964,8 @@ public class ManejadorEscenarios {
 			String renglon = "│ BOLSA PLASTICA";
 			renglon += calcularEspacios(renglon, limite);
 			String cantidades = " -- " + valor / 50 + " " + valor;
-			renglon += cantidades;
-			renglones.add(renglon + calcularEspacios(renglon, tamano - renglon.length() - 1) + "│");
+			renglon += calcularEspacios(renglon, tamano - cantidades.length()) + cantidades + "│";
+			renglones.add(renglon + calcularEspacios(renglon, tamano - renglon.length() - 1));
 		}
 
 		renglones.add("│                                          │");
@@ -941,6 +1012,7 @@ public class ManejadorEscenarios {
 					+ (fecha.get(Calendar.MONTH) + 1) + "-" + fecha.get(Calendar.DAY_OF_MONTH) + ".txt";
 
 			Persistencia.escribirArchivo(rutaRecibos + nombreArchivo, renglones);
+			impressor.imprimirArchivo(rutaRecibos + nombreArchivo);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -1096,6 +1168,7 @@ public class ManejadorEscenarios {
 					+ (fecha.get(Calendar.MONTH) + 1) + "-" + fecha.get(Calendar.DAY_OF_MONTH) + ".txt";
 
 			Persistencia.escribirArchivo(rutaInformesFiscales + nombreArchivo, renglones);
+			impressor.imprimirArchivo(rutaInformesFiscales + nombreArchivo);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -1124,6 +1197,21 @@ public class ManejadorEscenarios {
 
 	public void setReciboTemp(Recibo reciboTemp) {
 		this.reciboTemp = reciboTemp;
+	}
+
+	public void ventanaConfirmar(Recibo recibo) {
+		// TODO Auto-generated method stub
+		reciboTemp = recibo;
+		ventanaConfirmarCompra();
+
+	}
+
+	public int getBolsas() {
+		return bolsas;
+	}
+
+	public void setBolsas(int bolsas) {
+		this.bolsas = bolsas;
 	}
 
 }

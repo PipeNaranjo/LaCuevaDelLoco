@@ -56,7 +56,7 @@ public class FacturaController {
 	void generarFactura() {
 		try {
 			if (!efectivo.getText().equals("")) {
-				if (Integer.parseInt(cambio.getText()) > 0) {
+				if (Integer.parseInt(cambio.getText()) >= 0) {
 					manejador.getReciboTemp().setEfectivoRegistrado(Integer.parseInt(efectivo.getText()));
 					manejador.adjuntarRecibo(manejador.getReciboTemp());
 					Alert alert = new Alert(AlertType.INFORMATION, "Venta Realizada", ButtonType.OK);

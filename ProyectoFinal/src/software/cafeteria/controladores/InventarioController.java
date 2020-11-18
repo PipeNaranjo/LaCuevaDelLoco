@@ -117,7 +117,7 @@ public class InventarioController {
 								Alert alert = new Alert(AlertType.INFORMATION, "El producto se elimino con exito",
 										ButtonType.OK);
 								alert.showAndWait();
-								
+
 							} else {
 								Alert alert = new Alert(AlertType.ERROR, "El producto no se pudo eliminar",
 										ButtonType.OK);
@@ -195,6 +195,7 @@ public class InventarioController {
 
 	@FXML
 	public void actualizarTablaTipo() {
+		manejador.setTipoSeleccionado(comboActualizarTabla.getSelectionModel().getSelectedItem());
 		tabla.setItems(manejador.actualizarTablaTipo(manejador.getTipoSeleccionado()));
 	}
 
@@ -206,13 +207,13 @@ public class InventarioController {
 	}
 
 	public void setManejador(ManejadorEscenarios manejador) {
-		// TODO Auto-generated method stub
+
 		this.manejador = manejador;
 		actualizarTabla();
 	}
 
 	public ManejadorEscenarios getManejador() {
-		// TODO Auto-generated method stub
+
 		return manejador;
 	}
 
@@ -223,7 +224,5 @@ public class InventarioController {
 	public void setStage(Stage stage) {
 		this.stage = stage;
 	}
-	
-	
 
 }
