@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="536.0" prefWidth="1068.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="software.cafeteria.controladores.InventarioController">
+   <center>
+      <TableView fx:id="tabla" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn fx:id="producto" prefWidth="161.0" text="Producto" />
+            <TableColumn fx:id="codigoBarras" prefWidth="88.0" text="Código Barras" />
+            <TableColumn fx:id="tipoProducto" prefWidth="88.0" text="Tipo Producto" />
+            <TableColumn fx:id="empresa" prefWidth="75.0" text="Empresa" />
+          <TableColumn fx:id="iva" prefWidth="44.0" text="IVA" />
+            <TableColumn fx:id="presentacion" prefWidth="59.0" text="Present" />
+            <TableColumn fx:id="precio" prefWidth="74.0" text="Precio" />
+            <TableColumn fx:id="costo" prefWidth="67.0" text="Costo" />
+            <TableColumn fx:id="cantidad" prefWidth="70.0" text="Cantidad" />
+        </columns>
+         <effect>
+            <DropShadow color="#544f4f" />
+         </effect>
+      </TableView>
+   </center>
+   <bottom>
+      <AnchorPane prefHeight="41.0" prefWidth="1068.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="btn_regresar" layoutX="14.0" layoutY="4.0" mnemonicParsing="false" onAction="#regresar" text="Regresar">
+               <effect>
+                  <DropShadow color="#544f4f" />
+               </effect>
+            </Button>
+         </children></AnchorPane>
+   </bottom>
+   <right>
+      <AnchorPane prefHeight="522.0" prefWidth="186.0" BorderPane.alignment="CENTER">
+         <children>
+            <TextField fx:id="busquedaProducto" layoutX="7.0" layoutY="14.0" onKeyReleased="#buscarProductoNombre" prefHeight="30.0" prefWidth="150.0" promptText="Buscar Producto">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <effect>
+                  <DropShadow color="#544f4f" />
+               </effect></TextField>
+            <ComboBox fx:id="comboActualizarTabla" layoutX="15.0" layoutY="467.0" onAction="#actualizarTablaTipo" prefHeight="25.0" prefWidth="160.0">
+               <effect>
+                  <DropShadow color="#544f4f" />
+               </effect></ComboBox>
+            <Label layoutX="11.0" layoutY="439.0" text="Actualizar tabla por:">
+               <font>
+                  <Font size="16.0" />
+               </font></Label>
+            <Button fx:id="btn_agregar" layoutX="7.0" layoutY="58.0" mnemonicParsing="false" onAction="#agregarProducto" prefHeight="30.0" prefWidth="172.0" text="Agregar Producto">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <effect>
+                  <DropShadow color="#544f4f" />
+               </effect></Button>
+         </children>
+      </AnchorPane>
+   </right>
+   <top>
+      <AnchorPane prefHeight="22.0" prefWidth="1068.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label layoutX="500.0" layoutY="3.0" text="INVENTARIO">
+               <effect>
+                  <DropShadow color="#544f4f" />
+               </effect>
+            </Label>
+         </children></AnchorPane>
+   </top>
+   <left>
+      <AnchorPane prefHeight="512.0" prefWidth="13.0" BorderPane.alignment="CENTER" />
+   </left>
+</BorderPane>

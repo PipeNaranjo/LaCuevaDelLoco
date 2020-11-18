@@ -1,0 +1,40 @@
+
+Tsoftware.cafeteria.entidades.Producto#clone()Lsoftware/cafeteria/entidades/Producto;p
+dC:/Users/Pipe Naranjo/eclipse-workspace/ProyectoFinal/src/software/cafeteria/entidades/Producto.javaØ Ø("1*ò	
+1p
+dC:/Users/Pipe Naranjo/eclipse-workspace/ProyectoFinal/src/software/cafeteria/entidades/Producto.javaÙ Ù($Ò
+Ï
+p
+dC:/Users/Pipe Naranjo/eclipse-workspace/ProyectoFinal/src/software/cafeteria/entidades/Producto.javaÙ Ù($
+%0java.lang.String"__id*=*;'
+%software.cafeteria.entidades.Producto"
+codigoDeBarrasÊ
+Ç
+p
+dC:/Users/Pipe Naranjo/eclipse-workspace/ProyectoFinal/src/software/cafeteria/entidades/Producto.javaÙ& Ù(,
+%1java.lang.String"__id*5*3'
+%software.cafeteria.entidades.Producto"
+nombreÉÆ
+p
+dC:/Users/Pipe Naranjo/eclipse-workspace/ProyectoFinal/src/software/cafeteria/entidades/Producto.javaÙ Ù(+
+%2%software.cafeteria.entidades.Producto"%software.cafeteria.entidades.Productoè
+å
+p
+dC:/Users/Pipe Naranjo/eclipse-workspace/ProyectoFinal/src/software/cafeteria/entidades/Producto.javaÙ	 Ù(X
+%3"`software.cafeteria.entidades.Producto#<init>(Ljava/lang/String;Ljava/lang/String;LEmpresa;IIII)V*-
++
+%2%software.cafeteria.entidades.Producto*
+
+%0java.lang.String*
+
+%1java.lang.String*
+""*
+""*
+""*
+""*
+"""¡
+p
+dC:/Users/Pipe Naranjo/eclipse-workspace/ProyectoFinal/src/software/cafeteria/entidades/Producto.javaÙ Ù(Y-
++
+%2%software.cafeteria.entidades.ProductoB)'
+%software.cafeteria.entidades.Producto

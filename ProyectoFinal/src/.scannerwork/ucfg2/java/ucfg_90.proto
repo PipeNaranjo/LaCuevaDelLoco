@@ -1,0 +1,16 @@
+
+Ksoftware.cafeteria.entidades.Recibo#getFecha()Ljava/util/GregorianCalendar;l
+bC:/Users/Pipe Naranjo/eclipse-workspace/ProyectoFinal/src/software/cafeteria/entidades/Recibo.javaB B(""1*Ø
+1l
+bC:/Users/Pipe Naranjo/eclipse-workspace/ProyectoFinal/src/software/cafeteria/entidades/Recibo.javaC	 C(Î
+Ë
+l
+bC:/Users/Pipe Naranjo/eclipse-workspace/ProyectoFinal/src/software/cafeteria/entidades/Recibo.javaC	 C(!
+%0java.util.GregorianCalendar"__id*2*0%
+#software.cafeteria.entidades.Recibo"
+fecha"“
+l
+bC:/Users/Pipe Naranjo/eclipse-workspace/ProyectoFinal/src/software/cafeteria/entidades/Recibo.javaC C(#
+!
+%0java.util.GregorianCalendarB'%
+#software.cafeteria.entidades.Recibo

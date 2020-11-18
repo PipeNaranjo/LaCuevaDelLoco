@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="183.0" prefWidth="410.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="software.cafeteria.controladores.AgregarIvaController">
+   <children>
+      <Button fx:id="btn_agregar" layoutX="105.0" layoutY="135.0" mnemonicParsing="false" onAction="#agregarIva" text="Agregar">
+         <effect>
+            <DropShadow color="#544f4f" />
+         </effect></Button>
+      <Button fx:id="btn_cancelar" layoutX="252.0" layoutY="135.0" mnemonicParsing="false" onAction="#cancelar" text="Cancelar">
+         <effect>
+            <DropShadow color="#544f4f" />
+         </effect></Button>
+      <Label layoutX="5.0" layoutY="46.0" prefHeight="43.0" prefWidth="201.0" text="Agregar nuevo iva" textAlignment="CENTER">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <TextField fx:id="iva" layoutX="236.0" layoutY="55.0">
+         <effect>
+            <DropShadow color="#544f4f" />
+         </effect></TextField>
+   </children>
+</AnchorPane>

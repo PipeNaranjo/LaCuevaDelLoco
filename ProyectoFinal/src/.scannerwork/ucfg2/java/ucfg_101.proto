@@ -1,0 +1,29 @@
+
+msoftware.cafeteria.entidades.RegistroDeVentas#removerRecibo(Ljava/util/GregorianCalendar;Ljava/lang/String;)Zv
+lC:/Users/Pipe Naranjo/eclipse-workspace/ProyectoFinal/src/software/cafeteria/entidades/RegistroDeVentas.java< <("3*þ
+2v
+lC:/Users/Pipe Naranjo/eclipse-workspace/ProyectoFinal/src/software/cafeteria/entidades/RegistroDeVentas.java? ?(
+"€
+v
+lC:/Users/Pipe Naranjo/eclipse-workspace/ProyectoFinal/src/software/cafeteria/entidades/RegistroDeVentas.java@ @(
+""*²
+3v
+lC:/Users/Pipe Naranjo/eclipse-workspace/ProyectoFinal/src/software/cafeteria/entidades/RegistroDeVentas.java= =(¬©
+v
+lC:/Users/Pipe Naranjo/eclipse-workspace/ProyectoFinal/src/software/cafeteria/entidades/RegistroDeVentas.java= =(%
+%0"tsoftware.cafeteria.entidades.RegistroDeVentas#obtenerRecibo(Ljava/util/GregorianCalendar;Ljava/lang/String;)LRecibo;*1/
+-software.cafeteria.entidades.RegistroDeVentas*&
+$
+fechajava.util.GregorianCalendar*
+
+idjava.lang.String2>obtenerRecibo(Ljava/util/GregorianCalendar;Ljava/lang/String;)*
+2
+1*þ
+1v
+lC:/Users/Pipe Naranjo/eclipse-workspace/ProyectoFinal/src/software/cafeteria/entidades/RegistroDeVentas.javaB	 B("€
+v
+lC:/Users/Pipe Naranjo/eclipse-workspace/ProyectoFinal/src/software/cafeteria/entidades/RegistroDeVentas.javaB B(
+"":$
+fechajava.util.GregorianCalendar:
+idjava.lang.StringB1/
+-software.cafeteria.entidades.RegistroDeVentas
