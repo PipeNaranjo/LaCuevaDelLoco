@@ -5,8 +5,15 @@
 	<artifactId>ProyectoFinal</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ProyectoFinal</name>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 	<build>
-
 		<sourceDirectory>src</sourceDirectory>
 		<resources>
 			<resource>
@@ -27,9 +34,13 @@
 			</plugin>
 		</plugins>
 	</build>
+	
 	<properties>
-		<sonar.projectKey>ProyectoFinalSW32</sonar.projectKey>
-		<sonar.organization>universidaddelquindio10</sonar.organization>
+		<sonar.projectKey>ProyectoFinalSW</sonar.projectKey>
+		<sonar.organization>proyectofinal3</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.6</maven.compiler.source>
+		<maven.compiler.target>1.6</maven.compiler.target>
 	</properties>
 </project>
