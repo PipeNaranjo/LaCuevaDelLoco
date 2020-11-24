@@ -2,18 +2,15 @@ package test.java;
 
 import java.util.ArrayList;
 
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
-import junit.framework.TestCase;
 import main.java.software.cafeteria.entidades.Empresa;
 import main.java.software.cafeteria.entidades.InformeFiscal;
 import main.java.software.cafeteria.entidades.ProductosInventario;
 import main.java.software.cafeteria.entidades.Recibo;
 
-public class InformeFiscalTest extends TestCase {
+public class InformeFiscalTest {
 
 	private static final String NOMBRE = "coca-cola";
 	private static final String NOMBREPRODUCTO1 = NOMBRE + " personal";
@@ -25,18 +22,6 @@ public class InformeFiscalTest extends TestCase {
 	private static final Empresa EMPRESA3 = new Empresa("quinvalle");
 	private static final String TIPO = "Bebida";
 	private static final String TIPO2 = "Snacks";
-
-	@Override
-	@Before
-	public void setUp() throws Exception {
-		super.setUp();
-	}
-
-	@Override
-	@After
-	public void tearDown() throws Exception {
-		super.tearDown();
-	}
 
 	@Test
 	public void totalDeLaCaja() {
@@ -54,7 +39,7 @@ public class InformeFiscalTest extends TestCase {
 		c.agregarProductos(a, 10);
 		b.add(c);
 		InformeFiscal d = new InformeFiscal(123, b);
-		Assert.assertEquals((5000 + 5500 + 5000 + 15000), d.getTotalEnCaja());
+		Assert.assertEquals((5000L + 5500L + 5000L + 15000L), d.getTotalEnCaja());
 	}
 
 	@Test
@@ -74,7 +59,7 @@ public class InformeFiscalTest extends TestCase {
 		b.add(c);
 		InformeFiscal d = new InformeFiscal(123, b);
 
-		Assert.assertEquals(((5000 * 19 / 100) + (5500 * 5 / 100) + (5000 * 19 / 100) + 0), d.getTotalIva());
+		Assert.assertEquals(((5000L * 19L / 100L) + (5500L * 5L / 100L) + (5000L * 19L / 100L) + 0L), d.getTotalIva());
 	}
 
 	@Test

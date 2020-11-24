@@ -1,26 +1,12 @@
 package test.java;
 
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
-import junit.framework.TestCase;
 import main.java.software.cafeteria.entidades.Empresa;
 import main.java.software.cafeteria.entidades.Producto;
 
-
-public class ProductoTest extends TestCase {
-
-	@Before
-	public void setUp() throws Exception {
-		super.setUp();
-	}
-
-	@After
-	public void tearDown() throws Exception {
-		super.tearDown();
-	}
+public class ProductoTest {
 
 	@Test
 	public void testClone() {

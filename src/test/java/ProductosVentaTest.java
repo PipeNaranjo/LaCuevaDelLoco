@@ -1,32 +1,17 @@
 package test.java;
 
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
-import junit.framework.TestCase;
 import main.java.software.cafeteria.entidades.Empresa;
 import main.java.software.cafeteria.entidades.ProductosInventario;
 import main.java.software.cafeteria.entidades.ProductosVentas;
 
-public class ProductosVentaTest extends TestCase {
+public class ProductosVentaTest {
 	private static final String NOMBRE = "coca-cola";
 	private static final String NOMBREPRODUCTO = NOMBRE + " personal";
 	private static final Empresa EMPRESA = new Empresa(NOMBRE);
 	private static final String TIPO = "Bebida";
-
-	@Before
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-	}
-
-	@After
-	@Override
-	public void tearDown() throws Exception {
-		super.tearDown();
-	}
 
 	@Test
 	public void agregarCantidadProductoV() {

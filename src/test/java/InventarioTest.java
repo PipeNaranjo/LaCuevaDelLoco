@@ -1,16 +1,13 @@
 package test.java;
 
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
-import junit.framework.TestCase;
 import main.java.software.cafeteria.entidades.Empresa;
 import main.java.software.cafeteria.entidades.ProductosInventario;
 import main.java.software.cafeteria.logica.Inventario;
 
-public class InventarioTest extends TestCase {
+public class InventarioTest {
 
 	private static final String NOMBRE = "coca-cola";
 	private static final String NOMBRE2 = "Postobon";
@@ -18,18 +15,6 @@ public class InventarioTest extends TestCase {
 	private static final Empresa EMPRESA = new Empresa(NOMBRE);
 	private static final String TIPO = "Bebida";
 	private static final Empresa EMPRESA2 = new Empresa(NOMBRE2);
-
-	@Before
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-	}
-
-	@After
-	@Override
-	public void tearDown() throws Exception {
-		super.tearDown();
-	}
 
 	@Test
 	public void verificarExistenciaProductoI() {

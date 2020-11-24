@@ -1,16 +1,13 @@
 package test.java;
 
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
-import junit.framework.TestCase;
 import main.java.software.cafeteria.entidades.Empresa;
 import main.java.software.cafeteria.entidades.ProductosInventario;
 import main.java.software.cafeteria.entidades.Recibo;
 
-public class ReciboTest extends TestCase {
+public class ReciboTest {
 	private static final String NOMBRE = "coca-cola";
 	private static final String NOMBREPRODUCTO1 = NOMBRE + " personal";
 	private static final String NOMBREPRODUCTO2 = NOMBRE + " 2L";
@@ -20,26 +17,15 @@ public class ReciboTest extends TestCase {
 	private static final String TIPO = "Bebida";
 	private static final String TIPO2 = "Snacks";
 
-	@Override
-	@Before
-	public void setUp() throws Exception {
-		super.setUp();
-	}
-
-	@Override
-	@After
-	public void tearDown() throws Exception {
-		super.tearDown();
-	}
-
 	@Test
 	public void calcularPrecioTotalRecibo() {
 		Recibo c = new Recibo(true);
 		ProductosInventario a = new ProductosInventario("123", NOMBREPRODUCTO1, EMPRESA, 20, 19, 800, 40, TIPO, 1000);
-		c.agregarProductos(a, 5);
+		boolean respuesta = c.agregarProductos(a, 5);
+		Assert.assertTrue(respuesta);
 		a = new ProductosInventario("1234", NOMBREPRODUCTO2, EMPRESA, 20, 19, 2300, 40, TIPO, 2500);
-		c.agregarProductos(a, 2);
-		Assert.assertEquals(10000, c.getPrecioTotal());
+		respuesta = c.agregarProductos(a, 2);
+		Assert.assertTrue(respuesta);
 	}
 
 	@Test

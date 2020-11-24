@@ -1,18 +1,15 @@
 package test.java;
 
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
-import junit.framework.TestCase;
 import main.java.software.cafeteria.entidades.Empresa;
 import main.java.software.cafeteria.entidades.ProductosInventario;
 import main.java.software.cafeteria.entidades.Recibo;
 import main.java.software.cafeteria.entidades.RegistroDeVentas;
 import main.java.software.cafeteria.logica.Inventario;
 
-public class ProductosInventarioTest extends TestCase {
+public class ProductosInventarioTest {
 
 	private static final String NOMBRE = "coca-cola";
 	private static final String NOMBREPRODUCTO1 = NOMBRE + " personal";
@@ -29,19 +26,7 @@ public class ProductosInventarioTest extends TestCase {
 	private static final String TIPO2 = "Snacks";
 	private static final String TIPO3 = "Licor";
 
-	Inventario inventario;
-
-	@Override
-	@Before
-	public void setUp() throws Exception {
-		super.setUp();
-	}
-
-	@Override
-	@After
-	public void tearDown() throws Exception {
-		super.tearDown();
-	}
+	Inventario inventario = new Inventario();
 
 	@Test
 	public void agregarCantidadProductoI() {

@@ -3,12 +3,9 @@ package test.java;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
-import junit.framework.TestCase;
 import main.java.software.cafeteria.entidades.Empresa;
 import main.java.software.cafeteria.entidades.InformeFiscal;
 import main.java.software.cafeteria.entidades.ProductosInventario;
@@ -16,32 +13,20 @@ import main.java.software.cafeteria.entidades.Recibo;
 import main.java.software.cafeteria.entidades.RegistroDeVentas;
 import main.java.software.cafeteria.logica.Inventario;
 
-public class RegistroDeVentasTest extends TestCase {
+public class RegistroDeVentasTest {
 	private static final String NOMBREPRODUCTO = "AGUILA ZERO BOTELLA RETORNABLE";
 	private static final Empresa EMPRESA = new Empresa("Bavaria");
 	private static final String CODIGOBARRAS = "7702004002419";
 	private static final String TIPO = "Licor";
-	
-	Inventario inventario;
 
-	@Before
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-	}
-
-	@Override
-	@After
-	public void tearDown() throws Exception {
-		super.tearDown();
-	}
+	Inventario inventario = new Inventario();
 
 	@Test
 	public void adjuntarUnReciboTest() {
 		Recibo recibo = new Recibo(false);
 		int cantidad = 3;
-		ProductosInventario producto = new ProductosInventario(CODIGOBARRAS, NOMBREPRODUCTO,
-				EMPRESA, 30, 19, 48800, 20, TIPO, 2500);
+		ProductosInventario producto = new ProductosInventario(CODIGOBARRAS, NOMBREPRODUCTO, EMPRESA, 30, 19, 48800, 20,
+				TIPO, 2500);
 		inventario.agregarProducto(producto);
 
 		recibo.agregarProductos(producto, cantidad);
@@ -57,8 +42,8 @@ public class RegistroDeVentasTest extends TestCase {
 	public void obtenerListaRecibosTest() {
 		Recibo recibo = new Recibo(false);
 		int cantidad = 3;
-		ProductosInventario producto = new ProductosInventario(CODIGOBARRAS, NOMBREPRODUCTO,
-				EMPRESA, 30, 19, 48800, 20, TIPO, 2500);
+		ProductosInventario producto = new ProductosInventario(CODIGOBARRAS, NOMBREPRODUCTO, EMPRESA, 30, 19, 48800, 20,
+				TIPO, 2500);
 		inventario.agregarProducto(producto);
 
 		recibo.agregarProductos(producto, cantidad);
@@ -75,8 +60,8 @@ public class RegistroDeVentasTest extends TestCase {
 	public void obtenerReciboTest() {
 		Recibo recibo = new Recibo(false);
 		int cantidad = 3;
-		ProductosInventario producto = new ProductosInventario(CODIGOBARRAS, NOMBREPRODUCTO,
-				EMPRESA, 30, 19, 48800, 20, TIPO, 2500);
+		ProductosInventario producto = new ProductosInventario(CODIGOBARRAS, NOMBREPRODUCTO, EMPRESA, 30, 19, 48800, 20,
+				TIPO, 2500);
 		inventario.agregarProducto(producto);
 
 		recibo.agregarProductos(producto, cantidad);
@@ -93,8 +78,8 @@ public class RegistroDeVentasTest extends TestCase {
 	public void removerRecibo() {
 		Recibo recibo = new Recibo(false);
 		int cantidad = 3;
-		ProductosInventario producto = new ProductosInventario(CODIGOBARRAS, NOMBREPRODUCTO,
-				EMPRESA, 30, 19, 48800, 20, TIPO, 2500);
+		ProductosInventario producto = new ProductosInventario(CODIGOBARRAS, NOMBREPRODUCTO, EMPRESA, 30, 19, 48800, 20,
+				TIPO, 2500);
 		inventario.agregarProducto(producto);
 
 		recibo.agregarProductos(producto, cantidad);
@@ -113,8 +98,8 @@ public class RegistroDeVentasTest extends TestCase {
 	public void generarInformeFiscalTest() {
 		Recibo recibo = new Recibo(false);
 		int cantidad = 3;
-		ProductosInventario producto = new ProductosInventario(CODIGOBARRAS, NOMBREPRODUCTO,
-				EMPRESA, 30, 19, 48800, 20, TIPO, 2500);
+		ProductosInventario producto = new ProductosInventario(CODIGOBARRAS, NOMBREPRODUCTO, EMPRESA, 30, 19, 48800, 20,
+				TIPO, 2500);
 		inventario.agregarProducto(producto);
 
 		recibo.agregarProductos(producto, cantidad);
