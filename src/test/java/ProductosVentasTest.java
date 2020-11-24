@@ -7,7 +7,8 @@ import main.java.software.cafeteria.entidades.Empresa;
 import main.java.software.cafeteria.entidades.ProductosInventario;
 import main.java.software.cafeteria.entidades.ProductosVentas;
 
-public class ProductosVentaTest {
+public class ProductosVentasTest {
+
 	private static final String NOMBRE = "coca-cola";
 	private static final String NOMBREPRODUCTO = NOMBRE + " personal";
 	private static final Empresa EMPRESA = new Empresa(NOMBRE);

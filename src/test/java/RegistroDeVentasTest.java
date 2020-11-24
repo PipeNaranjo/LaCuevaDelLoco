@@ -14,6 +14,7 @@ import main.java.software.cafeteria.entidades.RegistroDeVentas;
 import main.java.software.cafeteria.logica.Inventario;
 
 public class RegistroDeVentasTest {
+
 	private static final String NOMBREPRODUCTO = "AGUILA ZERO BOTELLA RETORNABLE";
 	private static final Empresa EMPRESA = new Empresa("Bavaria");
 	private static final String CODIGOBARRAS = "7702004002419";

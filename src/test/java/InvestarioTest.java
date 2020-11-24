@@ -1,5 +1,6 @@
 package test.java;
 
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -7,7 +8,7 @@ import main.java.software.cafeteria.entidades.Empresa;
 import main.java.software.cafeteria.entidades.ProductosInventario;
 import main.java.software.cafeteria.logica.Inventario;
 
-public class InventarioTest {
+public class InvestarioTest {
 
 	private static final String NOMBRE = "coca-cola";
 	private static final String NOMBRE2 = "Postobon";

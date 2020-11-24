@@ -8,6 +8,7 @@ import main.java.software.cafeteria.entidades.ProductosInventario;
 import main.java.software.cafeteria.entidades.Recibo;
 
 public class ReciboTest {
+
 	private static final String NOMBRE = "coca-cola";
 	private static final String NOMBREPRODUCTO1 = NOMBRE + " personal";
 	private static final String NOMBREPRODUCTO2 = NOMBRE + " 2L";
