@@ -10,7 +10,7 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
-			<scope>provided</scope>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<build>
@@ -32,9 +32,13 @@
 					<target />
 				</configuration>
 			</plugin>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.2</version>
+			</plugin>
 		</plugins>
 	</build>
-	
+
 	<properties>
 		<sonar.projectKey>ProyectoFinalSW</sonar.projectKey>
 		<sonar.organization>proyectofinal3</sonar.organization>
