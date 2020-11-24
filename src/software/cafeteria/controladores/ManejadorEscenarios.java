@@ -59,8 +59,10 @@ public class ManejadorEscenarios {
 		if (new File(archivo).exists()) {
 			try {
 				tienda = (Tienda) Persistencia.cargarObjeto(archivo);
-			} catch (ClassNotFoundException | IOException e) {
+			} catch (ClassNotFoundException e) {
 
+				e.printStackTrace();
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		} else {
@@ -105,10 +107,9 @@ public class ManejadorEscenarios {
 			// se crea el escenario
 			stage = new Stage();
 			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-				@Override
 				public void handle(WindowEvent event) {
 
-					Alert alert = new Alert(AlertType.CONFIRMATION, "¿Seguro quieres salir de la aplicación?",
+					Alert alert = new Alert(AlertType.CONFIRMATION, "Â¿Seguro quieres salir de la aplicaciÃ³n?",
 							ButtonType.YES, ButtonType.NO);
 					Optional<ButtonType> action = alert.showAndWait();
 					if (action.get() == ButtonType.YES) {
@@ -160,10 +161,9 @@ public class ManejadorEscenarios {
 			escenario.setResizable(false);
 			escenario.getIcons().add(new Image("file:src/software/cafeteria/images/icono_ventana.png"));
 			escenario.setOnCloseRequest(new EventHandler<WindowEvent>() {
-				@Override
 				public void handle(WindowEvent event) {
 
-					Alert alert = new Alert(AlertType.CONFIRMATION, "¿Seguro quieres salir?", ButtonType.YES,
+					Alert alert = new Alert(AlertType.CONFIRMATION, "Â¿Seguro quieres salir?", ButtonType.YES,
 							ButtonType.NO);
 					Optional<ButtonType> action = alert.showAndWait();
 					if (action.get() == ButtonType.YES) {
@@ -208,10 +208,9 @@ public class ManejadorEscenarios {
 			escenario.setResizable(false);
 			escenario.setScene(scene);
 			escenario.setOnCloseRequest(new EventHandler<WindowEvent>() {
-				@Override
 				public void handle(WindowEvent event) {
 
-					Alert alert = new Alert(AlertType.CONFIRMATION, "¿Seguro quieres salir?\nSe perderan los datos",
+					Alert alert = new Alert(AlertType.CONFIRMATION, "Â¿Seguro quieres salir?\nSe perderan los datos",
 							ButtonType.YES, ButtonType.NO);
 					Optional<ButtonType> action = alert.showAndWait();
 					if (action.get() == ButtonType.YES) {
@@ -253,7 +252,6 @@ public class ManejadorEscenarios {
 			escenario.setTitle("Inventario");
 			escenario.setResizable(false);
 			escenario.setOnCloseRequest(new EventHandler<WindowEvent>() {
-				@Override
 				public void handle(WindowEvent event) {
 
 					ventanaPrincipal();
@@ -435,10 +433,9 @@ public class ManejadorEscenarios {
 			escenario.setResizable(false);
 			escenario.getIcons().add(new Image("file:src/software/cafeteria/images/icono_ventana.png"));
 			escenario.setOnCloseRequest(new EventHandler<WindowEvent>() {
-				@Override
 				public void handle(WindowEvent event) {
 
-					Alert alert = new Alert(AlertType.CONFIRMATION, "¿Seguro quieres salir?", ButtonType.YES,
+					Alert alert = new Alert(AlertType.CONFIRMATION, "Â¿Seguro quieres salir?", ButtonType.YES,
 							ButtonType.NO);
 					Optional<ButtonType> action = alert.showAndWait();
 					if (action.get() == ButtonType.YES) {
@@ -737,41 +734,41 @@ public class ManejadorEscenarios {
 		ArrayList<String> renglones = new ArrayList<String>();
 
 		renglones.add(
-				"┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐");
+				"â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”�");
 		renglones.add(
-				"│                                          INFORME FISCAL DE VENTAS DIARIAS                                          │");
+				"â”‚                                          INFORME FISCAL DE VENTAS DIARIAS                                          â”‚");
 		renglones.add(
-				"│                                  CAFETERIA LA CUEVA DEL LOCO    ARMENIA-QUINDIO                                    │");
+				"â”‚                                  CAFETERIA LA CUEVA DEL LOCO    ARMENIA-QUINDIO                                    â”‚");
 		renglones.add(
-				"│                                            ARIGO COMERCIALIZADORA S.A.S.                                           │");
+				"â”‚                                            ARIGO COMERCIALIZADORA S.A.S.                                           â”‚");
 
 		GregorianCalendar fecha = informe.getFecha();
-		String prefijo = "│         Fecha:              " + fecha.get(Calendar.YEAR) + "-" + fecha.get(Calendar.MONTH)
+		String prefijo = "â”‚         Fecha:              " + fecha.get(Calendar.YEAR) + "-" + fecha.get(Calendar.MONTH)
 				+ "-" + fecha.get(Calendar.DAY_OF_MONTH);
 		int tamano = renglones.get(0).length();
-		String sufijo = "Consec. Z No:      " + informe.getNumeroInforme() + "       │";
+		String sufijo = "Consec. Z No:      " + informe.getNumeroInforme() + "       â”‚";
 		renglones.add(prefijo + calcularEspacios(prefijo, tamano - sufijo.length()) + sufijo);
 
-		prefijo = "│         Número caja:        " + "1";
-		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "│");
+		prefijo = "â”‚         NÃºmero caja:        " + "1";
+		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "â”‚");
 
-		prefijo = "│         Registro Inicial:   " + informe.numeroPrimerRecibo();
-		sufijo = "Registro Final:     " + informe.numeroUltimoRecibo() + "      │";
+		prefijo = "â”‚         Registro Inicial:   " + informe.numeroPrimerRecibo();
+		sufijo = "Registro Final:     " + informe.numeroUltimoRecibo() + "      â”‚";
 		renglones.add(prefijo + calcularEspacios(sufijo, tamano - prefijo.length()) + sufijo);
 
-		prefijo = "│      ┌──────────────────────────────────────────────────────────┬──────────────────┬────────────────┐";
-		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "│");
+		prefijo = "â”‚      â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”�";
+		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "â”‚");
 
-		prefijo = "│      │                    TIPO DE VENTA                         │    IVA O IPÓC    │    VR. BASE    │";
-		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "│");
+		prefijo = "â”‚      â”‚                    TIPO DE VENTA                         â”‚    IVA O IPÃ“C    â”‚    VR. BASE    â”‚";
+		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "â”‚");
 
-		prefijo = "│      ├──────────────────────────────────────────────────────────┼──────────────────┼────────────────┤";
-		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "│");
+		prefijo = "â”‚      â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤";
+		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "â”‚");
 
-		prefijo = "│      │                   VENTAS EXENTAS                         │";
+		prefijo = "â”‚      â”‚                   VENTAS EXENTAS                         â”‚";
 
 		sufijo = 0 + "";
-		prefijo += calcularEspacios(sufijo, "    IVA O IPÓC    ".length() - 1) + sufijo;
+		prefijo += calcularEspacios(sufijo, "    IVA O IPÃ“C    ".length() - 1) + sufijo;
 		Integer[][] iva = informe.getIva();
 		Integer[][] ganancias = informe.getGanancia();
 		if (ganancias[0][0] == 0) {
@@ -779,25 +776,25 @@ public class ManejadorEscenarios {
 		} else {
 			sufijo = 0 + "";
 		}
-		prefijo += " │" + calcularEspacios(sufijo, "    VR. BASE    ".length() - 1) + sufijo + " │";
-		prefijo += calcularEspacios("│", tamano - prefijo.length()) + "│";
+		prefijo += " â”‚" + calcularEspacios(sufijo, "    VR. BASE    ".length() - 1) + sufijo + " â”‚";
+		prefijo += calcularEspacios("â”‚", tamano - prefijo.length()) + "â”‚";
 		renglones.add(prefijo);
 
-		prefijo = "│      ├──────────────────────────────────────────────────────────┼──────────────────┼────────────────┤";
-		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "│");
+		prefijo = "â”‚      â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤";
+		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "â”‚");
 
-		prefijo = "│      │                VALORES BOLSAS PLÁSTICAS                  │";
+		prefijo = "â”‚      â”‚                VALORES BOLSAS PLÃ�STICAS                  â”‚";
 		sufijo = 0 + "";
-		prefijo += calcularEspacios(sufijo, "    IVA O IPÓC    ".length() - 1) + sufijo;
+		prefijo += calcularEspacios(sufijo, "    IVA O IPÃ“C    ".length() - 1) + sufijo;
 		sufijo = (informe.calcularValorBolsasEfectivo() + informe.calcularValorBolsasTarjeta()) + "";
-		prefijo += " │" + calcularEspacios(sufijo, "    VR. BASE    ".length() - 1) + sufijo + " │";
-		prefijo += calcularEspacios("│", tamano - prefijo.length()) + "│";
+		prefijo += " â”‚" + calcularEspacios(sufijo, "    VR. BASE    ".length() - 1) + sufijo + " â”‚";
+		prefijo += calcularEspacios("â”‚", tamano - prefijo.length()) + "â”‚";
 		renglones.add(prefijo);
 
-		prefijo = "│      ├──────────────────────────────────────────────────────────┼──────────────────┼────────────────┤";
-		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "│");
+		prefijo = "â”‚      â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤";
+		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "â”‚");
 
-		prefijo = "│      │                 VENTAS GRAVADAS AL 5%                    │";
+		prefijo = "â”‚      â”‚                 VENTAS GRAVADAS AL 5%                    â”‚";
 		String sufijo1 = "";
 		boolean ward = true;
 		for (int i = 0; i < ganancias.length && ward; i++) {
@@ -812,15 +809,15 @@ public class ManejadorEscenarios {
 			sufijo = 0 + "";
 		}
 
-		prefijo += calcularEspacios(sufijo1, "    IVA O IPÓC    ".length() - 1) + sufijo1;
-		prefijo += " │" + calcularEspacios(sufijo, "    VR. BASE    ".length() - 1) + sufijo + " │";
-		prefijo += calcularEspacios("│", tamano - prefijo.length()) + "│";
+		prefijo += calcularEspacios(sufijo1, "    IVA O IPÃ“C    ".length() - 1) + sufijo1;
+		prefijo += " â”‚" + calcularEspacios(sufijo, "    VR. BASE    ".length() - 1) + sufijo + " â”‚";
+		prefijo += calcularEspacios("â”‚", tamano - prefijo.length()) + "â”‚";
 		renglones.add(prefijo);
 
-		prefijo = "│      ├──────────────────────────────────────────────────────────┼──────────────────┼────────────────┤";
-		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "│");
+		prefijo = "â”‚      â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤";
+		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "â”‚");
 
-		prefijo = "│      │                VENTAS GRAVADAS AL 19%                    │";
+		prefijo = "â”‚      â”‚                VENTAS GRAVADAS AL 19%                    â”‚";
 		sufijo1 = "";
 		ward = true;
 		for (int i = 0; i < ganancias.length && ward; i++) {
@@ -835,61 +832,61 @@ public class ManejadorEscenarios {
 			sufijo = 0 + "";
 		}
 
-		prefijo += calcularEspacios(sufijo1, "    IVA O IPÓC    ".length() - 1) + sufijo1;
-		prefijo += " │" + calcularEspacios(sufijo, "    VR. BASE    ".length() - 1) + sufijo + " │";
-		prefijo += calcularEspacios("│", tamano - prefijo.length()) + "│";
+		prefijo += calcularEspacios(sufijo1, "    IVA O IPÃ“C    ".length() - 1) + sufijo1;
+		prefijo += " â”‚" + calcularEspacios(sufijo, "    VR. BASE    ".length() - 1) + sufijo + " â”‚";
+		prefijo += calcularEspacios("â”‚", tamano - prefijo.length()) + "â”‚";
 		renglones.add(prefijo);
 
-		prefijo = "│      ├──────────────────────────────────────────────────────────┼──────────────────┼────────────────┤";
-		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "│");
+		prefijo = "â”‚      â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤";
+		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "â”‚");
 
-		prefijo = "│      │                   TOTAL DE VENTAS                        │";
-		prefijo += calcularEspacios(informe.getTotalIva() + "", "    IVA O IPÓC    ".length() - 1)
+		prefijo = "â”‚      â”‚                   TOTAL DE VENTAS                        â”‚";
+		prefijo += calcularEspacios(informe.getTotalIva() + "", "    IVA O IPÃ“C    ".length() - 1)
 				+ informe.getTotalIva();
-		prefijo += " │" + calcularEspacios(informe.getTotalGanancia() + "", "    VR. BASE    ".length() - 1)
+		prefijo += " â”‚" + calcularEspacios(informe.getTotalGanancia() + "", "    VR. BASE    ".length() - 1)
 				+ (informe.getTotalGanancia() + informe.calcularValorBolsasEfectivo()
 						+ informe.calcularValorBolsasTarjeta())
-				+ " │";
-		prefijo += calcularEspacios("│", tamano - prefijo.length()) + "│";
+				+ " â”‚";
+		prefijo += calcularEspacios("â”‚", tamano - prefijo.length()) + "â”‚";
 		renglones.add(prefijo);
 
-		prefijo = "│      └──────────────────────────────────────────────────────────┴──────────────────┴────────────────┘";
-		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "│");
+		prefijo = "â”‚      â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜";
+		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "â”‚");
 
-		prefijo = "│      ┌──────────────────┬──────────────────┬──────────────────┬──────────────────┬────────────────┐";
-		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "│");
+		prefijo = "â”‚      â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”�";
+		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "â”‚");
 
-		prefijo = "│      │     EFECTIVO     │      CHEQUES     │  TARJ. CRÉDITO   │   VIAS CRÉDITO   │ TOTAL RECIBIDO │";
-		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "│");
+		prefijo = "â”‚      â”‚     EFECTIVO     â”‚      CHEQUES     â”‚  TARJ. CRÃ‰DITO   â”‚   VIAS CRÃ‰DITO   â”‚ TOTAL RECIBIDO â”‚";
+		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "â”‚");
 
-		prefijo = "│      ├──────────────────┼──────────────────┼──────────────────┼──────────────────┼────────────────┤";
-		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "│");
+		prefijo = "â”‚      â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤";
+		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "â”‚");
 
-		prefijo = "│      │"
+		prefijo = "â”‚      â”‚"
 				+ calcularEspacios((informe.getEfectivo() + informe.calcularValorBolsasEfectivo()) + "",
 						"     EFECTIVO     ".length() - 1)
-				+ (informe.getEfectivo() + informe.calcularValorBolsasEfectivo()) + " │";
-		prefijo += calcularEspacios(0 + "", "      CHEQUES     ".length() - 1) + 0 + " │";
+				+ (informe.getEfectivo() + informe.calcularValorBolsasEfectivo()) + " â”‚";
+		prefijo += calcularEspacios(0 + "", "      CHEQUES     ".length() - 1) + 0 + " â”‚";
 		prefijo += calcularEspacios((informe.getTarjeta() + informe.calcularValorBolsasTarjeta()) + "",
-				"  TARJ. CRÉDITO   ".length() - 1) + (informe.getTarjeta() + informe.calcularValorBolsasTarjeta())
-				+ " │";
-		prefijo += calcularEspacios(0 + "", "   VIAS CRÉDITO   ".length() - 1) + 0 + " │";
+				"  TARJ. CRÃ‰DITO   ".length() - 1) + (informe.getTarjeta() + informe.calcularValorBolsasTarjeta())
+				+ " â”‚";
+		prefijo += calcularEspacios(0 + "", "   VIAS CRÃ‰DITO   ".length() - 1) + 0 + " â”‚";
 		prefijo += calcularEspacios((informe.getTotalEnCaja() + informe.calcularValorBolsasTarjeta()) + "",
 				" TOTAL RECIBIDO ".length() - 1) + (informe.getTotalEnCaja() + informe.calcularValorBolsasTarjeta())
-				+ " │";
+				+ " â”‚";
 
-		prefijo += calcularEspacios("│", tamano - prefijo.length() - 1) + " │";
+		prefijo += calcularEspacios("â”‚", tamano - prefijo.length() - 1) + " â”‚";
 		renglones.add(prefijo);
 
-		prefijo = "│      └──────────────────┴──────────────────┴──────────────────┴──────────────────┴────────────────┘";
-		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "│");
+		prefijo = "â”‚      â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜";
+		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "â”‚");
 		renglones.add(
-				"│                                                                                                                    │");
+				"â”‚                                                                                                                    â”‚");
 
 		renglones.add(
-				"│                                                                                                                    │");
+				"â”‚                                                                                                                    â”‚");
 		renglones.add(
-				"└────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘");
+				"â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜");
 
 		try {
 			String nombreArchivo = "Cuadre " + informe.getNumeroInforme() + " " + fecha.get(Calendar.YEAR) + "-"
@@ -907,33 +904,34 @@ public class ManejadorEscenarios {
 
 		ArrayList<String> renglones = new ArrayList<String>();
 
-		renglones.add("┌──────────────────────────────────────────┐");
-		renglones.add("│              COMEDAL S.A.S.              │");
-		renglones.add("│         CF/RIA LA CUEVA DEL LOCO         │");
-		renglones.add("│             NIT: 901262014-5             │");
-		renglones.add("│          RESPONSABLE IMP/CONSUMO         │");
-		renglones.add("│                                          │");
-		renglones.add("│                                          │");
-		renglones.add("│           E IMP/VENTAS LEY 1943          │");
-		renglones.add("│            CRA 19 # 1N 00 LC 5           │");
-		renglones.add("│              ARMENIA QUINDIO             │");
-		renglones.add("│                                          │");
+		renglones.add(
+				"â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”�");
+		renglones.add("â”‚              COMEDAL S.A.S.              â”‚");
+		renglones.add("â”‚         CF/RIA LA CUEVA DEL LOCO         â”‚");
+		renglones.add("â”‚             NIT: 901262014-5             â”‚");
+		renglones.add("â”‚          RESPONSABLE IMP/CONSUMO         â”‚");
+		renglones.add("â”‚                                          â”‚");
+		renglones.add("â”‚                                          â”‚");
+		renglones.add("â”‚           E IMP/VENTAS LEY 1943          â”‚");
+		renglones.add("â”‚            CRA 19 # 1N 00 LC 5           â”‚");
+		renglones.add("â”‚              ARMENIA QUINDIO             â”‚");
+		renglones.add("â”‚                                          â”‚");
 		int tamano = renglones.get(0).length() - 1;
 		GregorianCalendar fecha = recibo.getFecha();
 
-		String renglon1 = "│ " + fecha.get(Calendar.YEAR) + "-" + (fecha.get(Calendar.MONTH) + 1) + "-"
+		String renglon1 = "â”‚ " + fecha.get(Calendar.YEAR) + "-" + (fecha.get(Calendar.MONTH) + 1) + "-"
 				+ fecha.get(Calendar.DAY_OF_MONTH) + " " + fecha.get(Calendar.HOUR) + ":" + fecha.get(Calendar.MINUTE)
 				+ ":" + fecha.get(Calendar.SECOND);
-		renglones.add(renglon1 + calcularEspacios(renglon1, tamano) + "│");
-		renglon1 = recibo.getId() + " │";
-		renglones.add("│" + calcularEspacios(renglon1, tamano) + renglon1);
-		renglones.add("│                                          │");
-		renglones.add("│                                          │");
+		renglones.add(renglon1 + calcularEspacios(renglon1, tamano) + "â”‚");
+		renglon1 = recibo.getId() + " â”‚";
+		renglones.add("â”‚" + calcularEspacios(renglon1, tamano) + renglon1);
+		renglones.add("â”‚                                          â”‚");
+		renglones.add("â”‚                                          â”‚");
 
 		int limite = (renglones.get(0).length() * 60) / 100;
 
 		for (int i = 0; i < recibo.getProductosV().size(); i++) {
-			String renglon = "│ ";
+			String renglon = "â”‚ ";
 			ProductosVentas producto = recibo.getProductosV().get(i);
 			String[] partes = producto.getProducto().getNombre().split(" ");
 			for (int j = 0; j < partes.length; j++) {
@@ -943,13 +941,13 @@ public class ManejadorEscenarios {
 							+ producto.getProducto().getPrecio() * producto.getCantidad();
 					String espacios = calcularEspacios(renglon + partes[j], tamano - cantidades.length());
 
-					renglones.add(renglon + partes[j] + espacios + cantidades + "│");
+					renglones.add(renglon + partes[j] + espacios + cantidades + "â”‚");
 
 				} else {
 					if (renglon.length() + partes[j].length() > limite) {
 
-						renglones.add(renglon + calcularEspacios(renglon, tamano) + "│");
-						renglon = "│ ";
+						renglones.add(renglon + calcularEspacios(renglon, tamano) + "â”‚");
+						renglon = "â”‚ ";
 
 					} else {
 
@@ -961,51 +959,52 @@ public class ManejadorEscenarios {
 		}
 		int valor = recibo.getValorBolsas();
 		if (valor > 0) {
-			String renglon = "│ BOLSA PLASTICA";
+			String renglon = "â”‚ BOLSA PLASTICA";
 			renglon += calcularEspacios(renglon, limite);
 			String cantidades = " -- " + valor / 50 + " " + valor;
-			renglon += calcularEspacios(renglon, tamano - cantidades.length()) + cantidades + "│";
+			renglon += calcularEspacios(renglon, tamano - cantidades.length()) + cantidades + "â”‚";
 			renglones.add(renglon + calcularEspacios(renglon, tamano - renglon.length() - 1));
 		}
 
-		renglones.add("│                                          │");
-		renglones.add("│                                          │");
+		renglones.add("â”‚                                          â”‚");
+		renglones.add("â”‚                                          â”‚");
 
 		Integer[][] iva = recibo.getTotalIvaRecibo();
 		Integer[][] ganancias = recibo.getTotalGananciaRecibo();
-		String prefijo = "│ BASE GRAVADA";
+		String prefijo = "â”‚ BASE GRAVADA";
 		for (int i = 0; i < iva.length; i++) {
 
 			if (iva[i][0] == 0) {
 				renglon1 = ganancias[i][1] + "";
 				renglones.add(
-						prefijo + calcularEspacios(renglon1, tamano - prefijo.length() - 1) + "$" + renglon1 + "│");
-				String iva_ = "│   EXENTOS:";
+						prefijo + calcularEspacios(renglon1, tamano - prefijo.length() - 1) + "$" + renglon1 + "â”‚");
+				String iva_ = "â”‚   EXENTOS:";
 				renglon1 = iva[i][1] + "";
-				renglones.add(iva_ + calcularEspacios(renglon1, tamano - 1 - iva_.length()) + "$" + renglon1 + "│");
+				renglones.add(iva_ + calcularEspacios(renglon1, tamano - 1 - iva_.length()) + "$" + renglon1 + "â”‚");
 			} else {
 				renglon1 = ganancias[i][1] + "";
 				renglones.add(
-						prefijo + calcularEspacios(renglon1, tamano - prefijo.length() - 1) + "$" + renglon1 + "│");
-				String iva_ = "│   GRAVADOS " + iva[i][0] + "%";
+						prefijo + calcularEspacios(renglon1, tamano - prefijo.length() - 1) + "$" + renglon1 + "â”‚");
+				String iva_ = "â”‚   GRAVADOS " + iva[i][0] + "%";
 				renglon1 = iva[i][1] + "";
-				renglones.add(iva_ + calcularEspacios(renglon1, tamano - 1 - iva_.length()) + "$" + renglon1 + "│");
+				renglones.add(iva_ + calcularEspacios(renglon1, tamano - 1 - iva_.length()) + "$" + renglon1 + "â”‚");
 			}
 
 		}
 
-		renglones.add("│" + calcularEspacios("│", tamano) + "│");
+		renglones.add("â”‚" + calcularEspacios("â”‚", tamano) + "â”‚");
 		String tarjeta = recibo.getTarjeta() ? "SI" : "NO";
-		renglon1 = "│    PAGO CON TARJETA:    " + tarjeta;
-		renglones.add(renglon1 + calcularEspacios(renglon1, tamano) + "│");
-		renglon1 = "│    TOTAL:             " + recibo.getPrecioTotal();
-		renglones.add(renglon1 + calcularEspacios(renglon1, tamano) + "│");
-		renglon1 = "│    CAJA:              " + recibo.getEfectivoRegistrado();
-		renglones.add(renglon1 + calcularEspacios(renglon1, tamano) + "│");
-		renglon1 = "│    CAMBIO:            " + recibo.getCambio();
-		renglones.add(renglon1 + calcularEspacios(renglon1, tamano) + "│");
-		renglones.add("│                                          │");
-		renglones.add("└──────────────────────────────────────────┘");
+		renglon1 = "â”‚    PAGO CON TARJETA:    " + tarjeta;
+		renglones.add(renglon1 + calcularEspacios(renglon1, tamano) + "â”‚");
+		renglon1 = "â”‚    TOTAL:             " + recibo.getPrecioTotal();
+		renglones.add(renglon1 + calcularEspacios(renglon1, tamano) + "â”‚");
+		renglon1 = "â”‚    CAJA:              " + recibo.getEfectivoRegistrado();
+		renglones.add(renglon1 + calcularEspacios(renglon1, tamano) + "â”‚");
+		renglon1 = "â”‚    CAMBIO:            " + recibo.getCambio();
+		renglones.add(renglon1 + calcularEspacios(renglon1, tamano) + "â”‚");
+		renglones.add("â”‚                                          â”‚");
+		renglones.add(
+				"â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜");
 
 		try {
 			String nombreArchivo = "Recibo " + recibo.getId() + " " + fecha.get(Calendar.YEAR) + "-"
@@ -1033,135 +1032,137 @@ public class ManejadorEscenarios {
 
 		ArrayList<String> renglones = new ArrayList<String>();
 
-		renglones.add("┌──────────────────────────────────────────┐");
-		renglones.add("│              COMEDAL S.A.S.              │");
-		renglones.add("│         CF/RIA LA CUEVA DEL LOCO         │");
-		renglones.add("│             NIT: 901262014-5             │");
-		renglones.add("│          RESPONSABLE IMP/CONSUMO         │");
-		renglones.add("│                                          │");
+		renglones.add(
+				"â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”�");
+		renglones.add("â”‚              COMEDAL S.A.S.              â”‚");
+		renglones.add("â”‚         CF/RIA LA CUEVA DEL LOCO         â”‚");
+		renglones.add("â”‚             NIT: 901262014-5             â”‚");
+		renglones.add("â”‚          RESPONSABLE IMP/CONSUMO         â”‚");
+		renglones.add("â”‚                                          â”‚");
 
 		int tamano = renglones.get(0).length() - 1;
 		GregorianCalendar fecha = new GregorianCalendar();
 
-		String renglon1 = "│ Z      " + fecha.get(Calendar.YEAR) + "-" + (fecha.get(Calendar.MONTH) + 1) + "-"
+		String renglon1 = "â”‚ Z      " + fecha.get(Calendar.YEAR) + "-" + (fecha.get(Calendar.MONTH) + 1) + "-"
 				+ fecha.get(Calendar.DAY_OF_MONTH) + "   " + fecha.get(Calendar.HOUR) + ":" + fecha.get(Calendar.MINUTE)
 				+ ":" + fecha.get(Calendar.SECOND);
-		renglones.add(renglon1 + calcularEspacios(renglon1, tamano) + "│");
+		renglones.add(renglon1 + calcularEspacios(renglon1, tamano) + "â”‚");
 		if (informe.getLista().size() >= 2) {
-			renglon1 = informe.getLista().get(informe.getLista().size() - 2).getId() + "│";
+			renglon1 = informe.getLista().get(informe.getLista().size() - 2).getId() + "â”‚";
 		} else {
-			renglon1 = informe.getLista().get(informe.getLista().size() - 1).getId() + "│";
+			renglon1 = informe.getLista().get(informe.getLista().size() - 1).getId() + "â”‚";
 		}
-		renglones.add("│ Z" + calcularEspacios(renglon1, tamano - 2) + renglon1);
-		renglones.add("│                                          │");
-		renglones.add("│                                          │");
-		renglones.add("│                                          │");
-		renglones.add("│                                          │");
-		renglones.add("│              COMEDAL S.A.S.              │");
-		renglones.add("│         CF/RIA LA CUEVA DEL LOCO         │");
-		renglones.add("│             NIT: 901262014-5             │");
-		renglones.add("│          RESPONSABLE IMP/CONSUMO         │");
-		renglones.add("│                                          │");
+		renglones.add("â”‚ Z" + calcularEspacios(renglon1, tamano - 2) + renglon1);
+		renglones.add("â”‚                                          â”‚");
+		renglones.add("â”‚                                          â”‚");
+		renglones.add("â”‚                                          â”‚");
+		renglones.add("â”‚                                          â”‚");
+		renglones.add("â”‚              COMEDAL S.A.S.              â”‚");
+		renglones.add("â”‚         CF/RIA LA CUEVA DEL LOCO         â”‚");
+		renglones.add("â”‚             NIT: 901262014-5             â”‚");
+		renglones.add("â”‚          RESPONSABLE IMP/CONSUMO         â”‚");
+		renglones.add("â”‚                                          â”‚");
 
 		GregorianCalendar fecha1 = new GregorianCalendar();
 
-		renglon1 = "│ Z      " + fecha1.get(Calendar.YEAR) + "-" + (fecha1.get(Calendar.MONTH) + 1) + "-"
+		renglon1 = "â”‚ Z      " + fecha1.get(Calendar.YEAR) + "-" + (fecha1.get(Calendar.MONTH) + 1) + "-"
 				+ fecha1.get(Calendar.DAY_OF_MONTH) + "   " + fecha1.get(Calendar.HOUR) + ":"
 				+ fecha1.get(Calendar.MINUTE) + ":" + fecha1.get(Calendar.SECOND);
-		renglones.add(renglon1 + calcularEspacios(renglon1, tamano) + "│");
-		renglon1 = informe.getLista().get(informe.getLista().size() - 1).getId() + "│";
-		renglones.add("│ Z" + calcularEspacios(renglon1, tamano - 2) + renglon1);
+		renglones.add(renglon1 + calcularEspacios(renglon1, tamano) + "â”‚");
+		renglon1 = informe.getLista().get(informe.getLista().size() - 1).getId() + "â”‚";
+		renglones.add("â”‚ Z" + calcularEspacios(renglon1, tamano - 2) + renglon1);
 
-		renglones.add("│                                          │");
-		renglones.add("│ ---------------------------------------- │");
-		renglon1 = "│ Z       Z DIARIO";
-		renglones.add(renglon1 + calcularEspacios(renglon1, tamano) + "│");
-		renglones.add("│ ---------------------------------------- │");
+		renglones.add("â”‚                                          â”‚");
+		renglones.add("â”‚ ---------------------------------------- â”‚");
+		renglon1 = "â”‚ Z       Z DIARIO";
+		renglones.add(renglon1 + calcularEspacios(renglon1, tamano) + "â”‚");
+		renglones.add("â”‚ ---------------------------------------- â”‚");
 		renglon1 = informe.getNumeroInforme();
-		String prefijo = "│ Z       DEPTOS";
-		renglones.add(prefijo + calcularEspacios(renglon1, tamano - prefijo.length()) + renglon1 + "│");
-		renglones.add("│                                          │");
+		String prefijo = "â”‚ Z       DEPTOS";
+		renglones.add(prefijo + calcularEspacios(renglon1, tamano - prefijo.length()) + renglon1 + "â”‚");
+		renglones.add("â”‚                                          â”‚");
 
 		Integer[][] iva = informe.getIva();
 		for (int i = 0; i < iva.length; i++) {
 
 			if (iva[i][0] == 0) {
-				String iva_ = "│   EXENTOS:";
+				String iva_ = "â”‚   EXENTOS:";
 				renglon1 = iva[i][1] + "";
-				renglones.add(iva_ + calcularEspacios(renglon1, tamano - 1 - iva_.length()) + "$" + renglon1 + "│");
+				renglones.add(iva_ + calcularEspacios(renglon1, tamano - 1 - iva_.length()) + "$" + renglon1 + "â”‚");
 			} else {
-				String iva_ = "│   GRAVADOS " + iva[i][0] + "%";
+				String iva_ = "â”‚   GRAVADOS " + iva[i][0] + "%";
 				renglon1 = iva[i][1] + "";
-				renglones.add(iva_ + calcularEspacios(renglon1, tamano - 1 - iva_.length()) + "$" + renglon1 + "│");
+				renglones.add(iva_ + calcularEspacios(renglon1, tamano - 1 - iva_.length()) + "$" + renglon1 + "â”‚");
 			}
 
 		}
-		renglones.add("│ ---------------------------------------- │");
-		prefijo = "│ Z    ToT. FIJOS";
+		renglones.add("â”‚ ---------------------------------------- â”‚");
+		prefijo = "â”‚ Z    ToT. FIJOS";
 		renglon1 = informe.getNumeroInforme();
-		renglones.add(prefijo + calcularEspacios(renglon1, tamano - prefijo.length()) + renglon1 + "│");
+		renglones.add(prefijo + calcularEspacios(renglon1, tamano - prefijo.length()) + renglon1 + "â”‚");
 
-		prefijo = "│ BRUTO ";
+		prefijo = "â”‚ BRUTO ";
 		renglon1 = informe.getTotalEnCaja() + "";
-		renglones.add(prefijo + calcularEspacios(renglon1, tamano - prefijo.length() - 1) + "$" + renglon1 + "│");
+		renglones.add(prefijo + calcularEspacios(renglon1, tamano - prefijo.length() - 1) + "$" + renglon1 + "â”‚");
 
-		prefijo = "│    EFECTIVO: ";
+		prefijo = "â”‚    EFECTIVO: ";
 		renglon1 = (informe.getEfectivo() + informe.calcularValorBolsasEfectivo()) + "";
-		renglones.add(prefijo + calcularEspacios(renglon1, tamano - prefijo.length() - 1) + "$" + renglon1 + "│");
+		renglones.add(prefijo + calcularEspacios(renglon1, tamano - prefijo.length() - 1) + "$" + renglon1 + "â”‚");
 
-		prefijo = "│    TARJETA: ";
+		prefijo = "â”‚    TARJETA: ";
 		renglon1 = (informe.getTarjeta() + informe.calcularValorBolsasTarjeta()) + "";
-		renglones.add(prefijo + calcularEspacios(renglon1, tamano - prefijo.length() - 1) + "$" + renglon1 + "│");
+		renglones.add(prefijo + calcularEspacios(renglon1, tamano - prefijo.length() - 1) + "$" + renglon1 + "â”‚");
 
-		renglones.add("│ ---------------------------------------- │");
+		renglones.add("â”‚ ---------------------------------------- â”‚");
 
 		Integer[][] ganancias = informe.getGanancia();
-		prefijo = "│ BASE GRAVADA";
+		prefijo = "â”‚ BASE GRAVADA";
 		for (int i = 0; i < iva.length; i++) {
 
 			if (iva[i][0] == 0) {
 				renglon1 = ganancias[i][1] + "";
 				renglones.add(
-						prefijo + calcularEspacios(renglon1, tamano - prefijo.length() - 1) + "$" + renglon1 + "│");
-				String iva_ = "│   EXENTOS:";
+						prefijo + calcularEspacios(renglon1, tamano - prefijo.length() - 1) + "$" + renglon1 + "â”‚");
+				String iva_ = "â”‚   EXENTOS:";
 				renglon1 = iva[i][1] + "";
-				renglones.add(iva_ + calcularEspacios(renglon1, tamano - 1 - iva_.length()) + "$" + renglon1 + "│");
+				renglones.add(iva_ + calcularEspacios(renglon1, tamano - 1 - iva_.length()) + "$" + renglon1 + "â”‚");
 			} else {
 				renglon1 = ganancias[i][1] + "";
 				renglones.add(
-						prefijo + calcularEspacios(renglon1, tamano - prefijo.length() - 1) + "$" + renglon1 + "│");
-				String iva_ = "│   GRAVADOS " + iva[i][0] + "%";
+						prefijo + calcularEspacios(renglon1, tamano - prefijo.length() - 1) + "$" + renglon1 + "â”‚");
+				String iva_ = "â”‚   GRAVADOS " + iva[i][0] + "%";
 				renglon1 = iva[i][1] + "";
-				renglones.add(iva_ + calcularEspacios(renglon1, tamano - 1 - iva_.length()) + "$" + renglon1 + "│");
+				renglones.add(iva_ + calcularEspacios(renglon1, tamano - 1 - iva_.length()) + "$" + renglon1 + "â”‚");
 			}
 
 		}
 
 		renglon1 = "$" + 0;
-		renglones.add(prefijo + calcularEspacios(renglon1, tamano - prefijo.length()) + renglon1 + "│");
+		renglones.add(prefijo + calcularEspacios(renglon1, tamano - prefijo.length()) + renglon1 + "â”‚");
 
-		prefijo = "│ IMP/CSUMO 8%";
+		prefijo = "â”‚ IMP/CSUMO 8%";
 		renglon1 = "$" + 0;
-		renglones.add(prefijo + calcularEspacios(renglon1, tamano - prefijo.length()) + renglon1 + "│");
+		renglones.add(prefijo + calcularEspacios(renglon1, tamano - prefijo.length()) + renglon1 + "â”‚");
 
 		renglon1 = informe.numeroPrimerRecibo() + "--->" + informe.numeroUltimoRecibo();
-		renglones.add("│" + calcularEspacios(renglon1, tamano - 2) + renglon1 + " │");
+		renglones.add("â”‚" + calcularEspacios(renglon1, tamano - 2) + renglon1 + " â”‚");
 
-		renglones.add("│ ---------------------------------------- │");
+		renglones.add("â”‚ ---------------------------------------- â”‚");
 
 		renglon1 = informe.getNumeroInforme();
-		prefijo = "│ Z       FUNC LIBRES";
-		renglones.add(prefijo + calcularEspacios(renglon1, tamano - prefijo.length()) + renglon1 + "│");
+		prefijo = "â”‚ Z       FUNC LIBRES";
+		renglones.add(prefijo + calcularEspacios(renglon1, tamano - prefijo.length()) + renglon1 + "â”‚");
 
-		prefijo = "│ CAJA           No";
-		renglones.add(prefijo + calcularEspacios("1", tamano - prefijo.length()) + "1│");
+		prefijo = "â”‚ CAJA           No";
+		renglones.add(prefijo + calcularEspacios("1", tamano - prefijo.length()) + "1â”‚");
 
 		renglon1 = informe.getTotalEnCaja() + informe.calcularValorBolsasTarjeta()
-				+ informe.calcularValorBolsasTarjeta() + "│";
-		renglones.add("│" + calcularEspacios(renglon1, tamano) + renglon1);
+				+ informe.calcularValorBolsasTarjeta() + "â”‚";
+		renglones.add("â”‚" + calcularEspacios(renglon1, tamano) + renglon1);
 
-		renglones.add("│                                          │");
-		renglones.add("└──────────────────────────────────────────┘");
+		renglones.add("â”‚                                          â”‚");
+		renglones.add(
+				"â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜");
 
 		try {
 			String nombreArchivo = "Informe " + informe.getNumeroInforme() + " " + fecha.get(Calendar.YEAR) + "-"

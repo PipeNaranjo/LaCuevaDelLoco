@@ -1,7 +1,0 @@
-organization=proyectofinal3
-projectKey=ProyectoFinal
-serverUrl=https://sonarcloud.io
-serverVersion=8.0.0.14515
-dashboardUrl=https://sonarcloud.io/dashboard?id=ProyectoFinal
-ceTaskId=AXXaDhVu9RW8_RoqjhUF
-ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AXXaDhVu9RW8_RoqjhUF

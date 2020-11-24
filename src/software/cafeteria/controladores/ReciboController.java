@@ -2,9 +2,11 @@ package software.cafeteria.controladores;
 
 import java.util.Optional;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -14,6 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -24,6 +27,7 @@ import software.cafeteria.delegado.ProductoObservable;
 import software.cafeteria.entidades.ProductosVentas;
 import software.cafeteria.entidades.Recibo;
 
+@SuppressWarnings("restriction")
 public class ReciboController {
 
 	private ManejadorEscenarios manejador;
@@ -61,26 +65,24 @@ public class ReciboController {
 
 	private TableColumn<ProductoObservable, Void> menos;
 
-	private TableColumn<ProductoObservable, String> cantidad;
-
 	private TableColumn<ProductoObservable, Void> mas;
 
 	private TableColumn<ProductoObservable, Void> eliminarDelCarrito;
 
 	@FXML
-	private Button btn_factura;
+	private Button factura;
 
 	@FXML
-	private Button btn_carrito;
+	private Button botonCarrito;
 
 	@FXML
 	private TextField busquedaProducto;
 
 	@FXML
-	private Button btn_regresar;
+	private Button botonRegresar;
 
 	@FXML
-	private TextField cant_bolsas;
+	private TextField cantidadBolsas;
 
 	private int numeroBolsas;
 
@@ -88,10 +90,30 @@ public class ReciboController {
 	public void initialize() {
 
 		numeroBolsas = 0;
-		nombre1.setCellValueFactory(nombre -> nombre.getValue().getNombre());
-		precio1.setCellValueFactory(precio -> precio.getValue().getPrecio());
-		nombre2.setCellValueFactory(nombre -> nombre.getValue().getNombre());
-		precio2.setCellValueFactory(precio -> precio.getValue().getPrecio());
+		nombre1.setCellValueFactory(
+				new Callback<CellDataFeatures<ProductoObservable, String>, ObservableValue<String>>() {
+					public ObservableValue<String> call(CellDataFeatures<ProductoObservable, String> nombre) {
+						return nombre.getValue().getNombre();
+					}
+				});
+		precio1.setCellValueFactory(
+				new Callback<CellDataFeatures<ProductoObservable, String>, ObservableValue<String>>() {
+					public ObservableValue<String> call(CellDataFeatures<ProductoObservable, String> precio) {
+						return precio.getValue().getPrecio();
+					}
+				});
+		nombre2.setCellValueFactory(
+				new Callback<CellDataFeatures<ProductoObservable, String>, ObservableValue<String>>() {
+					public ObservableValue<String> call(CellDataFeatures<ProductoObservable, String> nombre) {
+						return nombre.getValue().getNombre();
+					}
+				});
+		precio2.setCellValueFactory(
+				new Callback<CellDataFeatures<ProductoObservable, String>, ObservableValue<String>>() {
+					public ObservableValue<String> call(CellDataFeatures<ProductoObservable, String> precio) {
+						return precio.getValue().getPrecio();
+					}
+				});
 
 		valorTotal.setText("0");
 
@@ -109,90 +131,95 @@ public class ReciboController {
 		imagenCarrito.setGraphic(imageView);
 
 		imageView = new ImageView("file:src/software/cafeteria/images/regresar.png");
-		btn_regresar.setGraphic(imageView);
+		botonRegresar.setGraphic(imageView);
 
 		imageView = new ImageView("file:src/software/cafeteria/images/vaciarCarrito.png");
-		btn_carrito.setGraphic(imageView);
+		botonCarrito.setGraphic(imageView);
 
 		imageView = new ImageView("file:src/software/cafeteria/images/confirmar.png");
-		btn_factura.setGraphic(imageView);
+		factura.setGraphic(imageView);
 
 	}
 
 	private void generarBotones() {
 		Callback<TableColumn<ProductoObservable, Void>, TableCell<ProductoObservable, Void>> cellFactory1 = new Callback<TableColumn<ProductoObservable, Void>, TableCell<ProductoObservable, Void>>() {
-			@Override
+
 			public TableCell<ProductoObservable, Void> call(final TableColumn<ProductoObservable, Void> param) {
 				final TableCell<ProductoObservable, Void> cell = new TableCell<ProductoObservable, Void>() {
 					final ImageView imageView = new ImageView("file:src/software/cafeteria/images/agregarCarrito.png");
 					private final Button btn = new Button("Agregar carrito", imageView);
 
 					{
-						btn.setOnAction((ActionEvent event) -> {
+						btn.setOnAction(new EventHandler<ActionEvent>() {
+							public void handle(ActionEvent event) {
 
-							int indice = this.getIndex();
-							ProductoObservable producto = productosInventarios.getItems().get(indice);
-							ObservableList<ProductoObservable> productos = FXCollections.observableArrayList();
+								int indice = getIndex();
+								ProductoObservable producto = productosInventarios.getItems().get(indice);
+								ObservableList<ProductoObservable> productos = FXCollections.observableArrayList();
 
-							boolean ward = true;
+								boolean ward = true;
 
-							for (int i = 0; i < carrito.getItems().size() && ward; i++) {
-								if (carrito.getItems().get(i).getCodigoBarras().getValue()
-										.equals(producto.getCodigoBarras().getValue())) {
-									ward = false;
-									int cantidad = Integer.parseInt(carrito.getItems().get(i).getCantidad().getValue());
+								for (int i = 0; i < carrito.getItems().size() && ward; i++) {
+									if (carrito.getItems().get(i).getCodigoBarras().getValue()
+											.equals(producto.getCodigoBarras().getValue())) {
+										ward = false;
+										int cantidad = Integer
+												.parseInt(carrito.getItems().get(i).getCantidad().getValue());
 
-									if (cantidad < carrito.getItems().get(i).getProductoInventario().getCantidad()) {
-
-										cantidad += 1;
-
-										carrito.getItems().get(i).setCantidad(new SimpleStringProperty(cantidad + ""));
-
-										if (cantidad == carrito.getItems().get(i).getProductoInventario()
+										if (cantidad < carrito.getItems().get(i).getProductoInventario()
 												.getCantidad()) {
 
+											cantidad += 1;
+
+											carrito.getItems().get(i)
+													.setCantidad(new SimpleStringProperty(cantidad + ""));
+
+											if (cantidad == carrito.getItems().get(i).getProductoInventario()
+													.getCantidad()) {
+
+												Alert alert = new Alert(AlertType.WARNING,
+														"Las existencias se agotaron", ButtonType.OK);
+												alert.show();
+
+											}
+										} else {
 											Alert alert = new Alert(AlertType.WARNING, "Las existencias se agotaron",
 													ButtonType.OK);
 											alert.show();
-
 										}
+
+									}
+								}
+
+								if (ward) {
+
+									if (producto.getProductoInventario().getCantidad() != 0) {
+										carrito.getItems().add(new ProductoObservable(producto.getNombre().getValue(),
+												producto.getCosto().getValue(), producto.getIva().getValue(),
+												producto.getTipoProducto().getValue(), "1",
+												producto.getPrecio().getValue(), producto.getCodigoBarras().getValue(),
+												producto.getPresentacion().getValue(), producto.getEmpresa().getValue(),
+												producto.getProductoInventario()));
 									} else {
 										Alert alert = new Alert(AlertType.WARNING, "Las existencias se agotaron",
 												ButtonType.OK);
 										alert.show();
 									}
-
 								}
-							}
-
-							if (ward) {
-
-								if (producto.getProductoInventario().getCantidad() != 0) {
-									carrito.getItems().add(new ProductoObservable(producto.getNombre().getValue(),
-											producto.getCosto().getValue(), producto.getIva().getValue(),
-											producto.getTipoProducto().getValue(), "1", producto.getPrecio().getValue(),
-											producto.getCodigoBarras().getValue(),
-											producto.getPresentacion().getValue(), producto.getEmpresa().getValue(),
-											producto.getProductoInventario()));
-								} else {
-									Alert alert = new Alert(AlertType.WARNING, "Las existencias se agotaron",
-											ButtonType.OK);
-									alert.show();
+								int valor = numeroBolsas * 50;
+								for (int j = 0; j < carrito.getItems().size(); j++) {
+									productos.add(carrito.getItems().get(j));
+									valor += Integer.parseInt(carrito.getItems().get(j).getPrecio().getValue())
+											* Integer.parseInt(carrito.getItems().get(j).getCantidad().getValue());
 								}
+
+								carrito.getItems().removeAll(carrito.getItems());
+								carrito.getItems().addAll(productos);
+
+								valorTotal.setText(valor + "");
+								cambiarTotal();
+
 							}
-							int valor = numeroBolsas * 50;
-							for (int j = 0; j < carrito.getItems().size(); j++) {
-								productos.add(carrito.getItems().get(j));
-								valor += Integer.parseInt(carrito.getItems().get(j).getPrecio().getValue())
-										* Integer.parseInt(carrito.getItems().get(j).getCantidad().getValue());
-							}
-
-							carrito.getItems().removeAll(carrito.getItems());
-							carrito.getItems().addAll(productos);
-
-							valorTotal.setText(valor + "");
-							cambiarTotal();
-
 						});
 					}
 
@@ -216,7 +243,6 @@ public class ReciboController {
 		productosInventarios.getColumns().add(agregarAlCarro);
 
 		Callback<TableColumn<ProductoObservable, Void>, TableCell<ProductoObservable, Void>> cellFactory2 = new Callback<TableColumn<ProductoObservable, Void>, TableCell<ProductoObservable, Void>>() {
-			@Override
 			public TableCell<ProductoObservable, Void> call(final TableColumn<ProductoObservable, Void> param) {
 				final TableCell<ProductoObservable, Void> cell = new TableCell<ProductoObservable, Void>() {
 					final ImageView imageView = new ImageView(
@@ -224,33 +250,35 @@ public class ReciboController {
 					private final Button btn = new Button("", imageView);
 
 					{
-						btn.setOnAction((ActionEvent event) -> {
+						btn.setOnAction(new EventHandler<ActionEvent>() {
+							public void handle(ActionEvent event) {
 
-							int indice = this.getIndex();
+								int indice = getIndex();
 
-							ObservableList<ProductoObservable> productos = FXCollections.observableArrayList();
-							if (!carrito.getItems().get(indice).getCantidad().getValue().equals("1")) {
+								ObservableList<ProductoObservable> productos = FXCollections.observableArrayList();
+								if (!carrito.getItems().get(indice).getCantidad().getValue().equals("1")) {
 
-								int cantidad = Integer.parseInt(carrito.getItems().get(indice).getCantidad().getValue())
-										- 1;
-								ProductoObservable producto = carrito.getItems().get(indice);
-								producto.setCantidad(new SimpleStringProperty(cantidad + ""));
+									int cantidad = Integer
+											.parseInt(carrito.getItems().get(indice).getCantidad().getValue()) - 1;
+									ProductoObservable producto = carrito.getItems().get(indice);
+									producto.setCantidad(new SimpleStringProperty(cantidad + ""));
 
-								int valor = numeroBolsas * 50;
-								for (int j = 0; j < carrito.getItems().size(); j++) {
-									productos.add(carrito.getItems().get(j));
-									valor += Integer.parseInt(carrito.getItems().get(j).getPrecio().getValue())
-											* Integer.parseInt(carrito.getItems().get(j).getCantidad().getValue());
+									int valor = numeroBolsas * 50;
+									for (int j = 0; j < carrito.getItems().size(); j++) {
+										productos.add(carrito.getItems().get(j));
+										valor += Integer.parseInt(carrito.getItems().get(j).getPrecio().getValue())
+												* Integer.parseInt(carrito.getItems().get(j).getCantidad().getValue());
+									}
+
+									carrito.getItems().removeAll(carrito.getItems());
+									carrito.getItems().addAll(productos);
+
+									valorTotal.setText(valor + "");
+									cambiarTotal();
+
 								}
 
-								carrito.getItems().removeAll(carrito.getItems());
-								carrito.getItems().addAll(productos);
-
-								valorTotal.setText(valor + "");
-								cambiarTotal();
-
 							}
-
 						});
 					}
 
@@ -271,15 +299,19 @@ public class ReciboController {
 		menos.setCellFactory(cellFactory2);
 
 		carrito.getColumns().add(menos);
-
+		TableColumn<ProductoObservable, String> cantidad;
 		cantidad = new TableColumn<ProductoObservable, String>("Cant");
-		cantidad.setCellValueFactory(cantidad -> cantidad.getValue().getCantidad());
+		cantidad.setCellValueFactory(
+				new Callback<CellDataFeatures<ProductoObservable, String>, ObservableValue<String>>() {
+					public ObservableValue<String> call(CellDataFeatures<ProductoObservable, String> cantidad) {
+						return cantidad.getValue().getCantidad();
+					}
+				});
 		cantidad.setMaxWidth(42);
 
 		carrito.getColumns().add(cantidad);
 
 		Callback<TableColumn<ProductoObservable, Void>, TableCell<ProductoObservable, Void>> cellFactory3 = new Callback<TableColumn<ProductoObservable, Void>, TableCell<ProductoObservable, Void>>() {
-			@Override
 			public TableCell<ProductoObservable, Void> call(final TableColumn<ProductoObservable, Void> param) {
 				final TableCell<ProductoObservable, Void> cell = new TableCell<ProductoObservable, Void>() {
 					final ImageView imageView = new ImageView(
@@ -287,57 +319,60 @@ public class ReciboController {
 					private final Button btn = new Button("", imageView);
 
 					{
-						btn.setOnAction((ActionEvent event) -> {
+						btn.setOnAction(new EventHandler<ActionEvent>() {
+							public void handle(ActionEvent event) {
 
-							ObservableList<ProductoObservable> productos = FXCollections.observableArrayList();
-							ProductoObservable productoCarrito = carrito.getItems().get(this.getIndex());
+								ObservableList<ProductoObservable> productos = FXCollections.observableArrayList();
+								ProductoObservable productoCarrito = carrito.getItems().get(getIndex());
 
-							ProductoObservable producto = null;
+								ProductoObservable producto = null;
 
-							for (int i = 0; i < productosInventarios.getItems().size(); i++) {
-								if (productoCarrito.getCodigoBarras().getValue()
-										.equals(productosInventarios.getItems().get(i).getCodigoBarras().getValue())) {
+								for (int i = 0; i < productosInventarios.getItems().size(); i++) {
+									if (productoCarrito.getCodigoBarras().getValue().equals(
+											productosInventarios.getItems().get(i).getCodigoBarras().getValue())) {
 
-									producto = productosInventarios.getItems().get(i);
-								}
-							}
-
-							if (producto != null) {
-								int cantidadCarrito = Integer.parseInt(productoCarrito.getCantidad().getValue());
-
-								int cantidad = producto.getProductoInventario().getCantidad();
-
-								if (cantidadCarrito < cantidad) {
-									cantidadCarrito += 1;
-
-									productoCarrito.setCantidad(new SimpleStringProperty(cantidadCarrito + ""));
-
-									int valor = numeroBolsas * 50;
-									for (int j = 0; j < carrito.getItems().size(); j++) {
-										productos.add(carrito.getItems().get(j));
-										valor += Integer.parseInt(carrito.getItems().get(j).getPrecio().getValue())
-												* Integer.parseInt(carrito.getItems().get(j).getCantidad().getValue());
+										producto = productosInventarios.getItems().get(i);
 									}
+								}
 
-									carrito.getItems().removeAll(carrito.getItems());
-									carrito.getItems().addAll(productos);
+								if (producto != null) {
+									int cantidadCarrito = Integer.parseInt(productoCarrito.getCantidad().getValue());
 
-									valorTotal.setText(valor + "");
-									cambiarTotal();
+									int cantidad = producto.getProductoInventario().getCantidad();
 
-									if (cantidadCarrito == cantidad) {
+									if (cantidadCarrito < cantidad) {
+										cantidadCarrito += 1;
+
+										productoCarrito.setCantidad(new SimpleStringProperty(cantidadCarrito + ""));
+
+										int valor = numeroBolsas * 50;
+										for (int j = 0; j < carrito.getItems().size(); j++) {
+											productos.add(carrito.getItems().get(j));
+											valor += Integer.parseInt(carrito.getItems().get(j).getPrecio().getValue())
+													* Integer.parseInt(
+															carrito.getItems().get(j).getCantidad().getValue());
+										}
+
+										carrito.getItems().removeAll(carrito.getItems());
+										carrito.getItems().addAll(productos);
+
+										valorTotal.setText(valor + "");
+										cambiarTotal();
+
+										if (cantidadCarrito == cantidad) {
+											Alert alert = new Alert(AlertType.WARNING, "Las existencias se agotaron",
+													ButtonType.OK);
+											alert.show();
+										}
+
+									} else {
 										Alert alert = new Alert(AlertType.WARNING, "Las existencias se agotaron",
 												ButtonType.OK);
 										alert.show();
 									}
-
-								} else {
-									Alert alert = new Alert(AlertType.WARNING, "Las existencias se agotaron",
-											ButtonType.OK);
-									alert.show();
 								}
-							}
 
+							}
 						});
 					}
 
@@ -360,7 +395,6 @@ public class ReciboController {
 		carrito.getColumns().add(mas);
 
 		Callback<TableColumn<ProductoObservable, Void>, TableCell<ProductoObservable, Void>> cellFactory4 = new Callback<TableColumn<ProductoObservable, Void>, TableCell<ProductoObservable, Void>>() {
-			@Override
 			public TableCell<ProductoObservable, Void> call(final TableColumn<ProductoObservable, Void> param) {
 				final TableCell<ProductoObservable, Void> cell = new TableCell<ProductoObservable, Void>() {
 					final ImageView imageView = new ImageView(
@@ -368,20 +402,22 @@ public class ReciboController {
 					private final Button btn = new Button("", imageView);
 
 					{
-						btn.setOnAction((ActionEvent event) -> {
+						btn.setOnAction(new EventHandler<ActionEvent>() {
+							public void handle(ActionEvent event) {
 
-							int indice = this.getIndex();
+								int indice = getIndex();
 
-							carrito.getItems().remove(indice);
+								carrito.getItems().remove(indice);
 
-							int valor = 0;
-							for (int j = 0; j < carrito.getItems().size(); j++) {
+								int valor = 0;
+								for (int j = 0; j < carrito.getItems().size(); j++) {
 
-								valor += Integer.parseInt(carrito.getItems().get(j).getPrecio().getValue())
-										* Integer.parseInt(carrito.getItems().get(j).getCantidad().getValue());
+									valor += Integer.parseInt(carrito.getItems().get(j).getPrecio().getValue())
+											* Integer.parseInt(carrito.getItems().get(j).getCantidad().getValue());
+								}
+								valorTotal.setText(valor + "");
+
 							}
-							valorTotal.setText(valor + "");
-
 						});
 					}
 
@@ -420,9 +456,9 @@ public class ReciboController {
 				seleccion = true;
 			}
 			int cantidad_bolsas = 0;
-			if (!cant_bolsas.getText().equals("")) {
+			if (!cantidadBolsas.getText().equals("")) {
 				try {
-					cantidad_bolsas = Integer.parseInt(cant_bolsas.getText());
+					cantidad_bolsas = Integer.parseInt(cantidadBolsas.getText());
 				} catch (NumberFormatException e) {
 					Alert alert = new Alert(AlertType.ERROR, "Número de bolsas inválido", ButtonType.OK);
 					alert.show();
@@ -471,10 +507,10 @@ public class ReciboController {
 
 				int valor = Integer.parseInt(valorTotal.getText()) - (numeroBolsas * 50);
 
-				if (cant_bolsas.getText().equals("")) {
+				if (cantidadBolsas.getText().equals("")) {
 					numeroBolsas = 0;
 				} else {
-					numeroBolsas = Integer.parseInt(cant_bolsas.getText());
+					numeroBolsas = Integer.parseInt(cantidadBolsas.getText());
 				}
 				System.out.println(numeroBolsas);
 				int bolsas = numeroBolsas * 50;
@@ -496,7 +532,7 @@ public class ReciboController {
 		carrito.getItems().addAll(productos);
 		valorTotal.setText("0");
 		manejador.setReciboTemp(null);
-		cant_bolsas.setText("");
+		cantidadBolsas.setText("");
 
 	}
 
@@ -521,7 +557,7 @@ public class ReciboController {
 			if (recibo.getTarjeta()) {
 				tarjeta.setSelected(true);
 			}
-			cant_bolsas.setText(recibo.getValorBolsas() / 50 + "");
+			cantidadBolsas.setText(recibo.getValorBolsas() / 50 + "");
 			valorTotal.setText(recibo.getPrecioTotal() + "");
 		}
 

@@ -60,7 +60,7 @@ public class Persistencia {
 		FileReader miFileReader = new FileReader(miArchivo);
 		BufferedReader miBufferReader = new BufferedReader(miFileReader);
 		String linea;
-		ArrayList<String> misLineas = new ArrayList<>();
+		ArrayList<String> misLineas = new ArrayList<String>();
 		while ((linea = miBufferReader.readLine()) != null) {
 			misLineas.add(linea);
 		}
@@ -82,10 +82,10 @@ public class Persistencia {
 	 */
 	public static ArrayList<ArrayList<String>> cargarArchivos(File directorio, ArrayList<String> nombres)
 			throws Exception {
-		ArrayList<String> archivosRuta = new ArrayList<>();
+		ArrayList<String> archivosRuta = new ArrayList<String>();
 		listarRecursivamenteArchivos(directorio, archivosRuta);
 
-		ArrayList<ArrayList<String>> misArchivos = new ArrayList<>();
+		ArrayList<ArrayList<String>> misArchivos = new ArrayList<ArrayList<String>>();
 		// System.out.println("archivosRuta.get(i) " +archivosRuta.size());
 
 		for (int i = 0; i < archivosRuta.size(); i++) {
@@ -138,13 +138,13 @@ public class Persistencia {
 	 * @throws IOException
 	 */
 	public static ArrayList<ArrayList<String>> cargarRutas(File directorio) throws IOException {
-		ArrayList<String> archivosRuta = new ArrayList<>();
+		ArrayList<String> archivosRuta = new ArrayList<String>();
 		listarRecursivamenteArchivos(directorio, archivosRuta);
 
-		ArrayList<ArrayList<String>> misArchivos = new ArrayList<>();
+		ArrayList<ArrayList<String>> misArchivos = new ArrayList<ArrayList<String>>();
 
 		for (int i = 0; i < archivosRuta.size(); i++) {
-			ArrayList<String> miR = new ArrayList<>();
+			ArrayList<String> miR = new ArrayList<String>();
 			miR.add(archivosRuta.get(i));
 			// System.out.println(archivosRuta.get(i));
 			misArchivos.add(miR);
