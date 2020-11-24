@@ -309,8 +309,8 @@ public class Inventario implements Serializable {
 	 * metodo constructor del inventario
 	 */
 	public Inventario() {
-		this.productosI = new ArrayList<>();
-		this.empresas = new ArrayList<>();
+		this.productosI = new ArrayList<ProductosInventario>();
+		this.empresas = new ArrayList<Empresa>();
 	}
 
 	/**
