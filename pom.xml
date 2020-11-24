@@ -43,6 +43,10 @@
 		<sonar.projectKey>ProyectoFinalSW</sonar.projectKey>
 		<sonar.organization>proyectofinal3</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<sonar.sources>.</sonar.sources>
+		<sonar.tests>.</sonar.tests>
+		<sonar.test.inclusions>**/*Test*/**</sonar.test.inclusions>
+		<sonar.exclusions>**/*Test*/**</sonar.exclusions>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.6</maven.compiler.source>
 		<maven.compiler.target>1.6</maven.compiler.target>
