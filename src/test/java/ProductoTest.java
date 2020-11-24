@@ -1,4 +1,4 @@
-package test.javasoftware.cafeteria.pruebas;
+package test.java;
 
 import org.junit.After;
 import org.junit.Assert;

@@ -1,4 +1,4 @@
-package test.javasoftware.cafeteria.pruebas;
+package test.java;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
