@@ -22,7 +22,7 @@ public class PruebasUnitarias {
 	@Test
 	public void crearEmpresa() {
 		Empresa a = new Empresa("coca-cola");
-		Assert.assertEquals("coca-cola", a.getNombre());
+		Assert.assertEquals("coca-", a.getNombre());
 	}
 
 	@Test
