@@ -9,11 +9,15 @@ import main.java.software.cafeteria.entidades.Empresa;
 
 public class EmpresaTest extends TestCase {
 
+	private static final String NOMBRE = "coca-cola";
+
+	@Override
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
 	}
 
+	@Override
 	@After
 	public void tearDown() throws Exception {
 		super.tearDown();
@@ -21,8 +25,8 @@ public class EmpresaTest extends TestCase {
 
 	@Test
 	public void testEmpresa() {
-		Empresa a = new Empresa("coca-cola");
-		assertEquals("coca-cola", a.getNombre());
+		Empresa a = new Empresa(NOMBRE);
+		assertEquals(NOMBRE, a.getNombre());
 	}
 
 }
