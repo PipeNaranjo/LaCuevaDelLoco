@@ -22,7 +22,7 @@ public class EmpresaTest extends TestCase {
 	@Test
 	public void testEmpresa() {
 		Empresa a = new Empresa("coca-cola");
-		assertEquals("coca-c", a.getNombre());
+		assertEquals("coca-cola", a.getNombre());
 	}
 
 }
