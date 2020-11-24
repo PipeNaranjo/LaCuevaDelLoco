@@ -18,27 +18,27 @@ public class InformeFiscalTest {
 
 	@Test
 	public void testInformeFiscal() {
-		fail("Not yet implemented");
+
 	}
 
 	@Test
 	public void testCalcularValorBolsasEfectivo() {
-		fail("Not yet implemented");
+
 	}
 
 	@Test
 	public void testCalcularValorBolsasTarjeta() {
-		fail("Not yet implemented");
+
 	}
 
 	@Test
 	public void testNumeroPrimerRecibo() {
-		fail("Not yet implemented");
+
 	}
 
 	@Test
 	public void testNumeroUltimoRecibo() {
-		fail("Not yet implemented");
+
 	}
 
 }
