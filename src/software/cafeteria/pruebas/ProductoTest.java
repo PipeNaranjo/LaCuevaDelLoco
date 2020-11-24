@@ -9,6 +9,7 @@ import junit.framework.TestCase;
 import software.cafeteria.entidades.Empresa;
 import software.cafeteria.entidades.Producto;
 
+
 public class ProductoTest extends TestCase {
 
 	@Before
@@ -26,7 +27,7 @@ public class ProductoTest extends TestCase {
 		Producto a = new Producto("123", "coca-cola personal", new Empresa("coca-cola"), 20, 19, 800, 1000);
 		Producto b = a.clone();
 
-		Assert.assertEquals(a, b);
+		Assert.assertEquals(a.getCodigoDeBarras(), b.getCodigoDeBarras());
 	}
 
 }
