@@ -25,14 +25,8 @@ public class ProductoTest extends TestCase {
 	public void testClone() {
 		Producto a = new Producto("123", "coca-cola personal", new Empresa("coca-cola"), 20, 19, 800, 1000);
 		Producto b = a.clone();
-		Assert.assertEquals(a.getCodigoDeBarras(), b.getCodigoDeBarras());
-		Assert.assertEquals(a.getNombre(), b.getNombre());
-		Assert.assertEquals(a.getEmpresa(), b.getEmpresa());
-		Assert.assertEquals(a.getPresentacion(), b.getPresentacion());
-		Assert.assertEquals(a.getIva(), b.getIva());
-		Assert.assertEquals(a.getCosto(), b.getCosto());
-		Assert.assertEquals(a.getPrecio(), b.getPrecio());
-		Assert.assertNotEquals(a, b);
+
+		Assert.assertEquals(a, b);
 	}
 
 }
