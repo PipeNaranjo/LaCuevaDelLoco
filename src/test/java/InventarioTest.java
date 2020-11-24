@@ -16,9 +16,10 @@ public class InventarioTest {
 	private static final String TIPO = "Bebida";
 	private static final Empresa EMPRESA2 = new Empresa(NOMBRE2);
 
+	Inventario b = new Inventario();
+
 	@Test
 	public void verificarExistenciaProductoI() {
-		Inventario b = new Inventario();
 		ProductosInventario a = new ProductosInventario("123", NOMBREPRODUCTO, EMPRESA, 20, 19, 800, 40, TIPO, 1000);
 		b.agregarProducto(a);
 		Assert.assertTrue(b.verficarExistenciaProducto("123"));
@@ -26,7 +27,6 @@ public class InventarioTest {
 
 	@Test
 	public void obtenerProductoI() {
-		Inventario b = new Inventario();
 		ProductosInventario a = new ProductosInventario("123", NOMBREPRODUCTO, EMPRESA, 20, 19, 800, 40, TIPO, 1000);
 		b.agregarProducto(a);
 		Assert.assertEquals(a, b.obtenerproductoI("123"));
@@ -34,7 +34,6 @@ public class InventarioTest {
 
 	@Test
 	public void modificarProductoI() {
-		Inventario b = new Inventario();
 		ProductosInventario a = new ProductosInventario("123", NOMBREPRODUCTO, EMPRESA, 20, 19, 800, 40, TIPO, 1000);
 		b.agregarProducto(a);
 		b.modificarProducto(a, "123", NOMBREPRODUCTO, EMPRESA, 20, 19, 800, 40, TIPO, 1200);
@@ -43,7 +42,6 @@ public class InventarioTest {
 
 	@Test
 	public void borrarProductoI() {
-		Inventario b = new Inventario();
 		ProductosInventario a = new ProductosInventario("123", NOMBREPRODUCTO, EMPRESA, 20, 19, 800, 40, TIPO, 1000);
 		b.agregarProducto(a);
 		Assert.assertTrue(b.verficarExistenciaProducto("123"));
@@ -53,7 +51,6 @@ public class InventarioTest {
 
 	@Test
 	public void agregarAlProductoI() {
-		Inventario b = new Inventario();
 		ProductosInventario a = new ProductosInventario("123", NOMBREPRODUCTO, EMPRESA, 20, 19, 800, 40, TIPO, 1000);
 		b.agregarProducto(a);
 		b.agregarAlInventario(b.obtenerproductoI("123"), 10);
@@ -62,7 +59,6 @@ public class InventarioTest {
 
 	@Test
 	public void restarAlProductoI() {
-		Inventario b = new Inventario();
 		ProductosInventario a = new ProductosInventario("123", NOMBREPRODUCTO, EMPRESA, 20, 19, 800, 40, TIPO, 1000);
 		b.agregarProducto(a);
 		b.restarAlInventario(b.obtenerproductoI("123"), 10);
@@ -71,7 +67,6 @@ public class InventarioTest {
 
 	@Test
 	public void agregarEmpresaI() {
-		Inventario b = new Inventario();
 		Empresa a = EMPRESA2;
 		b.agregarEmpresa(a);
 		Assert.assertEquals(1, b.getEmpresas().size());
@@ -79,21 +74,18 @@ public class InventarioTest {
 
 	@Test
 	public void agregarEmpresaI2() {
-		Inventario b = new Inventario();
 		b.agregarEmpresa(NOMBRE2);
 		Assert.assertEquals(1, b.getEmpresas().size());
 	}
 
 	@Test
 	public void verificarExistenciaEmpresaI() {
-		Inventario b = new Inventario();
 		b.agregarEmpresa(NOMBRE2);
 		Assert.assertTrue(b.verficarExistenciaEmpresa(NOMBRE2));
 	}
 
 	@Test
 	public void obtenerEmpresaI() {
-		Inventario b = new Inventario();
 		Empresa a = EMPRESA2;
 		b.agregarEmpresa(a);
 		Assert.assertEquals(a, b.obtenerEmpresa(NOMBRE2));
@@ -101,7 +93,6 @@ public class InventarioTest {
 
 	@Test
 	public void borrarEmpresaI() {
-		Inventario b = new Inventario();
 		b.agregarEmpresa(NOMBRE2);
 		Assert.assertTrue(b.verficarExistenciaEmpresa(NOMBRE2));
 		b.borrarEmpresas(NOMBRE2);
