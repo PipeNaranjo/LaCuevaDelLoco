@@ -7,8 +7,8 @@ import javafx.stage.Stage;
 
 public class VentanaInicioController {
 
-	public ManejadorEscenarios manejador;
-	public Stage stage;
+	private ManejadorEscenarios manejador;
+	private Stage stage;
 
 	@FXML
 	private Button informeFiscal;

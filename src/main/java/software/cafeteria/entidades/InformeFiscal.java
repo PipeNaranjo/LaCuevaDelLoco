@@ -1,8 +1,8 @@
 package main.java.software.cafeteria.entidades;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 /**
  * Clase que guarda todos los datos de productos en general
@@ -30,7 +30,7 @@ public class InformeFiscal implements Serializable {
 	// el iva
 	private Integer[][] ganancia;
 	// lista de recibos con los cuales se saca el informe fiscal
-	private ArrayList<Recibo> lista;
+	private List<Recibo> lista;
 	// valor de las bolsas vendidas en efectivo
 	private int valorBolsasEfectivo;
 	// valor de las bolsas vendidas por tarjeta
@@ -44,7 +44,7 @@ public class InformeFiscal implements Serializable {
 	 * @param lista
 	 *            lista de recibos con los cuales se saca el informe fiscal
 	 */
-	public InformeFiscal(int numeroInforme, ArrayList<Recibo> lista) {
+	public InformeFiscal(int numeroInforme, List<Recibo> lista) {
 		setNumeroInforme(numeroInforme);
 		this.fecha = new GregorianCalendar();
 		this.lista = lista;
@@ -58,22 +58,22 @@ public class InformeFiscal implements Serializable {
 	 * @param lista
 	 *            lista de recibos con los cuales se saca el informe fiscal
 	 */
-	private void calcularValores(ArrayList<Recibo> lista) {
+	private void calcularValores(List<Recibo> lista) {
 		Integer[] i = new Integer[100];
 		Integer[] g = new Integer[100];
 		for (Recibo r : lista) {
 			int suma = 0;
 			for (ProductosVentas p : r.getProductosV()) {
 				int ivaP = p.getProducto().getIva();
-				int $p = p.getProducto().getPrecio();
-				int $piva = ($p * ivaP) / 100;
+				int p1 = p.getProducto().getPrecio();
+				int piva = (p1 * ivaP) / 100;
 				if (i[ivaP] == null) {
 					i[ivaP] = 0;
 					g[ivaP] = 0;
 				}
-				i[ivaP] += $piva * p.getCantidad();
-				g[ivaP] += ($p - $piva) * p.getCantidad();
-				suma += $p * p.getCantidad();
+				i[ivaP] += piva * p.getCantidad();
+				g[ivaP] += (p1 - piva) * p.getCantidad();
+				suma += p1 * p.getCantidad();
 			}
 			if (r.getTarjeta()) {
 				this.tarjeta += suma;
@@ -225,7 +225,7 @@ public class InformeFiscal implements Serializable {
 	 * 
 	 * @return regresa la lista de productos
 	 */
-	public ArrayList<Recibo> getLista() {
+	public List<Recibo> getLista() {
 		return lista;
 	}
 

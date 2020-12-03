@@ -139,7 +139,7 @@
    <bottom>
       <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <buttons>
-          <Button fx:id="btn_modificar" mnemonicParsing="false" onAction="#modificarProducto" text="Modificar">
+          <Button fx:id="btnModificar" mnemonicParsing="false" onAction="#modificarProducto" text="Modificar">
                <font>
                   <Font size="14.0" />
                </font>
@@ -147,7 +147,7 @@
                   <DropShadow color="#544f4f" />
                </effect>
             </Button>
-            <Button fx:id="btn_cancelar" mnemonicParsing="false" onAction="#cancelar" text="Cancelar">
+            <Button fx:id="btnCancelar" mnemonicParsing="false" onAction="#cancelar" text="Cancelar">
                <font>
                   <Font size="14.0" />
                </font>

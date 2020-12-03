@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -32,26 +35,32 @@ import main.java.software.cafeteria.logica.Tienda;
 
 public class ManejadorEscenarios {
 
+	private static final Logger LOGGER = Logger
+			.getLogger(ManejadorEscenarios.class.getPackage().getName() + "." + ManejadorEscenarios.class.getName());
+	private String errorDir = "Error Directorios";
+	private String vacio = "|                                              |";
+	private String inicio = " ---------------------------------------------- ";
 	private ObservableList<ProductoObservable> productos;
 	private ObservableList<String> iva;
 	private ObservableList<String> tiposProductos;
 	private ObservableList<String> tiposProductos1;
+	private String todos = "Todos";
 	private ObservableList<String> empresas;
 	private Stage stage;
-	private Stage agregar;
 	private Tienda tienda;
 	private String tipoSeleccionado;
 	private InventarioController inventarioControlador;
-	private VentanaInicioController ventanaInicioController;
-	private ReciboController facturaControlador;
+	private AgregarProductoController agregarProductoControlador;
+	private ModificarProductoController modificarProductoControlador;
+	private String imagen = "file:src/main/java/software/cafeteria/images/icono_ventana.png";
 	private Recibo reciboTemp;
-	public static InformeFiscal informe;
 	private String rutaRecibos = System.getProperty("user.home") + "/Desktop/Facturas/";
 	private String rutaInformesFiscales = System.getProperty("user.home")
 			+ "/Desktop/informesFiscales (Cuadre de Caja)/";
 	private Impressor impressor;
 	private int bolsas = 0;
 	private String archivo = "src/cafeteria.dat";
+	private boolean validar = false;
 
 	public ManejadorEscenarios(Stage stage) {
 
@@ -61,23 +70,23 @@ public class ManejadorEscenarios {
 				tienda = (Tienda) Persistencia.cargarObjeto(archivo);
 			} catch (ClassNotFoundException e) {
 
-				e.printStackTrace();
+				LOGGER.log(Level.WARNING, "Error Clase No Encontrada");
 			} catch (IOException e) {
-				e.printStackTrace();
+				LOGGER.log(Level.WARNING, errorDir);
 			}
 		} else {
 			tienda = new Tienda();
 		}
+
+		tipoSeleccionado = "Todos";
 
 		impressor = new Impressor();
 		verificarDirectorios();
 		iva = listarIva();
 		productos = listarProductos();
 		empresas = listarEmpresas();
-		tiposProductos1 = listarTipos();
+		tiposProductos = listarTipos();
 		tiposProductos1 = listarTipos1();
-
-		tipoSeleccionado = "Todos";
 
 		ventanaPrincipal();
 
@@ -109,18 +118,20 @@ public class ManejadorEscenarios {
 			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 				public void handle(WindowEvent event) {
 
-					Alert alert = new Alert(AlertType.CONFIRMATION, "Â¿Seguro quieres salir de la aplicaciÃ³n?",
+					Alert alert = new Alert(AlertType.CONFIRMATION, "¿Seguro quieres salir de la aplicación?",
 							ButtonType.YES, ButtonType.NO);
 					Optional<ButtonType> action = alert.showAndWait();
-					if (action.get() == ButtonType.YES) {
-						try {
-							Persistencia.guardarObjetos(tienda, archivo);
-							stage.close();
-						} catch (IOException e) {
-							e.printStackTrace();
+					if (action.isPresent()) {
+						if (action.get() == ButtonType.YES) {
+							try {
+								Persistencia.guardarObjetos(tienda, archivo);
+								stage.close();
+							} catch (IOException e) {
+								LOGGER.log(Level.WARNING, errorDir);
+							}
+						} else if (action.get() == ButtonType.NO) {
+							event.consume();
 						}
-					} else if (action.get() == ButtonType.NO) {
-						event.consume();
 					}
 
 				}
@@ -131,10 +142,10 @@ public class ManejadorEscenarios {
 			Scene scene = new Scene(page);
 
 			stage.setScene(scene);
-			stage.getIcons().add(new Image("file:src/main/java/software/cafeteria/images/icono_ventana.png"));
+			stage.getIcons().add(new Image(imagen));
 
 			// se carga el controlador
-			ventanaInicioController = loader.getController();
+			VentanaInicioController ventanaInicioController = loader.getController();
 			ventanaInicioController.setManejador(this);
 			ventanaInicioController.setStage(stage);
 
@@ -142,7 +153,7 @@ public class ManejadorEscenarios {
 			stage.show();
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.log(Level.WARNING, errorDir);
 		}
 
 	}
@@ -159,17 +170,19 @@ public class ManejadorEscenarios {
 			// se crea el escenario
 			Stage escenario = new Stage();
 			escenario.setResizable(false);
-			escenario.getIcons().add(new Image("file:src/main/java/software/cafeteria/images/icono_ventana.png"));
+			escenario.getIcons().add(new Image(imagen));
 			escenario.setOnCloseRequest(new EventHandler<WindowEvent>() {
 				public void handle(WindowEvent event) {
 
-					Alert alert = new Alert(AlertType.CONFIRMATION, "Â¿Seguro quieres salir?", ButtonType.YES,
+					Alert alert = new Alert(AlertType.CONFIRMATION, "¿Seguro quieres salir?", ButtonType.YES,
 							ButtonType.NO);
 					Optional<ButtonType> action = alert.showAndWait();
-					if (action.get() == ButtonType.YES) {
-						abrirCrearFactura();
-					} else if (action.get() == ButtonType.NO) {
-						event.consume();
+					if (action.isPresent()) {
+						if (action.get() == ButtonType.YES) {
+							abrirCrearFactura();
+						} else if (action.get() == ButtonType.NO) {
+							event.consume();
+						}
 					}
 
 				}
@@ -187,7 +200,7 @@ public class ManejadorEscenarios {
 			escenario.show();
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.log(Level.WARNING, errorDir);
 		}
 
 	}
@@ -213,20 +226,22 @@ public class ManejadorEscenarios {
 					Alert alert = new Alert(AlertType.CONFIRMATION, "Â¿Seguro quieres salir?\nSe perderan los datos",
 							ButtonType.YES, ButtonType.NO);
 					Optional<ButtonType> action = alert.showAndWait();
-					if (action.get() == ButtonType.YES) {
-						reciboTemp = null;
-						stage.close();
-						ventanaPrincipal();
+					if (action.isPresent()) {
+						if (action.get() == ButtonType.YES) {
+							reciboTemp = null;
+							stage.close();
+							ventanaPrincipal();
 
-					} else if (action.get() == ButtonType.NO) {
-						event.consume();
+						} else if (action.get() == ButtonType.NO) {
+							event.consume();
+						}
 					}
 
 				}
 			});
-			escenario.getIcons().add(new Image("file:src/main/java/software/cafeteria/images/icono_ventana.png"));
+			escenario.getIcons().add(new Image(imagen));
 			// se carga el controlador
-			facturaControlador = loader.getController();
+			ReciboController facturaControlador = loader.getController();
 			facturaControlador.setManejador(this);
 			facturaControlador.setStage(escenario);
 
@@ -234,7 +249,7 @@ public class ManejadorEscenarios {
 			escenario.show();
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.log(Level.WARNING, errorDir);
 		}
 
 	}
@@ -248,7 +263,7 @@ public class ManejadorEscenarios {
 			BorderPane page = (BorderPane) loader.load();
 
 			Stage escenario = new Stage();
-			escenario.getIcons().add(new Image("file:src/main/java/software/cafeteria/images/icono_ventana.png"));
+			escenario.getIcons().add(new Image(imagen));
 			escenario.setTitle("Inventario");
 			escenario.setResizable(false);
 			escenario.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -270,7 +285,7 @@ public class ManejadorEscenarios {
 			escenario.show();
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.log(Level.WARNING, errorDir);
 		}
 	}
 
@@ -285,7 +300,7 @@ public class ManejadorEscenarios {
 			// se crea el escenario
 			Stage escenario = new Stage();
 			escenario.setResizable(false);
-			escenario.getIcons().add(new Image("file:src/main/java/software/cafeteria/images/icono_ventana.png"));
+			escenario.getIcons().add(new Image(imagen));
 			escenario.setTitle("Agregar Empresa");
 			Scene scene = new Scene(page);
 			escenario.setScene(scene);
@@ -299,7 +314,7 @@ public class ManejadorEscenarios {
 			escenario.show();
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.log(Level.WARNING, errorDir);
 		}
 	}
 
@@ -314,7 +329,7 @@ public class ManejadorEscenarios {
 			// se crea el escenario
 			Stage escenario = new Stage();
 			escenario.setResizable(false);
-			escenario.getIcons().add(new Image("file:src/main/java/software/cafeteria/images/icono_ventana.png"));
+			escenario.getIcons().add(new Image(imagen));
 			escenario.setTitle("Agregar Tipo de Producto");
 			Scene scene = new Scene(page);
 			escenario.setScene(scene);
@@ -328,7 +343,7 @@ public class ManejadorEscenarios {
 			escenario.show();
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.log(Level.WARNING, errorDir);
 		}
 	}
 
@@ -341,23 +356,23 @@ public class ManejadorEscenarios {
 			BorderPane page = (BorderPane) loader.load();
 
 			// se crea el escenario
-			agregar = new Stage();
-			// agregar.setTitle("Agregar Producto");
+			Stage agregar = new Stage();
+			agregar.setTitle("Agregar Producto");
 			Scene scene = new Scene(page);
 			agregar.setScene(scene);
 			agregar.setResizable(false);
-			agregar.getIcons().add(new Image("file:src/main/java/software/cafeteria/images/icono_ventana.png"));
+			agregar.getIcons().add(new Image(imagen));
 
 			// se carga el controlador
-			AgregarProductoController agregarProductoControlador = loader.getController();
+			agregarProductoControlador = loader.getController();
 			agregarProductoControlador.setManejador(this);
 			agregarProductoControlador.setStage(agregar);
-
+			validar = true;
 			// se crea el escenario
 			agregar.show();
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.log(Level.WARNING, errorDir);
 		}
 	}
 
@@ -373,13 +388,13 @@ public class ManejadorEscenarios {
 			// se crea el escenario
 			Stage escenario = new Stage();
 			escenario.setResizable(false);
-			escenario.getIcons().add(new Image("file:src/main/java/software/cafeteria/images/icono_ventana.png"));
+			escenario.getIcons().add(new Image(imagen));
 			escenario.setTitle("Modificar un producto");
 			Scene scene = new Scene(page);
 			escenario.setScene(scene);
 
 			// se carga el controlador
-			ModificarProductoController modificarProductoControlador = loader.getController();
+			modificarProductoControlador = loader.getController();
 			modificarProductoControlador.setManejador(this, index);
 			modificarProductoControlador.setStage(escenario);
 
@@ -387,7 +402,7 @@ public class ManejadorEscenarios {
 			escenario.show();
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.log(Level.WARNING, errorDir);
 		}
 	}
 
@@ -396,13 +411,13 @@ public class ManejadorEscenarios {
 
 			// se carga la interfaz
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("view/modificar_producto.fxml"));
-			BorderPane page = (BorderPane) loader.load();
+			loader.setLocation(Main.class.getResource("view/agregar_iva.fxml"));
+			AnchorPane page = (AnchorPane) loader.load();
 
 			// se crea el escenario
 			Stage escenario = new Stage();
 			escenario.setResizable(false);
-			escenario.getIcons().add(new Image("file:src/main/java/software/cafeteria/images/icono_ventana.png"));
+			escenario.getIcons().add(new Image(imagen));
 			escenario.setTitle("Agregar nuevo Iva");
 			Scene scene = new Scene(page);
 			escenario.setScene(scene);
@@ -416,7 +431,7 @@ public class ManejadorEscenarios {
 			escenario.show();
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.log(Level.WARNING, errorDir);
 		}
 	}
 
@@ -431,17 +446,19 @@ public class ManejadorEscenarios {
 			// se crea el escenario
 			Stage escenario = new Stage();
 			escenario.setResizable(false);
-			escenario.getIcons().add(new Image("file:src/main/java/software/cafeteria/images/icono_ventana.png"));
+			escenario.getIcons().add(new Image(imagen));
 			escenario.setOnCloseRequest(new EventHandler<WindowEvent>() {
 				public void handle(WindowEvent event) {
 
-					Alert alert = new Alert(AlertType.CONFIRMATION, "Â¿Seguro quieres salir?", ButtonType.YES,
+					Alert alert = new Alert(AlertType.CONFIRMATION, "¿Seguro quieres salir?", ButtonType.YES,
 							ButtonType.NO);
 					Optional<ButtonType> action = alert.showAndWait();
-					if (action.get() == ButtonType.YES) {
-						abrirCrearFactura();
-					} else if (action.get() == ButtonType.NO) {
-						event.consume();
+					if (action.isPresent()) {
+						if (action.get() == ButtonType.YES) {
+							abrirCrearFactura();
+						} else if (action.get() == ButtonType.NO) {
+							event.consume();
+						}
 					}
 
 				}
@@ -459,23 +476,30 @@ public class ManejadorEscenarios {
 			escenario.show();
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.log(Level.WARNING, errorDir);
 		}
 	}
 
 	public boolean agregarIva(int iva) {
 
 		boolean retorno = tienda.getIva().contains(iva + "");
-		if (retorno) {
+		if (!retorno) {
 			tienda.getIva().add(iva + "");
 			try {
 				Persistencia.guardarObjetos(tienda, archivo);
 			} catch (IOException e) {
 
-				e.printStackTrace();
+				LOGGER.log(Level.WARNING, errorDir);
 			}
-			return retorno;
+
 		}
+
+		if (validar) {
+			agregarProductoControlador.getIva().getSelectionModel().select(iva + "");
+		} else {
+			modificarProductoControlador.getIva().getSelectionModel().select(iva + "");
+		}
+
 		return retorno;
 	}
 
@@ -500,7 +524,6 @@ public class ManejadorEscenarios {
 		iva.add("5");
 		iva.add("19");
 		iva.add("Exento");
-		System.out.println();
 		for (int i = 0; i < tienda.getIva().size(); i++) {
 			iva.add(tienda.getIva().get(i));
 		}
@@ -538,7 +561,7 @@ public class ManejadorEscenarios {
 
 		tiposProductos1 = null;
 		tiposProductos1 = FXCollections.observableArrayList();
-		tiposProductos1.add("Todos");
+		tiposProductos1.add(todos);
 		for (int i = 0; i < tienda.getInventario().getProductosI().size(); i++) {
 			if (!tiposProductos1.contains(tienda.getInventario().getProductosI().get(i).getTipo())) {
 				tiposProductos1.add(tienda.getInventario().getProductosI().get(i).getTipo());
@@ -578,23 +601,21 @@ public class ManejadorEscenarios {
 
 	}
 
-	public boolean agregarProducto(String codigoBarras, String nombre, int costo, int presentacion, int precio, int iva,
-			String tipo, int cantidad, String empresa) {
+	public boolean agregarProducto(ProductosInventario productoInventario) {
 
-		ProductosInventario productoInventario = new ProductosInventario(codigoBarras, nombre, new Empresa(empresa),
-				presentacion, iva, costo, cantidad, tipo, precio);
 		boolean res = tienda.getInventario().agregarProducto(productoInventario);
 		if (res) {
-			if (tipoSeleccionado.equals("Todos")) {
+			if (tipoSeleccionado.equals(todos) || productoInventario.getTipo().equals(tipoSeleccionado)) {
 				productos.add(new ProductoObservable(productoInventario));
-			} else if (productoInventario.getTipo().equals(tipoSeleccionado)) {
-				productos.add(new ProductoObservable(productoInventario));
+			}
+			if (!tiposProductos1.contains(productoInventario.getTipo())) {
+				tiposProductos1.add(productoInventario.getTipo());
 			}
 		}
 		try {
 			Persistencia.guardarObjetos(tienda, archivo);
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.log(Level.WARNING, errorDir);
 		}
 		return res;
 
@@ -603,19 +624,28 @@ public class ManejadorEscenarios {
 	public boolean agregarEmpresa(String nombreEmpresa) {
 		boolean res = tienda.getInventario().agregarEmpresa(new Empresa(nombreEmpresa));
 		empresas.add(nombreEmpresa);
+		if (validar) {
+			agregarProductoControlador.getEmpresaDistri().getSelectionModel().select(nombreEmpresa);
+		} else {
+			modificarProductoControlador.getEmpresaDistri().getSelectionModel().select(nombreEmpresa);
+		}
 		return res;
 	}
 
-	@SuppressWarnings("unused")
 	public boolean agregarTipoProducto(String tipoProducto) {
 
 		for (int i = 0; i < tiposProductos.size(); i++) {
 			if (!(tiposProductos.get(i).equals(tipoProducto) && tiposProductos1.get(i).equals(tipoProducto))) {
 				tiposProductos.add(tipoProducto);
-				tiposProductos1.add(tipoProducto);
+
+				if (validar) {
+					agregarProductoControlador.getTipoProducto().getSelectionModel().select(tipoProducto);
+				} else {
+					modificarProductoControlador.getTipoProducto().getSelectionModel().select(tipoProducto);
+				}
+
 				return true;
 			}
-			return false;
 		}
 		return false;
 
@@ -627,23 +657,17 @@ public class ManejadorEscenarios {
 			ObservableList<ProductoObservable> nuevos = FXCollections.observableArrayList();
 
 			for (int j = 0; j < productos.size(); j++) {
-				String[] partesNombre = productos.get(j).getNombre().getValue().split(" ");
-				boolean ward = true;
-				for (int i = 0; i < partesNombre.length && ward; i++) {
-					if (partesNombre[i].length() > cadena.length()) {
+				String nombre = productos.get(j).getNombre().getValue();
 
-						String nombreProducto = partesNombre[i].substring(0, cadena.length());
-						if (nombreProducto.equalsIgnoreCase(cadena)) {
-							nuevos.add(productos.get(j));
-							ward = false;
-						}
-					}
+				if (nombre.contains(cadena)) {
+					nuevos.add(productos.get(j));
 				}
+
 			}
 
 			return nuevos;
 		}
-		return null;
+		return productos;
 
 	}
 
@@ -652,7 +676,7 @@ public class ManejadorEscenarios {
 		tipoSeleccionado = tipo;
 		productos = FXCollections.observableArrayList();
 
-		if (tipo.equals("Todos")) {
+		if (tipo.equals(todos)) {
 			for (int i = 0; i < tienda.getInventario().getProductosI().size(); i++) {
 
 				productos.add(new ProductoObservable(tienda.getInventario().getProductosI().get(i)));
@@ -669,19 +693,24 @@ public class ManejadorEscenarios {
 		return productos;
 	}
 
-	public boolean modificarProducto(String codigo_Barras, String nombre_Producto, int costo_Producto,
-			int presentacion_Producto, int precio_Producto, int iva_, String tipo_Producto, int cantidad_,
-			ProductoObservable productoAnterior, String empresa) {
+	public boolean modificarProducto(ProductosInventario producto, ProductosInventario anterior) {
 
-		boolean res = tienda.getInventario().modificarProducto(productoAnterior.getProductoInventario(), codigo_Barras,
-				nombre_Producto, new Empresa(empresa), presentacion_Producto, iva_, costo_Producto, cantidad_,
-				tipo_Producto, precio_Producto);
-		actualizarTablaTipo(tipoSeleccionado);
+		boolean res = tienda.getInventario().modificarProducto(anterior, producto);
+		try {
+			actualizarTablaTipo(tipoSeleccionado);
+		} catch (NullPointerException e) {
+			LOGGER.log(Level.WARNING, "Error Elemento Nulo");
+		}
 		inventarioControlador.actualizarTabla();
+		if (res && tiposProductos1.contains(producto.getTipo())) {
+
+			tiposProductos1.add(producto.getTipo());
+
+		}
 		try {
 			Persistencia.guardarObjetos(tienda, archivo);
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.log(Level.WARNING, errorDir);
 		}
 		return res;
 
@@ -695,7 +724,7 @@ public class ManejadorEscenarios {
 			Persistencia.guardarObjetos(tienda, archivo);
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.log(Level.WARNING, errorDir);
 		}
 		reciboTemp = null;
 	}
@@ -719,7 +748,7 @@ public class ManejadorEscenarios {
 				Persistencia.guardarObjetos(tienda, archivo);
 			} catch (IOException e) {
 
-				e.printStackTrace();
+				LOGGER.log(Level.WARNING, errorDir);
 			}
 
 		} else {
@@ -732,74 +761,76 @@ public class ManejadorEscenarios {
 	private void imprimirCuadreDeCaja(InformeFiscal informe) {
 
 		ArrayList<String> renglones = new ArrayList<String>();
-
+		String tabla = "|         ----------------------------------------------------------- ------------------ ---------------- ";
 		renglones.add(
-				"â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”�");
+				" ------------------------------------------------------------------------------------------------------------------------ ");
 		renglones.add(
-				"â”‚                                          INFORME FISCAL DE VENTAS DIARIAS                                          â”‚");
+				"|                                            INFORME FISCAL DE VENTAS DIARIAS                                            |");
 		renglones.add(
-				"â”‚                                  CAFETERIA LA CUEVA DEL LOCO    ARMENIA-QUINDIO                                    â”‚");
+				"|                                    CAFETERIA LA CUEVA DEL LOCO    ARMENIA-QUINDIO                                      |");
 		renglones.add(
-				"â”‚                                            ARIGO COMERCIALIZADORA S.A.S.                                           â”‚");
+				"|                                              ARIGO COMERCIALIZADORA S.A.S.                                             |");
 
 		GregorianCalendar fecha = informe.getFecha();
-		String prefijo = "â”‚         Fecha:              " + fecha.get(Calendar.YEAR) + "-" + fecha.get(Calendar.MONTH)
+		String prefijo = "|           Fecha:              " + fecha.get(Calendar.YEAR) + "-" + fecha.get(Calendar.MONTH)
 				+ "-" + fecha.get(Calendar.DAY_OF_MONTH);
 		int tamano = renglones.get(0).length();
-		String sufijo = "Consec. Z No:      " + informe.getNumeroInforme() + "       â”‚";
+		String sufijo = "Consec. Z No:      " + informe.getNumeroInforme() + "         |";
 		renglones.add(prefijo + calcularEspacios(prefijo, tamano - sufijo.length()) + sufijo);
 
-		prefijo = "â”‚         NÃºmero caja:        " + "1";
-		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "â”‚");
+		prefijo = "|           Número caja:        " + "1";
+		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "|");
 
-		prefijo = "â”‚         Registro Inicial:   " + informe.numeroPrimerRecibo();
-		sufijo = "Registro Final:     " + informe.numeroUltimoRecibo() + "      â”‚";
+		prefijo = "|           Registro Inicial:   " + informe.numeroPrimerRecibo();
+		sufijo = "Registro Final:     " + informe.numeroUltimoRecibo() + "       |";
 		renglones.add(prefijo + calcularEspacios(sufijo, tamano - prefijo.length()) + sufijo);
 
-		prefijo = "â”‚      â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”�";
-		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "â”‚");
+		prefijo = tabla;
+		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "|");
 
-		prefijo = "â”‚      â”‚                    TIPO DE VENTA                         â”‚    IVA O IPÃ“C    â”‚    VR. BASE    â”‚";
-		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "â”‚");
+		prefijo = "|        |                    TIPO DE VENTA                          |    IVA O IPOC    |    VR. BASE    |";
+		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "|");
 
-		prefijo = "â”‚      â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤";
-		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "â”‚");
+		prefijo = tabla;
+		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "|");
 
-		prefijo = "â”‚      â”‚                   VENTAS EXENTAS                         â”‚";
+		prefijo = "|        |                   VENTAS EXENTAS                          |";
 
 		sufijo = 0 + "";
-		prefijo += calcularEspacios(sufijo, "    IVA O IPÃ“C    ".length() - 1) + sufijo;
-		Integer[][] iva = informe.getIva();
+		String ivaIpoc = "    IVA O IPOC    ";
+		prefijo += calcularEspacios(sufijo, ivaIpoc.length() - 1) + sufijo;
+		Integer[][] iva1 = informe.getIva();
 		Integer[][] ganancias = informe.getGanancia();
 		if (ganancias[0][0] == 0) {
 			sufijo = ganancias[0][1] + "";
 		} else {
 			sufijo = 0 + "";
 		}
-		prefijo += " â”‚" + calcularEspacios(sufijo, "    VR. BASE    ".length() - 1) + sufijo + " â”‚";
-		prefijo += calcularEspacios("â”‚", tamano - prefijo.length()) + "â”‚";
+		String var = "    VR. BASE    ";
+		prefijo += " |" + calcularEspacios(sufijo, var.length() - 1) + sufijo + " |";
+		prefijo += calcularEspacios("|", tamano - prefijo.length()) + "|";
 		renglones.add(prefijo);
 
-		prefijo = "â”‚      â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤";
-		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "â”‚");
+		prefijo = tabla;
+		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "|");
 
-		prefijo = "â”‚      â”‚                VALORES BOLSAS PLÃ�STICAS                  â”‚";
+		prefijo = "|        |                VALORES BOLSAS PLÁSTICAS                   |";
 		sufijo = 0 + "";
-		prefijo += calcularEspacios(sufijo, "    IVA O IPÃ“C    ".length() - 1) + sufijo;
+		prefijo += calcularEspacios(sufijo, ivaIpoc.length() - 1) + sufijo;
 		sufijo = (informe.calcularValorBolsasEfectivo() + informe.calcularValorBolsasTarjeta()) + "";
-		prefijo += " â”‚" + calcularEspacios(sufijo, "    VR. BASE    ".length() - 1) + sufijo + " â”‚";
-		prefijo += calcularEspacios("â”‚", tamano - prefijo.length()) + "â”‚";
+		prefijo += " |" + calcularEspacios(sufijo, var.length() - 1) + sufijo + " |";
+		prefijo += calcularEspacios("|", tamano - prefijo.length()) + "|";
 		renglones.add(prefijo);
 
-		prefijo = "â”‚      â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤";
-		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "â”‚");
+		prefijo = tabla;
+		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "|");
 
-		prefijo = "â”‚      â”‚                 VENTAS GRAVADAS AL 5%                    â”‚";
+		prefijo = "|        |                VENTAS GRAVADAS AL 5%                      |";
 		String sufijo1 = "";
 		boolean ward = true;
 		for (int i = 0; i < ganancias.length && ward; i++) {
 			if (ganancias[i][0] == 5) {
-				sufijo1 = "" + iva[i][1];
+				sufijo1 = "" + iva1[i][1];
 				sufijo = "" + ganancias[i][1];
 				ward = false;
 			}
@@ -809,20 +840,20 @@ public class ManejadorEscenarios {
 			sufijo = 0 + "";
 		}
 
-		prefijo += calcularEspacios(sufijo1, "    IVA O IPÃ“C    ".length() - 1) + sufijo1;
-		prefijo += " â”‚" + calcularEspacios(sufijo, "    VR. BASE    ".length() - 1) + sufijo + " â”‚";
-		prefijo += calcularEspacios("â”‚", tamano - prefijo.length()) + "â”‚";
+		prefijo += calcularEspacios(sufijo1, ivaIpoc.length() - 1) + sufijo1;
+		prefijo += " |" + calcularEspacios(sufijo, var.length() - 1) + sufijo + " |";
+		prefijo += calcularEspacios("|", tamano - prefijo.length()) + "|";
 		renglones.add(prefijo);
 
-		prefijo = "â”‚      â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤";
-		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "â”‚");
+		prefijo = tabla;
+		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "|");
 
-		prefijo = "â”‚      â”‚                VENTAS GRAVADAS AL 19%                    â”‚";
+		prefijo = "|        |               VENTAS GRAVADAS AL 19%                      |";
 		sufijo1 = "";
 		ward = true;
 		for (int i = 0; i < ganancias.length && ward; i++) {
 			if (ganancias[i][0] == 19) {
-				sufijo1 = "" + iva[i][1];
+				sufijo1 = "" + iva1[i][1];
 				sufijo = "" + ganancias[i][1];
 				ward = false;
 			}
@@ -832,61 +863,63 @@ public class ManejadorEscenarios {
 			sufijo = 0 + "";
 		}
 
-		prefijo += calcularEspacios(sufijo1, "    IVA O IPÃ“C    ".length() - 1) + sufijo1;
-		prefijo += " â”‚" + calcularEspacios(sufijo, "    VR. BASE    ".length() - 1) + sufijo + " â”‚";
-		prefijo += calcularEspacios("â”‚", tamano - prefijo.length()) + "â”‚";
+		prefijo += calcularEspacios(sufijo1, ivaIpoc.length() - 1) + sufijo1;
+		prefijo += " |" + calcularEspacios(sufijo, var.length() - 1) + sufijo + " |";
+		prefijo += calcularEspacios("|", tamano - prefijo.length()) + "|";
 		renglones.add(prefijo);
 
-		prefijo = "â”‚      â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤";
-		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "â”‚");
+		prefijo = tabla;
+		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "|");
 
-		prefijo = "â”‚      â”‚                   TOTAL DE VENTAS                        â”‚";
-		prefijo += calcularEspacios(informe.getTotalIva() + "", "    IVA O IPÃ“C    ".length() - 1)
-				+ informe.getTotalIva();
-		prefijo += " â”‚" + calcularEspacios(informe.getTotalGanancia() + "", "    VR. BASE    ".length() - 1)
+		prefijo = "|        |                   TOTAL DE VENTAS                         |";
+		prefijo += calcularEspacios(informe.getTotalIva() + "", ivaIpoc.length() - 1) + informe.getTotalIva();
+		prefijo += " |" + calcularEspacios(informe.getTotalGanancia() + "", var.length() - 1)
 				+ (informe.getTotalGanancia() + informe.calcularValorBolsasEfectivo()
 						+ informe.calcularValorBolsasTarjeta())
-				+ " â”‚";
-		prefijo += calcularEspacios("â”‚", tamano - prefijo.length()) + "â”‚";
+				+ " |";
+		prefijo += calcularEspacios("|", tamano - prefijo.length()) + "|";
 		renglones.add(prefijo);
 
-		prefijo = "â”‚      â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜";
-		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "â”‚");
+		String tabla1 = "|       ------------------ ------------------ ------------------- ------------------- ---------------- ";
+		prefijo = tabla;
+		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "|");
 
-		prefijo = "â”‚      â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”�";
-		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "â”‚");
+		prefijo = tabla1;
+		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "|");
 
-		prefijo = "â”‚      â”‚     EFECTIVO     â”‚      CHEQUES     â”‚  TARJ. CRÃ‰DITO   â”‚   VIAS CRÃ‰DITO   â”‚ TOTAL RECIBIDO â”‚";
-		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "â”‚");
+		prefijo = "|      |     EFECTIVO     |      CHEQUES     |   TARJ. CREDITO   |   VIAS CREDITO   | TOTAL RECIBIDO |";
+		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "|");
 
-		prefijo = "â”‚      â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤";
-		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "â”‚");
+		prefijo = tabla1;
+		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "|");
 
-		prefijo = "â”‚      â”‚"
+		prefijo = "|      |"
 				+ calcularEspacios((informe.getEfectivo() + informe.calcularValorBolsasEfectivo()) + "",
 						"     EFECTIVO     ".length() - 1)
-				+ (informe.getEfectivo() + informe.calcularValorBolsasEfectivo()) + " â”‚";
-		prefijo += calcularEspacios(0 + "", "      CHEQUES     ".length() - 1) + 0 + " â”‚";
+				+ (informe.getEfectivo() + informe.calcularValorBolsasEfectivo()) + " |";
+		prefijo += calcularEspacios(0 + "", "      CHEQUES     ".length() - 1) + 0 + " |";
 		prefijo += calcularEspacios((informe.getTarjeta() + informe.calcularValorBolsasTarjeta()) + "",
-				"  TARJ. CRÃ‰DITO   ".length() - 1) + (informe.getTarjeta() + informe.calcularValorBolsasTarjeta())
-				+ " â”‚";
-		prefijo += calcularEspacios(0 + "", "   VIAS CRÃ‰DITO   ".length() - 1) + 0 + " â”‚";
+				"  TARJ. CREDITO   ".length() - 1) + (informe.getTarjeta() + informe.calcularValorBolsasTarjeta())
+				+ " |";
+		prefijo += calcularEspacios(0 + "", "   VIAS CREDITO   ".length() - 1) + 0 + "|";
+
 		prefijo += calcularEspacios((informe.getTotalEnCaja() + informe.calcularValorBolsasTarjeta()) + "",
 				" TOTAL RECIBIDO ".length() - 1) + (informe.getTotalEnCaja() + informe.calcularValorBolsasTarjeta())
-				+ " â”‚";
+				+ " |";
 
-		prefijo += calcularEspacios("â”‚", tamano - prefijo.length() - 1) + " â”‚";
+		prefijo += calcularEspacios("|", tamano - prefijo.length() - 1) + " |";
 		renglones.add(prefijo);
 
-		prefijo = "â”‚      â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜";
-		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "â”‚");
-		renglones.add(
-				"â”‚                                                                                                                    â”‚");
+		prefijo = tabla1;
+		renglones.add(prefijo + calcularEspacios(prefijo, tamano - 1) + "|");
 
 		renglones.add(
-				"â”‚                                                                                                                    â”‚");
+				"|                                                                                                                        |");
+
 		renglones.add(
-				"â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜");
+				"|                                                                                                                        |");
+		renglones.add(
+				" ------------------------------------------------------------------------------------------------------------------------ ");
 
 		try {
 			String nombreArchivo = "Cuadre " + informe.getNumeroInforme() + " " + fecha.get(Calendar.YEAR) + "-"
@@ -895,7 +928,7 @@ public class ManejadorEscenarios {
 			Persistencia.escribirArchivo(rutaInformesFiscales + nombreArchivo, renglones);
 			impressor.imprimirArchivo(rutaInformesFiscales + nombreArchivo);
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.log(Level.WARNING, errorDir);
 		}
 
 	}
@@ -904,107 +937,80 @@ public class ManejadorEscenarios {
 
 		ArrayList<String> renglones = new ArrayList<String>();
 
-		renglones.add(
-				"â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”�");
-		renglones.add("â”‚              COMEDAL S.A.S.              â”‚");
-		renglones.add("â”‚         CF/RIA LA CUEVA DEL LOCO         â”‚");
-		renglones.add("â”‚             NIT: 901262014-5             â”‚");
-		renglones.add("â”‚          RESPONSABLE IMP/CONSUMO         â”‚");
-		renglones.add("â”‚                                          â”‚");
-		renglones.add("â”‚                                          â”‚");
-		renglones.add("â”‚           E IMP/VENTAS LEY 1943          â”‚");
-		renglones.add("â”‚            CRA 19 # 1N 00 LC 5           â”‚");
-		renglones.add("â”‚              ARMENIA QUINDIO             â”‚");
-		renglones.add("â”‚                                          â”‚");
+		renglones.add(inicio);
+		renglones.add("|              COMEDAL S.A.S.                  |");
+		renglones.add("|           CF/RIA LA CUEVA DEL LOCO           |");
+		renglones.add("|               NIT: 901262014-5               |");
+		renglones.add("|            RESPONSABLE IMP/CONSUMO           |");
+		renglones.add(vacio);
+		renglones.add(vacio);
+		renglones.add("|             E IMP/VENTAS LEY 1943            |");
+		renglones.add("|              CRA 19 # 1N 00 LC 5             |");
+		renglones.add("|                ARMENIA QUINDIO               |");
+		renglones.add("|                                              |");
 		int tamano = renglones.get(0).length() - 1;
 		GregorianCalendar fecha = recibo.getFecha();
 
-		String renglon1 = "â”‚ " + fecha.get(Calendar.YEAR) + "-" + (fecha.get(Calendar.MONTH) + 1) + "-"
+		String renglon1 = "|  " + fecha.get(Calendar.YEAR) + "-" + (fecha.get(Calendar.MONTH) + 1) + "-"
 				+ fecha.get(Calendar.DAY_OF_MONTH) + " " + fecha.get(Calendar.HOUR) + ":" + fecha.get(Calendar.MINUTE)
 				+ ":" + fecha.get(Calendar.SECOND);
-		renglones.add(renglon1 + calcularEspacios(renglon1, tamano) + "â”‚");
-		renglon1 = recibo.getId() + " â”‚";
-		renglones.add("â”‚" + calcularEspacios(renglon1, tamano) + renglon1);
-		renglones.add("â”‚                                          â”‚");
-		renglones.add("â”‚                                          â”‚");
+		renglones.add(renglon1 + calcularEspacios(renglon1, tamano) + "|");
+		renglon1 = recibo.getId() + "|";
+		renglones.add("|" + calcularEspacios(renglon1, tamano) + renglon1);
+		renglones.add(vacio);
+		renglones.add(vacio);
 
 		int limite = (renglones.get(0).length() * 60) / 100;
 
-		for (int i = 0; i < recibo.getProductosV().size(); i++) {
-			String renglon = "â”‚ ";
-			ProductosVentas producto = recibo.getProductosV().get(i);
-			String[] partes = producto.getProducto().getNombre().split(" ");
-			for (int j = 0; j < partes.length; j++) {
+		ponerObjetos(limite, renglones, recibo, tamano);
 
-				if (j == partes.length - 1) {
-					String cantidades = " -- " + producto.getCantidad() + " "
-							+ producto.getProducto().getPrecio() * producto.getCantidad();
-					String espacios = calcularEspacios(renglon + partes[j], tamano - cantidades.length());
-
-					renglones.add(renglon + partes[j] + espacios + cantidades + "â”‚");
-
-				} else {
-					if (renglon.length() + partes[j].length() > limite) {
-
-						renglones.add(renglon + calcularEspacios(renglon, tamano) + "â”‚");
-						renglon = "â”‚ ";
-
-					} else {
-
-						renglon += partes[j] + " ";
-
-					}
-				}
-			}
-		}
 		int valor = recibo.getValorBolsas();
 		if (valor > 0) {
-			String renglon = "â”‚ BOLSA PLASTICA";
+			String renglon = "|  BOLSA PLASTICA";
 			renglon += calcularEspacios(renglon, limite);
 			String cantidades = " -- " + valor / 50 + " " + valor;
-			renglon += calcularEspacios(renglon, tamano - cantidades.length()) + cantidades + "â”‚";
+			renglon += calcularEspacios(renglon, tamano - cantidades.length()) + cantidades + "|";
 			renglones.add(renglon + calcularEspacios(renglon, tamano - renglon.length() - 1));
 		}
 
-		renglones.add("â”‚                                          â”‚");
-		renglones.add("â”‚                                          â”‚");
+		renglones.add(vacio);
+		renglones.add(vacio);
 
-		Integer[][] iva = recibo.getTotalIvaRecibo();
+		Integer[][] iva1 = recibo.getTotalIvaRecibo();
 		Integer[][] ganancias = recibo.getTotalGananciaRecibo();
-		String prefijo = "â”‚ BASE GRAVADA";
-		for (int i = 0; i < iva.length; i++) {
+		String prefijo = "|  BASE GRAVADA";
+		for (int i = 0; i < iva1.length; i++) {
 
-			if (iva[i][0] == 0) {
+			if (iva1[i][0] == 0) {
 				renglon1 = ganancias[i][1] + "";
 				renglones.add(
-						prefijo + calcularEspacios(renglon1, tamano - prefijo.length() - 1) + "$" + renglon1 + "â”‚");
-				String iva_ = "â”‚   EXENTOS:";
-				renglon1 = iva[i][1] + "";
-				renglones.add(iva_ + calcularEspacios(renglon1, tamano - 1 - iva_.length()) + "$" + renglon1 + "â”‚");
+						prefijo + calcularEspacios(renglon1, tamano - prefijo.length() - 1) + "$" + renglon1 + "|");
+				String iva2 = "|   EXENTOS:";
+				renglon1 = iva1[i][1] + "";
+				renglones.add(iva2 + calcularEspacios(renglon1, tamano - 1 - iva2.length()) + "$" + renglon1 + "|");
 			} else {
 				renglon1 = ganancias[i][1] + "";
 				renglones.add(
-						prefijo + calcularEspacios(renglon1, tamano - prefijo.length() - 1) + "$" + renglon1 + "â”‚");
-				String iva_ = "â”‚   GRAVADOS " + iva[i][0] + "%";
-				renglon1 = iva[i][1] + "";
-				renglones.add(iva_ + calcularEspacios(renglon1, tamano - 1 - iva_.length()) + "$" + renglon1 + "â”‚");
+						prefijo + calcularEspacios(renglon1, tamano - prefijo.length() - 1) + "$" + renglon1 + "|");
+				String iva2 = "|   GRAVADOS " + iva1[i][0] + "%";
+				renglon1 = iva1[i][1] + "";
+				renglones.add(iva2 + calcularEspacios(renglon1, tamano - 1 - iva2.length()) + "$" + renglon1 + "|");
 			}
 
 		}
 
-		renglones.add("â”‚" + calcularEspacios("â”‚", tamano) + "â”‚");
+		renglones.add(vacio);
 		String tarjeta = recibo.getTarjeta() ? "SI" : "NO";
-		renglon1 = "â”‚    PAGO CON TARJETA:    " + tarjeta;
-		renglones.add(renglon1 + calcularEspacios(renglon1, tamano) + "â”‚");
-		renglon1 = "â”‚    TOTAL:             " + recibo.getPrecioTotal();
-		renglones.add(renglon1 + calcularEspacios(renglon1, tamano) + "â”‚");
-		renglon1 = "â”‚    CAJA:              " + recibo.getEfectivoRegistrado();
-		renglones.add(renglon1 + calcularEspacios(renglon1, tamano) + "â”‚");
-		renglon1 = "â”‚    CAMBIO:            " + recibo.getCambio();
-		renglones.add(renglon1 + calcularEspacios(renglon1, tamano) + "â”‚");
-		renglones.add("â”‚                                          â”‚");
-		renglones.add(
-				"â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜");
+		renglon1 = "|      PAGO CON TARJETA:    " + tarjeta;
+		renglones.add(renglon1 + calcularEspacios(renglon1, tamano) + "|");
+		renglon1 = "|      TOTAL:             " + recibo.getPrecioTotal();
+		renglones.add(renglon1 + calcularEspacios(renglon1, tamano) + "|");
+		renglon1 = "|      CAJA:              " + recibo.getEfectivoRegistrado();
+		renglones.add(renglon1 + calcularEspacios(renglon1, tamano) + "|");
+		renglon1 = "|      CAMBIO:            " + recibo.getCambio();
+		renglones.add(renglon1 + calcularEspacios(renglon1, tamano) + "|");
+		renglones.add(vacio);
+		renglones.add(inicio);
 
 		try {
 			String nombreArchivo = "Recibo " + recibo.getId() + " " + fecha.get(Calendar.YEAR) + "-"
@@ -1013,156 +1019,148 @@ public class ManejadorEscenarios {
 			Persistencia.escribirArchivo(rutaRecibos + nombreArchivo, renglones);
 			impressor.imprimirArchivo(rutaRecibos + nombreArchivo);
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.log(Level.WARNING, errorDir);
 		}
 
-	}
-
-	public String calcularEspacios(String renglon, int limite) {
-		String espacios = "";
-
-		for (int i = 0; i < limite - renglon.length(); i++) {
-			espacios += " ";
-		}
-
-		return espacios;
 	}
 
 	public void imprimirInformeFiscal(InformeFiscal informe) {
 
 		ArrayList<String> renglones = new ArrayList<String>();
+		String cafeteria = "|           CF/RIA LA CUEVA DEL LOCO           |";
+		String nit = "|               NIT: 901262014-5               |";
+		String responsable = "|            RESPONSABLE IMP/CONSUMO           |";
+		renglones.add(inicio);
 
-		renglones.add(
-				"â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”�");
-		renglones.add("â”‚              COMEDAL S.A.S.              â”‚");
-		renglones.add("â”‚         CF/RIA LA CUEVA DEL LOCO         â”‚");
-		renglones.add("â”‚             NIT: 901262014-5             â”‚");
-		renglones.add("â”‚          RESPONSABLE IMP/CONSUMO         â”‚");
-		renglones.add("â”‚                                          â”‚");
+		renglones.add("|                COMEDAL S.A.S.                |");
+		renglones.add(cafeteria);
+		renglones.add(nit);
+		renglones.add(responsable);
+		renglones.add(vacio);
 
 		int tamano = renglones.get(0).length() - 1;
 		GregorianCalendar fecha = new GregorianCalendar();
 
-		String renglon1 = "â”‚ Z      " + fecha.get(Calendar.YEAR) + "-" + (fecha.get(Calendar.MONTH) + 1) + "-"
+		String renglon1 = "|  Z      " + fecha.get(Calendar.YEAR) + "-" + (fecha.get(Calendar.MONTH) + 1) + "-"
 				+ fecha.get(Calendar.DAY_OF_MONTH) + "   " + fecha.get(Calendar.HOUR) + ":" + fecha.get(Calendar.MINUTE)
 				+ ":" + fecha.get(Calendar.SECOND);
-		renglones.add(renglon1 + calcularEspacios(renglon1, tamano) + "â”‚");
+		renglones.add(renglon1 + calcularEspacios(renglon1, tamano) + "|");
 		if (informe.getLista().size() >= 2) {
-			renglon1 = informe.getLista().get(informe.getLista().size() - 2).getId() + "â”‚";
+			renglon1 = informe.getLista().get(informe.getLista().size() - 2).getId() + "|";
 		} else {
-			renglon1 = informe.getLista().get(informe.getLista().size() - 1).getId() + "â”‚";
+			renglon1 = informe.getLista().get(informe.getLista().size() - 1).getId() + "|";
 		}
-		renglones.add("â”‚ Z" + calcularEspacios(renglon1, tamano - 2) + renglon1);
-		renglones.add("â”‚                                          â”‚");
-		renglones.add("â”‚                                          â”‚");
-		renglones.add("â”‚                                          â”‚");
-		renglones.add("â”‚                                          â”‚");
-		renglones.add("â”‚              COMEDAL S.A.S.              â”‚");
-		renglones.add("â”‚         CF/RIA LA CUEVA DEL LOCO         â”‚");
-		renglones.add("â”‚             NIT: 901262014-5             â”‚");
-		renglones.add("â”‚          RESPONSABLE IMP/CONSUMO         â”‚");
-		renglones.add("â”‚                                          â”‚");
+		renglones.add("|  Z" + calcularEspacios(renglon1, tamano - 2) + renglon1);
+		renglones.add(vacio);
+		renglones.add(vacio);
+		renglones.add(vacio);
+		renglones.add(vacio);
+		renglones.add(vacio);
+		renglones.add("|                COMEDAL S.A.S.                |");
+		renglones.add(cafeteria);
+		renglones.add(nit);
+		renglones.add(responsable);
+		renglones.add(vacio);
 
 		GregorianCalendar fecha1 = new GregorianCalendar();
 
-		renglon1 = "â”‚ Z      " + fecha1.get(Calendar.YEAR) + "-" + (fecha1.get(Calendar.MONTH) + 1) + "-"
+		renglon1 = "|   Z      " + fecha1.get(Calendar.YEAR) + "-" + (fecha1.get(Calendar.MONTH) + 1) + "-"
 				+ fecha1.get(Calendar.DAY_OF_MONTH) + "   " + fecha1.get(Calendar.HOUR) + ":"
 				+ fecha1.get(Calendar.MINUTE) + ":" + fecha1.get(Calendar.SECOND);
-		renglones.add(renglon1 + calcularEspacios(renglon1, tamano) + "â”‚");
-		renglon1 = informe.getLista().get(informe.getLista().size() - 1).getId() + "â”‚";
-		renglones.add("â”‚ Z" + calcularEspacios(renglon1, tamano - 2) + renglon1);
+		renglones.add(renglon1 + calcularEspacios(renglon1, tamano) + "|");
+		renglon1 = informe.getLista().get(informe.getLista().size() - 1).getId() + "|";
+		renglones.add("|  Z" + calcularEspacios(renglon1, tamano - 2) + renglon1);
 
-		renglones.add("â”‚                                          â”‚");
-		renglones.add("â”‚ ---------------------------------------- â”‚");
-		renglon1 = "â”‚ Z       Z DIARIO";
-		renglones.add(renglon1 + calcularEspacios(renglon1, tamano) + "â”‚");
-		renglones.add("â”‚ ---------------------------------------- â”‚");
+		renglones.add(vacio);
+		renglones.add("|" + inicio.trim() + "|");
+		renglon1 = "|  Z       Z DIARIO";
+		renglones.add(renglon1 + calcularEspacios(renglon1, tamano) + "|");
+		renglones.add("|" + inicio.trim() + "|");
 		renglon1 = informe.getNumeroInforme();
-		String prefijo = "â”‚ Z       DEPTOS";
-		renglones.add(prefijo + calcularEspacios(renglon1, tamano - prefijo.length()) + renglon1 + "â”‚");
-		renglones.add("â”‚                                          â”‚");
+		String prefijo = "|   Z       DEPTOS";
+		renglones.add(prefijo + calcularEspacios(renglon1, tamano - prefijo.length()) + renglon1 + "|");
+		renglones.add(vacio);
 
-		Integer[][] iva = informe.getIva();
-		for (int i = 0; i < iva.length; i++) {
+		Integer[][] iva2 = informe.getIva();
+		for (int i = 0; i < iva2.length; i++) {
 
-			if (iva[i][0] == 0) {
-				String iva_ = "â”‚   EXENTOS:";
-				renglon1 = iva[i][1] + "";
-				renglones.add(iva_ + calcularEspacios(renglon1, tamano - 1 - iva_.length()) + "$" + renglon1 + "â”‚");
+			if (iva2[i][0] == 0) {
+				String iva1 = "|   EXENTOS:";
+				renglon1 = iva2[i][1] + "";
+				renglones.add(iva1 + calcularEspacios(renglon1, tamano - 1 - iva1.length()) + "$" + renglon1 + "|");
 			} else {
-				String iva_ = "â”‚   GRAVADOS " + iva[i][0] + "%";
-				renglon1 = iva[i][1] + "";
-				renglones.add(iva_ + calcularEspacios(renglon1, tamano - 1 - iva_.length()) + "$" + renglon1 + "â”‚");
+				String iva1 = "|   GRAVADOS " + iva2[i][0] + "%";
+				renglon1 = iva2[i][1] + "";
+				renglones.add(iva1 + calcularEspacios(renglon1, tamano - 1 - iva1.length()) + "$" + renglon1 + "|");
 			}
 
 		}
-		renglones.add("â”‚ ---------------------------------------- â”‚");
-		prefijo = "â”‚ Z    ToT. FIJOS";
+		renglones.add(vacio);
+		prefijo = "|   Z    ToT. FIJOS";
 		renglon1 = informe.getNumeroInforme();
-		renglones.add(prefijo + calcularEspacios(renglon1, tamano - prefijo.length()) + renglon1 + "â”‚");
+		renglones.add(prefijo + calcularEspacios(renglon1, tamano - prefijo.length()) + renglon1 + "|");
 
-		prefijo = "â”‚ BRUTO ";
+		prefijo = "|   BRUTO ";
 		renglon1 = informe.getTotalEnCaja() + "";
-		renglones.add(prefijo + calcularEspacios(renglon1, tamano - prefijo.length() - 1) + "$" + renglon1 + "â”‚");
+		renglones.add(prefijo + calcularEspacios(renglon1, tamano - prefijo.length() - 1) + "$" + renglon1 + "|");
 
-		prefijo = "â”‚    EFECTIVO: ";
+		prefijo = "|      EFECTIVO: ";
 		renglon1 = (informe.getEfectivo() + informe.calcularValorBolsasEfectivo()) + "";
-		renglones.add(prefijo + calcularEspacios(renglon1, tamano - prefijo.length() - 1) + "$" + renglon1 + "â”‚");
+		renglones.add(prefijo + calcularEspacios(renglon1, tamano - prefijo.length() - 1) + "$" + renglon1 + "|");
 
-		prefijo = "â”‚    TARJETA: ";
+		prefijo = "|      TARJETA: ";
 		renglon1 = (informe.getTarjeta() + informe.calcularValorBolsasTarjeta()) + "";
-		renglones.add(prefijo + calcularEspacios(renglon1, tamano - prefijo.length() - 1) + "$" + renglon1 + "â”‚");
+		renglones.add(prefijo + calcularEspacios(renglon1, tamano - prefijo.length() - 1) + "$" + renglon1 + "|");
 
-		renglones.add("â”‚ ---------------------------------------- â”‚");
+		renglones.add(vacio);
 
 		Integer[][] ganancias = informe.getGanancia();
-		prefijo = "â”‚ BASE GRAVADA";
-		for (int i = 0; i < iva.length; i++) {
+		prefijo = "|   BASE GRAVADA";
+		for (int i = 0; i < iva2.length; i++) {
 
-			if (iva[i][0] == 0) {
+			if (iva2[i][0] == 0) {
 				renglon1 = ganancias[i][1] + "";
 				renglones.add(
-						prefijo + calcularEspacios(renglon1, tamano - prefijo.length() - 1) + "$" + renglon1 + "â”‚");
-				String iva_ = "â”‚   EXENTOS:";
-				renglon1 = iva[i][1] + "";
-				renglones.add(iva_ + calcularEspacios(renglon1, tamano - 1 - iva_.length()) + "$" + renglon1 + "â”‚");
+						prefijo + calcularEspacios(renglon1, tamano - prefijo.length() - 1) + "$" + renglon1 + "|");
+				String iva1 = "|     EXENTOS:";
+				renglon1 = iva2[i][1] + "";
+				renglones.add(iva1 + calcularEspacios(renglon1, tamano - 1 - iva1.length()) + "$" + renglon1 + "|");
 			} else {
 				renglon1 = ganancias[i][1] + "";
 				renglones.add(
-						prefijo + calcularEspacios(renglon1, tamano - prefijo.length() - 1) + "$" + renglon1 + "â”‚");
-				String iva_ = "â”‚   GRAVADOS " + iva[i][0] + "%";
-				renglon1 = iva[i][1] + "";
-				renglones.add(iva_ + calcularEspacios(renglon1, tamano - 1 - iva_.length()) + "$" + renglon1 + "â”‚");
+						prefijo + calcularEspacios(renglon1, tamano - prefijo.length() - 1) + "$" + renglon1 + "|");
+				String iva1 = "|     GRAVADOS " + iva2[i][0] + "%";
+				renglon1 = iva2[i][1] + "";
+				renglones.add(iva1 + calcularEspacios(renglon1, tamano - 1 - iva1.length()) + "$" + renglon1 + "|");
 			}
 
 		}
 
 		renglon1 = "$" + 0;
-		renglones.add(prefijo + calcularEspacios(renglon1, tamano - prefijo.length()) + renglon1 + "â”‚");
+		renglones.add(prefijo + calcularEspacios(renglon1, tamano - prefijo.length()) + renglon1 + "|");
 
-		prefijo = "â”‚ IMP/CSUMO 8%";
+		prefijo = "|   IMP/CSUMO 8%";
 		renglon1 = "$" + 0;
-		renglones.add(prefijo + calcularEspacios(renglon1, tamano - prefijo.length()) + renglon1 + "â”‚");
+		renglones.add(prefijo + calcularEspacios(renglon1, tamano - prefijo.length()) + renglon1 + "|");
 
 		renglon1 = informe.numeroPrimerRecibo() + "--->" + informe.numeroUltimoRecibo();
-		renglones.add("â”‚" + calcularEspacios(renglon1, tamano - 2) + renglon1 + " â”‚");
+		renglones.add("|" + calcularEspacios(renglon1, tamano - 2) + renglon1 + " |");
 
-		renglones.add("â”‚ ---------------------------------------- â”‚");
+		renglones.add("|" + inicio.trim() + "|");
 
 		renglon1 = informe.getNumeroInforme();
-		prefijo = "â”‚ Z       FUNC LIBRES";
-		renglones.add(prefijo + calcularEspacios(renglon1, tamano - prefijo.length()) + renglon1 + "â”‚");
+		prefijo = "|   Z       FUNC LIBRES";
+		renglones.add(prefijo + calcularEspacios(renglon1, tamano - prefijo.length()) + renglon1 + "|");
 
-		prefijo = "â”‚ CAJA           No";
-		renglones.add(prefijo + calcularEspacios("1", tamano - prefijo.length()) + "1â”‚");
+		prefijo = "|   CAJA           No";
+		renglones.add(prefijo + calcularEspacios("1 ", tamano - prefijo.length()) + "1 |");
 
 		renglon1 = informe.getTotalEnCaja() + informe.calcularValorBolsasTarjeta()
-				+ informe.calcularValorBolsasTarjeta() + "â”‚";
-		renglones.add("â”‚" + calcularEspacios(renglon1, tamano) + renglon1);
+				+ informe.calcularValorBolsasTarjeta() + "|";
+		renglones.add("|" + calcularEspacios(renglon1, tamano) + renglon1);
 
-		renglones.add("â”‚                                          â”‚");
-		renglones.add(
-				"â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜");
+		renglones.add(vacio);
+		renglones.add(inicio);
 
 		try {
 			String nombreArchivo = "Informe " + informe.getNumeroInforme() + " " + fecha.get(Calendar.YEAR) + "-"
@@ -1171,9 +1169,53 @@ public class ManejadorEscenarios {
 			Persistencia.escribirArchivo(rutaInformesFiscales + nombreArchivo, renglones);
 			impressor.imprimirArchivo(rutaInformesFiscales + nombreArchivo);
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.log(Level.WARNING, errorDir);
 		}
 
+	}
+
+	private void ponerObjetos(int limite, ArrayList<String> renglones, Recibo recibo, int tamano) {
+
+		for (int i = 0; i < recibo.getProductosV().size(); i++) {
+			StringBuilder renglon = new StringBuilder();
+			renglon.append("| ");
+			ProductosVentas producto = recibo.getProductosV().get(i);
+			String[] partes = producto.getProducto().getNombre().split(" ");
+			for (int j = 0; j < partes.length; j++) {
+
+				if (j == partes.length - 1) {
+					String cantidades = " -- " + producto.getCantidad() + " "
+							+ producto.getProducto().getPrecio() * producto.getCantidad();
+					String espacios = calcularEspacios(renglon.toString() + partes[j], tamano - cantidades.length());
+
+					renglones.add(renglon.toString() + partes[j] + espacios + cantidades + "|");
+
+				} else {
+					if (renglon.toString().length() + partes[j].length() > limite) {
+
+						renglones.add(renglon.toString() + calcularEspacios(renglon.toString(), tamano) + "|");
+						renglon = new StringBuilder();
+						renglon.append("| ");
+
+					} else {
+
+						renglon.append(partes[j] + " ");
+
+					}
+				}
+			}
+		}
+
+	}
+
+	public String calcularEspacios(String renglon, int limite) {
+		StringBuilder espacios = new StringBuilder();
+
+		for (int i = 0; i < limite - renglon.length(); i++) {
+			espacios.append(" ");
+		}
+
+		return espacios.toString();
 	}
 
 	public String getTipoSeleccionado() {
@@ -1201,7 +1243,6 @@ public class ManejadorEscenarios {
 	}
 
 	public void ventanaConfirmar(Recibo recibo) {
-		// TODO Auto-generated method stub
 		reciboTemp = recibo;
 		ventanaConfirmarCompra();
 
@@ -1213,6 +1254,30 @@ public class ManejadorEscenarios {
 
 	public void setBolsas(int bolsas) {
 		this.bolsas = bolsas;
+	}
+
+	public boolean isValidar() {
+		return validar;
+	}
+
+	public void setValidar(boolean validar) {
+		this.validar = validar;
+	}
+
+	public AgregarProductoController getAgregarProductoControlador() {
+		return agregarProductoControlador;
+	}
+
+	public void setAgregarProductoControlador(AgregarProductoController agregarProductoControlador) {
+		this.agregarProductoControlador = agregarProductoControlador;
+	}
+
+	public ModificarProductoController getModificarProductoControlador() {
+		return modificarProductoControlador;
+	}
+
+	public void setModificarProductoControlador(ModificarProductoController modificarProductoControlador) {
+		this.modificarProductoControlador = modificarProductoControlador;
 	}
 
 }

@@ -3,6 +3,7 @@ package main.java.software.cafeteria.entidades;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 /**
  * clase que guarda todos los datos del recibo de una venta
@@ -20,14 +21,14 @@ public class Recibo implements Serializable {
 	// el numero de identificiacion del recibo
 	private String id;
 	// la lista de productos que se vendieron esta venta
-	private ArrayList<ProductosVentas> productosV;
+	private List<ProductosVentas> productosV;
 	// fecha en la que se realizo la venta
 	private GregorianCalendar fecha;
 	// un boolean que indica si el pago fue por tarjeta (true) o en efectivo
 	// (false)
 	private boolean tarjeta;
 	// valor en que el cliente paga en efectivo en la caja
-	private int EfectivoRegistrado;
+	private int efectivoRegistrado;
 	// valor del dinero total recaudado por la venta de bolsas
 	private int valorBolsas;
 
@@ -58,7 +59,7 @@ public class Recibo implements Serializable {
 	public boolean agregarProductos(ProductosInventario producto, int cantidad) {
 		ProductosVentas a = new ProductosVentas(producto, cantidad);
 		productosV.add(a);
-		EfectivoRegistrado = 0;
+		efectivoRegistrado = 0;
 		return true;
 	}
 
@@ -84,7 +85,7 @@ public class Recibo implements Serializable {
 		if (tarjeta) {
 			return 0;
 		} else {
-			return (EfectivoRegistrado - getPrecioTotal());
+			return (efectivoRegistrado - getPrecioTotal());
 		}
 	}
 
@@ -114,7 +115,7 @@ public class Recibo implements Serializable {
 	 * 
 	 * @return regresa la lista de productos
 	 */
-	public ArrayList<ProductosVentas> getProductosV() {
+	public List<ProductosVentas> getProductosV() {
 		return productosV;
 	}
 
@@ -124,7 +125,7 @@ public class Recibo implements Serializable {
 	 * @param ListaProductos
 	 *            la nueva lista de los productos
 	 */
-	public void setProductosV(ArrayList<ProductosVentas> productosV) {
+	public void setProductosV(List<ProductosVentas> productosV) {
 		this.productosV = productosV;
 	}
 
@@ -174,7 +175,7 @@ public class Recibo implements Serializable {
 	 * @return
 	 */
 	public int getEfectivoRegistrado() {
-		return EfectivoRegistrado;
+		return efectivoRegistrado;
 	}
 
 	/**
@@ -184,7 +185,7 @@ public class Recibo implements Serializable {
 	 *            el valor que el usuario entrega en la caja
 	 */
 	public void setEfectivoRegistrado(int efectivoRegistrado) {
-		EfectivoRegistrado = efectivoRegistrado;
+		this.efectivoRegistrado = efectivoRegistrado;
 	}
 
 	/**
@@ -215,11 +216,11 @@ public class Recibo implements Serializable {
 		Integer[] i = new Integer[100];
 		for (ProductosVentas p : productosV) {
 			int ivaP = p.getProducto().getIva();
-			int $piva = (p.getProducto().getPrecio() * ivaP) / 100;
+			int piva = (p.getProducto().getPrecio() * ivaP) / 100;
 			if (i[ivaP] == null) {
 				i[ivaP] = 0;
 			}
-			i[ivaP] += $piva * p.getCantidad();
+			i[ivaP] += piva * p.getCantidad();
 		}
 		return organizarArreglo(i);
 	}
@@ -235,12 +236,12 @@ public class Recibo implements Serializable {
 		Integer[] g = new Integer[100];
 		for (ProductosVentas p : productosV) {
 			int ivaP = p.getProducto().getIva();
-			int $p = p.getProducto().getPrecio();
-			int $piva = ($p * ivaP) / 100;
+			int p1 = p.getProducto().getPrecio();
+			int piva = (p1 * ivaP) / 100;
 			if (g[ivaP] == null) {
 				g[ivaP] = 0;
 			}
-			g[ivaP] += ($p - $piva) * p.getCantidad();
+			g[ivaP] += (p1 - piva) * p.getCantidad();
 		}
 		return organizarArreglo(g);
 	}
@@ -254,7 +255,7 @@ public class Recibo implements Serializable {
 	 * @return los ivas que tienen un valor y su valor
 	 */
 	public Integer[][] organizarArreglo(Integer[] arreglo) {
-		ArrayList<Integer> vi = new ArrayList<Integer>();
+		List<Integer> vi = new ArrayList<Integer>();
 		for (int j = 0; j < arreglo.length; j++) {
 			if (arreglo[j] != null) {
 				vi.add(j);

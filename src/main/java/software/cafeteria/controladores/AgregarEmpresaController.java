@@ -7,6 +7,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class AgregarEmpresaController {
@@ -18,40 +20,54 @@ public class AgregarEmpresaController {
 	private TextField nombreEmpresa;
 
 	@FXML
-	private Button btn_agregar;
+	private Button btnAgregar;
 
 	@FXML
-	private Button btn_cancelar;
+	private Button btnCancelar;
 
 	@FXML
 	public void initialize() {
-		btn_agregar.setGraphic(new ImageView("file:src/main/java/software/cafeteria/images/agregarEmpresa.png"));
-		btn_cancelar.setGraphic(new ImageView("file:src/main/java/software/cafeteria/images/cancelar.png"));
+		btnAgregar.setGraphic(new ImageView("file:src/main/java/software/cafeteria/images/agregarEmpresa.png"));
+		btnCancelar.setGraphic(new ImageView("file:src/main/java/software/cafeteria/images/cancelar.png"));
 	}
 
 	@FXML
 	void agregarEmpresa() {
 
-		boolean res = manejador.agregarEmpresa(nombreEmpresa.getText());
+		if (!nombreEmpresa.getText().equals("")) {
+			boolean res = manejador.agregarEmpresa(nombreEmpresa.getText());
 
-		if (res) {
+			if (res) {
 
-			Alert alert = new Alert(AlertType.INFORMATION, "La empresa se agreg� con exito", ButtonType.OK);
-			alert.showAndWait();
-			stage.close();
+				Alert alert = new Alert(AlertType.INFORMATION, "La empresa se agreg� con exito", ButtonType.OK);
+				alert.showAndWait();
+				stage.close();
 
-		} else {
-			Alert alert = new Alert(AlertType.ERROR,
-					"La empresa con el nombre " + nombreEmpresa.getText() + " ya se encuentra registrada.",
-					ButtonType.OK);
-			alert.showAndWait();
+			} else {
+				Alert alert = new Alert(AlertType.ERROR,
+						"La empresa con el nombre " + nombreEmpresa.getText() + " ya se encuentra registrada.",
+						ButtonType.OK);
+				alert.showAndWait();
+			}
 		}
 
+	}
+
+	public void verificar(KeyEvent event) {
+		if (event.getCode() == KeyCode.ENTER) {
+			agregarEmpresa();
+
+		}
 	}
 
 	@FXML
 	void cancelar() {
 		stage.close();
+		if (manejador.isValidar()) {
+			manejador.getAgregarProductoControlador().getEmpresaDistri().getSelectionModel().clearSelection();
+		} else {
+			manejador.getModificarProductoControlador().actualiarCampos();
+		}
 	}
 
 	public Stage getStage() {

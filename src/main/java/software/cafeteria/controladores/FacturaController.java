@@ -1,5 +1,8 @@
 package main.java.software.cafeteria.controladores;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -12,14 +15,16 @@ import javafx.stage.Stage;
 
 public class FacturaController {
 
+	private static final Logger LOGGER = Logger
+			.getLogger("main.java.software.cafeteria.controladores.FacturaController");
 	private ManejadorEscenarios manejador;
 	private Stage stage;
 
 	@FXML
-	private Button btn_factura;
+	private Button btnFactura;
 
 	@FXML
-	private Button btn_cancelar;
+	private Button btnCancelar;
 
 	@FXML
 	private Label valorTotal;
@@ -32,8 +37,8 @@ public class FacturaController {
 
 	@FXML
 	private void initialize() {
-		btn_factura.setGraphic(new ImageView("file:src/main/java/software/cafeteria/images/factura.png"));
-		btn_cancelar.setGraphic(new ImageView("file:src/main/java/software/cafeteria/images/cancelar.png"));
+		btnFactura.setGraphic(new ImageView("file:src/main/java/software/cafeteria/images/factura.png"));
+		btnCancelar.setGraphic(new ImageView("file:src/main/java/software/cafeteria/images/cancelar.png"));
 	}
 
 	@FXML
@@ -42,7 +47,7 @@ public class FacturaController {
 			int valorEfectivo = Integer.parseInt(efectivo.getText());
 			cambio.setText((valorEfectivo - Integer.parseInt(valorTotal.getText())) + "");
 		} catch (NumberFormatException e) {
-
+			LOGGER.log(Level.WARNING, "Error formato", e);
 		}
 	}
 

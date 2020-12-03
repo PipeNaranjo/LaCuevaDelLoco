@@ -1,10 +1,10 @@
 package test.java;
 
-
 import org.junit.Assert;
 import org.junit.Test;
 
 import main.java.software.cafeteria.entidades.Empresa;
+import main.java.software.cafeteria.entidades.Producto;
 import main.java.software.cafeteria.entidades.ProductosInventario;
 import main.java.software.cafeteria.logica.Inventario;
 
@@ -21,29 +21,35 @@ public class InvestarioTest {
 
 	@Test
 	public void verificarExistenciaProductoI() {
-		ProductosInventario a = new ProductosInventario("123", NOMBREPRODUCTO, EMPRESA, 20, 19, 800, 40, TIPO, 1000);
+		ProductosInventario a = new ProductosInventario(new Producto("123", NOMBREPRODUCTO, EMPRESA, 20, 19, 800, 1000),
+				40, TIPO);
 		b.agregarProducto(a);
 		Assert.assertTrue(b.verficarExistenciaProducto("123"));
 	}
 
 	@Test
 	public void obtenerProductoI() {
-		ProductosInventario a = new ProductosInventario("123", NOMBREPRODUCTO, EMPRESA, 20, 19, 800, 40, TIPO, 1000);
+		ProductosInventario a = new ProductosInventario(new Producto("123", NOMBREPRODUCTO, EMPRESA, 20, 19, 800, 1000),
+				40, TIPO);
 		b.agregarProducto(a);
 		Assert.assertEquals(a, b.obtenerproductoI("123"));
 	}
 
 	@Test
 	public void modificarProductoI() {
-		ProductosInventario a = new ProductosInventario("123", NOMBREPRODUCTO, EMPRESA, 20, 19, 800, 40, TIPO, 1000);
+		ProductosInventario a = new ProductosInventario(new Producto("123", NOMBREPRODUCTO, EMPRESA, 20, 19, 800, 1000),
+				40, TIPO);
 		b.agregarProducto(a);
-		b.modificarProducto(a, "123", NOMBREPRODUCTO, EMPRESA, 20, 19, 800, 40, TIPO, 1200);
+
+		b.modificarProducto(a,
+				new ProductosInventario(new Producto("123", NOMBREPRODUCTO, EMPRESA, 20, 19, 800, 1200), 40, TIPO));
 		Assert.assertEquals(1200, b.obtenerproductoI("123").getPrecio());
 	}
 
 	@Test
 	public void borrarProductoI() {
-		ProductosInventario a = new ProductosInventario("123", NOMBREPRODUCTO, EMPRESA, 20, 19, 800, 40, TIPO, 1000);
+		ProductosInventario a = new ProductosInventario(new Producto("123", NOMBREPRODUCTO, EMPRESA, 20, 19, 800, 1000),
+				40, TIPO);
 		b.agregarProducto(a);
 		Assert.assertTrue(b.verficarExistenciaProducto("123"));
 		b.borrarProductoI("123");
@@ -52,7 +58,8 @@ public class InvestarioTest {
 
 	@Test
 	public void agregarAlProductoI() {
-		ProductosInventario a = new ProductosInventario("123", NOMBREPRODUCTO, EMPRESA, 20, 19, 800, 40, TIPO, 1000);
+		ProductosInventario a = new ProductosInventario(new Producto("123", NOMBREPRODUCTO, EMPRESA, 20, 19, 800, 1000),
+				40, TIPO);
 		b.agregarProducto(a);
 		b.agregarAlInventario(b.obtenerproductoI("123"), 10);
 		Assert.assertEquals(50, b.obtenerproductoI("123").getCantidad());
@@ -60,7 +67,8 @@ public class InvestarioTest {
 
 	@Test
 	public void restarAlProductoI() {
-		ProductosInventario a = new ProductosInventario("123", NOMBREPRODUCTO, EMPRESA, 20, 19, 800, 40, TIPO, 1000);
+		ProductosInventario a = new ProductosInventario(new Producto("123", NOMBREPRODUCTO, EMPRESA, 20, 19, 800, 1000),
+				40, TIPO);
 		b.agregarProducto(a);
 		b.restarAlInventario(b.obtenerproductoI("123"), 10);
 		Assert.assertEquals(30, b.obtenerproductoI("123").getCantidad());

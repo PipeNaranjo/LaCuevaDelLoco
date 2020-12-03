@@ -7,6 +7,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class AgregarTipoProductoController {
@@ -18,31 +20,40 @@ public class AgregarTipoProductoController {
 	private TextField agregarTipo;
 
 	@FXML
-	private Button btn_agregar;
+	private Button btnAgregar;
 
 	@FXML
-	private Button btn_cancelar;
-	
-	
+	private Button btnCancelar;
+
 	@FXML
-	public void initialize(){
-		btn_agregar.setGraphic(new ImageView("file:src/main/java/software/cafeteria/images/agregarTipo.png"));
-		btn_cancelar.setGraphic(new ImageView("file:src/main/java/software/cafeteria/images/cancelar.png"));
+	public void initialize() {
+		btnAgregar.setGraphic(new ImageView("file:src/main/java/software/cafeteria/images/agregarTipo.png"));
+		btnCancelar.setGraphic(new ImageView("file:src/main/java/software/cafeteria/images/cancelar.png"));
 	}
 
 	@FXML
 	void agregarTipo() {
-		boolean res = manejador.agregarTipoProducto(agregarTipo.getText());
+		if (!agregarTipo.getText().equalsIgnoreCase("")) {
+			boolean res = manejador.agregarTipoProducto(agregarTipo.getText());
 
-		if (res) {
-			Alert alert = new Alert(AlertType.INFORMATION, "El tipo de producto se agrego con exito", ButtonType.OK);
-			alert.showAndWait();
-			stage.close();
-		} else {
-			Alert alert = new Alert(AlertType.ERROR,
-					"El tipo de producto con el nombre " + agregarTipo.getText() + " ya se encuentra registrado.",
-					ButtonType.OK);
-			alert.showAndWait();
+			if (res) {
+				Alert alert = new Alert(AlertType.INFORMATION, "El tipo de producto se agrego con exito",
+						ButtonType.OK);
+				alert.showAndWait();
+				stage.close();
+			} else {
+				Alert alert = new Alert(AlertType.ERROR,
+						"El tipo de producto con el nombre " + agregarTipo.getText() + " ya se encuentra registrado.",
+						ButtonType.OK);
+				alert.showAndWait();
+			}
+		}
+	}
+
+	public void verificar(KeyEvent event) {
+		if (event.getCode() == KeyCode.ENTER) {
+			agregarTipo();
+
 		}
 	}
 
@@ -50,7 +61,11 @@ public class AgregarTipoProductoController {
 	void cancelar() {
 
 		stage.close();
-
+		if (manejador.isValidar()) {
+			manejador.getAgregarProductoControlador().getTipoProducto().getSelectionModel().clearSelection();
+		} else {
+			manejador.getModificarProductoControlador().actualiarCampos();
+		}
 	}
 
 	public Stage getStage() {

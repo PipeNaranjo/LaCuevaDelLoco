@@ -7,6 +7,8 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class AgregarIvaController {
@@ -15,42 +17,57 @@ public class AgregarIvaController {
 	private Stage stage;
 
 	@FXML
-	private Button btn_agregar;
+	private Button btnAgregar;
 
 	@FXML
-	private Button btn_cancelar;
+	private Button btnCancelar;
 
 	@FXML
 	private TextField iva;
 
 	@FXML
 	private void initialize() {
-		btn_agregar.setGraphic(new ImageView("file:src/main/java/software/cafeteria/images/agregarTipo.png"));
-		btn_cancelar.setGraphic(new ImageView("file:src/main/java/software/cafeteria/images/cancelar.png"));
+
+		btnAgregar.setGraphic(new ImageView("file:src/main/java/software/cafeteria/images/agregarTipo.png"));
+		btnCancelar.setGraphic(new ImageView("file:src/main/java/software/cafeteria/images/cancelar.png"));
 	}
 
 	@FXML
 	void agregarIva() {
-		try {
-			if (Integer.parseInt(iva.getText()) > 0) {
-				boolean res = manejador.agregarIva(Integer.parseInt(iva.getText()));
-				if (res) {
-					Alert alert = new Alert(AlertType.INFORMATION, "Se agreg� el iva correctamente", ButtonType.OK);
-					alert.show();
-				} else {
-					Alert alert = new Alert(AlertType.ERROR, "El iva ya se encuentra registrado", ButtonType.OK);
-					alert.show();
+		if (!iva.getText().equalsIgnoreCase("")) {
+			try {
+				if (Integer.parseInt(iva.getText()) > 0) {
+					boolean res = manejador.agregarIva(Integer.parseInt(iva.getText()));
+					if (res) {
+						Alert alert = new Alert(AlertType.INFORMATION, "Se agregó el iva correctamente", ButtonType.OK);
+						alert.show();
+					} else {
+						Alert alert = new Alert(AlertType.ERROR, "El iva ya se encuentra registrado", ButtonType.OK);
+						alert.show();
+					}
 				}
+			} catch (NumberFormatException e) {
+				Alert alert = new Alert(AlertType.ERROR, "Valor no numérico", ButtonType.OK);
+				alert.showAndWait();
 			}
-		} catch (NumberFormatException e) {
-			Alert alert = new Alert(AlertType.ERROR, "Valor no num�rico", ButtonType.OK);
-			alert.show();
+		}
+	}
+
+	public void verificar(KeyEvent event) {
+		if (event.getCode() == KeyCode.ENTER) {
+			agregarIva();
+
 		}
 	}
 
 	@FXML
 	void cancelar() {
 		stage.close();
+		if (manejador.isValidar()) {
+			manejador.getAgregarProductoControlador().getIva().getSelectionModel().clearSelection();
+		} else {
+			manejador.getModificarProductoControlador().actualiarCampos();
+		}
 	}
 
 	public ManejadorEscenarios getManejador() {

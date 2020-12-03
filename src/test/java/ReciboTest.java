@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import main.java.software.cafeteria.entidades.Empresa;
+import main.java.software.cafeteria.entidades.Producto;
 import main.java.software.cafeteria.entidades.ProductosInventario;
 import main.java.software.cafeteria.entidades.Recibo;
 
@@ -21,10 +22,11 @@ public class ReciboTest {
 	@Test
 	public void calcularPrecioTotalRecibo() {
 		Recibo c = new Recibo(true);
-		ProductosInventario a = new ProductosInventario("123", NOMBREPRODUCTO1, EMPRESA, 20, 19, 800, 40, TIPO, 1000);
+		ProductosInventario a = new ProductosInventario(
+				new Producto("123", NOMBREPRODUCTO1, EMPRESA, 20, 19, 800, 1000), 40, TIPO);
 		boolean respuesta = c.agregarProductos(a, 5);
 		Assert.assertTrue(respuesta);
-		a = new ProductosInventario("1234", NOMBREPRODUCTO2, EMPRESA, 20, 19, 2300, 40, TIPO, 2500);
+		a = new ProductosInventario(new Producto("1234", NOMBREPRODUCTO2, EMPRESA, 20, 19, 2300, 2500), 40, TIPO);
 		respuesta = c.agregarProductos(a, 2);
 		Assert.assertTrue(respuesta);
 	}
@@ -32,9 +34,10 @@ public class ReciboTest {
 	@Test
 	public void calcularCambioTotalReciboTarjeta() {
 		Recibo c = new Recibo(true);
-		ProductosInventario a = new ProductosInventario("123", NOMBREPRODUCTO1, EMPRESA, 20, 19, 800, 40, TIPO, 1000);
+		ProductosInventario a = new ProductosInventario(
+				new Producto("123", NOMBREPRODUCTO1, EMPRESA, 20, 19, 800, 1000), 40, TIPO);
 		c.agregarProductos(a, 5);
-		a = new ProductosInventario("1234", NOMBREPRODUCTO2, EMPRESA, 20, 19, 2300, 40, TIPO, 2500);
+		a = new ProductosInventario(new Producto("1234", NOMBREPRODUCTO2, EMPRESA, 20, 19, 2300, 2500), 40, TIPO);
 		c.agregarProductos(a, 4);
 		Assert.assertEquals(0, c.getCambio());
 	}
@@ -42,9 +45,10 @@ public class ReciboTest {
 	@Test
 	public void calcularCambioTotalReciboEfectivo() {
 		Recibo c = new Recibo(false);
-		ProductosInventario a = new ProductosInventario("123", NOMBREPRODUCTO1, EMPRESA, 20, 19, 800, 40, TIPO, 1000);
+		ProductosInventario a = new ProductosInventario(
+				new Producto("123", NOMBREPRODUCTO1, EMPRESA, 20, 19, 800, 1000), 40, TIPO);
 		c.agregarProductos(a, 5);
-		a = new ProductosInventario("1234", NOMBREPRODUCTO2, EMPRESA, 20, 19, 2300, 40, TIPO, 2500);
+		a = new ProductosInventario(new Producto("1234", NOMBREPRODUCTO2, EMPRESA, 20, 19, 2300, 2500), 40, TIPO);
 		c.agregarProductos(a, 4);
 		c.setEfectivoRegistrado(20000);
 		Assert.assertEquals(5000, c.getCambio());
@@ -53,11 +57,12 @@ public class ReciboTest {
 	@Test
 	public void totalIvaRecibo() {
 		Recibo c = new Recibo(false);
-		ProductosInventario a = new ProductosInventario("123", NOMBREPRODUCTO1, EMPRESA, 20, 19, 800, 40, TIPO, 1000);
+		ProductosInventario a = new ProductosInventario(
+				new Producto("123", NOMBREPRODUCTO1, EMPRESA, 20, 19, 800, 1000), 40, TIPO);
 		c.agregarProductos(a, 5);
-		a = new ProductosInventario("1234", NOMBREPRODUCTO2, EMPRESA, 20, 19, 2300, 40, TIPO, 2500);
+		a = new ProductosInventario(new Producto("1234", NOMBREPRODUCTO2, EMPRESA, 20, 19, 2300, 2500), 40, TIPO);
 		c.agregarProductos(a, 4);
-		a = new ProductosInventario("234", NOMBREPRODUCTO3, EMPRESA2, 20, 0, 1000, 40, TIPO2, 1500);
+		a = new ProductosInventario(new Producto("234", NOMBREPRODUCTO3, EMPRESA2, 20, 0, 1000, 1500), 40, TIPO2);
 		c.agregarProductos(a, 5);
 		int valor = c.getTotalIvaRecibo()[0][1];
 		Assert.assertEquals(0, valor);
@@ -68,11 +73,12 @@ public class ReciboTest {
 	@Test
 	public void totalIvaGanancia() {
 		Recibo c = new Recibo(false);
-		ProductosInventario a = new ProductosInventario("123", NOMBREPRODUCTO1, EMPRESA, 20, 19, 800, 40, TIPO, 1000);
+		ProductosInventario a = new ProductosInventario(
+				new Producto("123", NOMBREPRODUCTO1, EMPRESA, 20, 19, 800, 1000), 40, TIPO);
 		c.agregarProductos(a, 5);
-		a = new ProductosInventario("1234", NOMBREPRODUCTO2, EMPRESA, 20, 19, 2300, 40, TIPO, 2500);
+		a = new ProductosInventario(new Producto("1234", NOMBREPRODUCTO2, EMPRESA, 20, 19, 2300, 2500), 40, TIPO);
 		c.agregarProductos(a, 4);
-		a = new ProductosInventario("234", NOMBREPRODUCTO3, EMPRESA2, 20, 0, 1000, 40, TIPO2, 1500);
+		a = new ProductosInventario(new Producto("234", NOMBREPRODUCTO3, EMPRESA2, 20, 0, 1000, 1500), 40, TIPO2);
 		c.agregarProductos(a, 5);
 		int valor = c.getTotalGananciaRecibo()[0][1];
 		Assert.assertEquals((1500 * 5), valor);

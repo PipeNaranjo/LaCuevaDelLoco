@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import main.java.software.cafeteria.entidades.Empresa;
+import main.java.software.cafeteria.entidades.Producto;
 import main.java.software.cafeteria.entidades.ProductosInventario;
 import main.java.software.cafeteria.entidades.Recibo;
 import main.java.software.cafeteria.entidades.RegistroDeVentas;
@@ -30,40 +31,44 @@ public class ProductosInventarioTest {
 
 	@Test
 	public void agregarCantidadProductoI() {
-		ProductosInventario a = new ProductosInventario("123", NOMBREPRODUCTO1, EMPRESA, 20, 19, 800, 40, TIPO, 1000);
+		ProductosInventario a = new ProductosInventario(
+				new Producto("123", NOMBREPRODUCTO1, EMPRESA, 20, 19, 800, 1000), 40, TIPO);
 		a.agregarAlInventario(10);
 		Assert.assertEquals(50, a.getCantidad());
 	}
 
 	@Test
 	public void restarCantidadProductoI() {
-		ProductosInventario a = new ProductosInventario("123", NOMBREPRODUCTO1, EMPRESA, 20, 19, 800, 40, TIPO, 1000);
+		ProductosInventario a = new ProductosInventario(
+				new Producto("123", NOMBREPRODUCTO1, EMPRESA, 20, 19, 800, 1000), 40, TIPO);
 		a.restarAlInventario(10);
 		Assert.assertEquals(30, a.getCantidad());
 	}
 
 	@Test
 	public void compararProductoI1() {
-		ProductosInventario a = new ProductosInventario("123", NOMBREPRODUCTO1, EMPRESA, 20, 19, 800, 40, TIPO, 1000);
-		Assert.assertEquals(0, a.CompareTo("coca-cola personal"));
+		ProductosInventario a = new ProductosInventario(
+				new Producto("123", NOMBREPRODUCTO1, EMPRESA, 20, 19, 800, 1000), 40, TIPO);
+		Assert.assertEquals(0, a.compareTo("coca-cola personal"));
 	}
 
 	public void compararProductoI2() {
 		Inventario e = new Inventario();
 		RegistroDeVentas f = new RegistroDeVentas(0, 0);
 		Recibo c = new Recibo(false);
-		ProductosInventario a = new ProductosInventario("123", NOMBREPRODUCTO1, EMPRESA, 20, 19, 800, 40, TIPO, 1000);
+		ProductosInventario a = new ProductosInventario(
+				new Producto("123", NOMBREPRODUCTO1, EMPRESA, 20, 19, 800, 1000), 40, TIPO);
 		e.agregarAlInventario(a, 2);
 		c.agregarProductos(a, 5);
-		a = new ProductosInventario("346", NOMBREPRODUCTO4, EMPRESA3, 20, 5, 800, 40, TIPO2, 1100);
+		a = new ProductosInventario(new Producto("346", NOMBREPRODUCTO4, EMPRESA3, 20, 5, 800, 1100), 40, TIPO2);
 		e.agregarAlInventario(a, 2);
 		c.agregarProductos(a, 5);
 		f.adjuntarUnRecibo(c, e);
 		c = new Recibo(false);
-		a = new ProductosInventario("1234", NOMBREPRODUCTO2, EMPRESA, 20, 19, 2300, 40, TIPO, 2500);
+		a = new ProductosInventario(new Producto("1234", NOMBREPRODUCTO2, EMPRESA, 20, 19, 2300, 2500), 40, TIPO);
 		e.agregarAlInventario(a, 2);
 		c.agregarProductos(a, 2);
-		a = new ProductosInventario("234", NOMBREPRODUCTO3, EMPRESA2, 20, 0, 1000, 40, TIPO2, 1500);
+		a = new ProductosInventario(new Producto("234", NOMBREPRODUCTO3, EMPRESA2, 20, 0, 1000, 1500), 40, TIPO2);
 		e.agregarAlInventario(a, 2);
 		c.agregarProductos(a, 5);
 
@@ -75,8 +80,8 @@ public class ProductosInventarioTest {
 	@Test
 	public void agregarProductoTest() {
 
-		ProductosInventario producto = new ProductosInventario(CODIGOBARRAS, NOMBREPRODUCTO5, EMPRESA4, 30, 19, 48800,
-				20, TIPO3, 2500);
+		ProductosInventario producto = new ProductosInventario(
+				new Producto("123", NOMBREPRODUCTO1, EMPRESA, 20, 19, 800, 1000), 40, TIPO);
 
 		Assert.assertTrue((inventario.agregarProducto(producto)));
 
@@ -90,12 +95,14 @@ public class ProductosInventarioTest {
 		int cantidad = 10;
 		String tipo = TIPO3;
 		int precio = 2500;
-		ProductosInventario producto = new ProductosInventario(CODIGOBARRAS, NOMBREPRODUCTO5, EMPRESA4, presentacion,
-				iva, costo, cantidad, tipo, precio);
+		ProductosInventario producto = new ProductosInventario(
+				new Producto(CODIGOBARRAS, NOMBREPRODUCTO5, EMPRESA4, presentacion, iva, costo, precio), cantidad,
+				tipo);
 		inventario.agregarProducto(producto);
 
-		Assert.assertFalse(inventario.agregarProducto(CODIGOBARRAS, NOMBREPRODUCTO5, EMPRESA4, presentacion, iva, costo,
-				cantidad, tipo, precio));
+		Assert.assertFalse(inventario.agregarProducto(new ProductosInventario(
+				new Producto(CODIGOBARRAS, NOMBREPRODUCTO5, EMPRESA4, presentacion, iva, costo, precio), cantidad,
+				tipo)));
 	}
 
 }

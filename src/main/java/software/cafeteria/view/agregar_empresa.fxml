@@ -9,11 +9,11 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="183.0" prefWidth="410.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.software.cafeteria.controladores.AgregarEmpresaController">
    <children>
-      <Button fx:id="btn_agregar" layoutX="105.0" layoutY="135.0" mnemonicParsing="false" onAction="#agregarEmpresa" text="Agregar">
+      <Button fx:id="btnAgregar" focusTraversable="false" layoutX="105.0" layoutY="135.0" mnemonicParsing="false" onAction="#agregarEmpresa" text="Agregar">
          <effect>
             <DropShadow color="#544f4f" />
          </effect></Button>
-      <Button fx:id="btn_cancelar" layoutX="252.0" layoutY="135.0" mnemonicParsing="false" onAction="#cancelar" text="Cancelar">
+      <Button fx:id="btnCancelar" focusTraversable="false" layoutX="252.0" layoutY="135.0" mnemonicParsing="false" onAction="#cancelar" text="Cancelar">
          <effect>
             <DropShadow color="#544f4f" />
          </effect></Button>
@@ -22,7 +22,7 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <TextField fx:id="nombreEmpresa" layoutX="236.0" layoutY="55.0">
+      <TextField fx:id="nombreEmpresa" layoutX="236.0" layoutY="55.0" onKeyReleased="#verificar">
          <effect>
             <DropShadow color="#544f4f" />
          </effect></TextField>

@@ -10,6 +10,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import main.java.software.cafeteria.delegado.ProductoObservable;
+import main.java.software.cafeteria.entidades.Empresa;
+import main.java.software.cafeteria.entidades.Producto;
+import main.java.software.cafeteria.entidades.ProductosInventario;
 
 public class ModificarProductoController {
 
@@ -47,27 +50,26 @@ public class ModificarProductoController {
 	private ComboBox<String> empresaDistri;
 
 	@FXML
-	private Button btn_cancelar;
+	private Button btnCancelar;
 
 	@FXML
-	private Button btn_modificar;
+	private Button btnModificar;
 
 	@FXML
 	public void initialize() {
-		btn_cancelar.setGraphic(new ImageView("file:src/main/java/software/cafeteria/images/cancelar.png"));
-		btn_modificar.setGraphic(new ImageView("file:src/main/java/software/cafeteria/images/modificarProducto.png"));
+		btnCancelar.setGraphic(new ImageView("file:src/main/java/software/cafeteria/images/cancelar.png"));
+		btnModificar.setGraphic(new ImageView("file:src/main/java/software/cafeteria/images/modificarProducto.png"));
 	}
 
 	@FXML
 	void verificarTipo() {
 
 		String tipo = tipoProducto.getSelectionModel().getSelectedItem();
-		if (tipo != null) {
-			if (tipo.equals("Otro tipo")) {
-				manejador.ventanaAgregarTipo();
-				tipoProducto.setItems(manejador.listarTipos());
+		if (tipo != null && tipo.equals("Otro tipo")) {
 
-			}
+			manejador.ventanaAgregarTipo();
+			tipoProducto.setItems(manejador.listarTipos());
+
 		}
 	}
 
@@ -85,65 +87,63 @@ public class ModificarProductoController {
 				|| costoProducto.getText().equals("") || presentacionProducto.getText().equals("")
 				|| precioProducto.getText().equals("") || cantidad.getText().equals(""))) {
 
-			String codigo_Barras = codigoBarras.getText();
-			String nombre_Producto = nombreProducto.getText();
-			int costo_Producto = 0;
+			String codigoBarras1 = codigoBarras.getText();
+			String nombreProducto1 = nombreProducto.getText();
+			int costoProducto1 = 0;
 			try {
-				costo_Producto = Integer.parseInt(costoProducto.getText());
+				costoProducto1 = Integer.parseInt(costoProducto.getText());
 			} catch (NumberFormatException e) {
 				validar = false;
-				Alert alert = new Alert(AlertType.ERROR, "Valor no num�rico \nCampo costo del producto", ButtonType.OK);
+				Alert alert = new Alert(AlertType.ERROR, "Valor no numérico \nCampo costo del producto", ButtonType.OK);
 				alert.showAndWait();
 			}
-			int presentacion_Producto = 0;
+			int presentacionProducto1 = 0;
 			if (validar) {
 				try {
-					presentacion_Producto = Integer.parseInt(presentacionProducto.getText());
+					presentacionProducto1 = Integer.parseInt(presentacionProducto.getText());
 				} catch (NumberFormatException e) {
 					validar = false;
-					Alert alert = new Alert(AlertType.ERROR, "Valor no num�rico \nCampo presentaci�n del producto",
+					Alert alert = new Alert(AlertType.ERROR, "Valor no numérico \nCampo presentación del producto",
 							ButtonType.OK);
 					alert.showAndWait();
 
 				}
 			}
-			int precio_Producto = 0;
+			int precioProducto1 = 0;
 			if (validar) {
 				try {
-					precio_Producto = Integer.parseInt(precioProducto.getText());
+					precioProducto1 = Integer.parseInt(precioProducto.getText());
 				} catch (NumberFormatException e) {
 					validar = false;
-					Alert alert = new Alert(AlertType.ERROR, "Valor no num�rico \nCampo precio del producto",
+					Alert alert = new Alert(AlertType.ERROR, "Valor no numérico \nCampo precio del producto",
 							ButtonType.OK);
 					alert.showAndWait();
 
 				}
 			}
-			int iva_ = -1;
+			int iva1 = -1;
 			String seleccion = iva.getSelectionModel().getSelectedItem();
 			if (seleccion != null && validar) {
-				if (seleccion.equals("5")) {
-					iva_ = 5;
-				} else if (seleccion.equals("19")) {
-					iva_ = 19;
-				} else if (seleccion.equals("Exento")) {
-					iva_ = 0;
+				if (seleccion.equals("Exento")) {
+					iva1 = 0;
+				} else {
+					iva1 = Integer.parseInt(seleccion);
 				}
 			} else {
 				validar = false;
 				Alert alert = new Alert(AlertType.ERROR, "Seleccione un valor en Iva", ButtonType.OK);
 				alert.showAndWait();
 			}
-			String tipo_Producto = tipoProducto.getSelectionModel().getSelectedItem();
-			if (tipo_Producto == null && validar) {
+			String tipoProducto1 = tipoProducto.getSelectionModel().getSelectedItem();
+			if (tipoProducto1 == null && validar) {
 				validar = false;
 				Alert alert = new Alert(AlertType.ERROR, "Seleccione un valor en tipo Producto", ButtonType.OK);
 				alert.showAndWait();
 			}
-			int cantidad_ = 0;
+			int cantidad1 = 0;
 			if (validar) {
 				try {
-					cantidad_ = Integer.parseInt(cantidad.getText());
+					cantidad1 = Integer.parseInt(cantidad.getText());
 				} catch (NumberFormatException e) {
 					validar = false;
 					Alert alert = new Alert(AlertType.ERROR, "Valor no num�rico \nCampo cantidad del producto",
@@ -161,11 +161,18 @@ public class ModificarProductoController {
 			ProductoObservable productoAnterior = manejador.listarProductos().get(index);
 
 			if (validar) {
-				manejador.modificarProducto(codigo_Barras, nombre_Producto, costo_Producto, presentacion_Producto,
-						precio_Producto, iva_, tipo_Producto, cantidad_, productoAnterior, empresa);
-				Alert alert = new Alert(AlertType.INFORMATION, "Se modific� con exito el Producto", ButtonType.OK);
-				alert.showAndWait();
-				stage.close();
+				ProductosInventario producto = new ProductosInventario(new Producto(codigoBarras1, nombreProducto1,
+						new Empresa(empresa), presentacionProducto1, iva1, costoProducto1, precioProducto1), cantidad1,
+						tipoProducto1);
+				boolean respuesta = manejador.modificarProducto(producto, productoAnterior.getProductoInventario());
+				if (respuesta) {
+					Alert alert = new Alert(AlertType.INFORMATION, "Se modificó con exito el Producto", ButtonType.OK);
+					alert.showAndWait();
+					stage.close();
+				} else {
+					Alert alert = new Alert(AlertType.ERROR, "El código de barras ya existe", ButtonType.OK);
+					alert.showAndWait();
+				}
 			}
 
 		} else {
@@ -178,24 +185,23 @@ public class ModificarProductoController {
 	@FXML
 	void verificarEmpresa() {
 		String empresa = empresaDistri.getSelectionModel().getSelectedItem();
-		if (empresa != null) {
-			if (empresa.equals("Otra empresa")) {
-				manejador.ventanaAgregarEmpresa();
-				empresaDistri.setItems(manejador.listarEmpresas());
+		if (empresa != null && empresa.equals("Otra empresa")) {
 
-			}
+			manejador.ventanaAgregarEmpresa();
+			empresaDistri.setItems(manejador.listarEmpresas());
+
 		}
 	}
 
 	@FXML
 	public void verificarIva() {
-		String iva_ = iva.getSelectionModel().getSelectedItem();
-		if (iva_ != null) {
-			if (iva_.equals("Otro Iva")) {
-				manejador.abrirAgregarIva();
+		String iva1 = iva.getSelectionModel().getSelectedItem();
+		if (iva1 != null && iva1.equals("Otro Iva")) {
 
-				iva.setItems(manejador.listarIva());
-			}
+			manejador.abrirAgregarIva();
+
+			iva.setItems(manejador.listarIva());
+
 		}
 	}
 
@@ -240,6 +246,30 @@ public class ModificarProductoController {
 
 	public void setIndex(int index) {
 		this.index = index;
+	}
+
+	public ComboBox<String> getIva() {
+		return iva;
+	}
+
+	public void setIva(ComboBox<String> iva) {
+		this.iva = iva;
+	}
+
+	public ComboBox<String> getTipoProducto() {
+		return tipoProducto;
+	}
+
+	public void setTipoProducto(ComboBox<String> tipoProducto) {
+		this.tipoProducto = tipoProducto;
+	}
+
+	public ComboBox<String> getEmpresaDistri() {
+		return empresaDistri;
+	}
+
+	public void setEmpresaDistri(ComboBox<String> empresaDistri) {
+		this.empresaDistri = empresaDistri;
 	}
 
 }

@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import main.java.software.cafeteria.entidades.Empresa;
 import main.java.software.cafeteria.entidades.InformeFiscal;
+import main.java.software.cafeteria.entidades.Producto;
 import main.java.software.cafeteria.entidades.ProductosInventario;
 import main.java.software.cafeteria.entidades.Recibo;
 
@@ -27,15 +28,16 @@ public class InformeFiscalTest {
 	public void totalDeLaCaja() {
 		ArrayList<Recibo> b = new ArrayList<Recibo>();
 		Recibo c = new Recibo(false);
-		ProductosInventario a = new ProductosInventario("123", NOMBREPRODUCTO1, EMPRESA, 20, 19, 800, 40, TIPO, 1000);
+		ProductosInventario a = new ProductosInventario(
+				new Producto("123", NOMBREPRODUCTO1, EMPRESA, 20, 19, 800, 1000), 40, TIPO);
 		c.agregarProductos(a, 5);
-		a = new ProductosInventario("346", NOMBREPRODUCTO4, EMPRESA3, 20, 5, 800, 40, TIPO2, 1100);
+		a = new ProductosInventario(new Producto("346", NOMBREPRODUCTO4, EMPRESA3, 20, 5, 800, 1100), 40, TIPO2);
 		c.agregarProductos(a, 5);
 		b.add(c);
 		c = new Recibo(false);
-		a = new ProductosInventario("1234", NOMBREPRODUCTO2, EMPRESA, 20, 19, 2300, 40, TIPO, 2500);
+		a = new ProductosInventario(new Producto("1234", NOMBREPRODUCTO2, EMPRESA, 20, 19, 2300, 2500), 40, TIPO);
 		c.agregarProductos(a, 2);
-		a = new ProductosInventario("234", NOMBREPRODUCTO3, EMPRESA2, 20, 0, 1000, 40, TIPO2, 1500);
+		a = new ProductosInventario(new Producto("234", NOMBREPRODUCTO3, EMPRESA2, 20, 0, 1000, 1500), 40, TIPO2);
 		c.agregarProductos(a, 10);
 		b.add(c);
 		InformeFiscal d = new InformeFiscal(123, b);
@@ -46,15 +48,16 @@ public class InformeFiscalTest {
 	public void totalDeIvaIF() {
 		ArrayList<Recibo> b = new ArrayList<Recibo>();
 		Recibo c = new Recibo(false);
-		ProductosInventario a = new ProductosInventario("123", NOMBREPRODUCTO1, EMPRESA, 20, 19, 800, 40, TIPO, 1000);
+		ProductosInventario a = new ProductosInventario(
+				new Producto("123", NOMBREPRODUCTO1, EMPRESA, 20, 19, 800, 1000), 40, TIPO);
 		c.agregarProductos(a, 5);
-		a = new ProductosInventario("346", NOMBREPRODUCTO4, EMPRESA3, 20, 5, 800, 40, TIPO2, 1100);
+		a = new ProductosInventario(new Producto("346", NOMBREPRODUCTO4, EMPRESA3, 20, 5, 800, 1100), 40, TIPO2);
 		c.agregarProductos(a, 5);
 		b.add(c);
 		c = new Recibo(false);
-		a = new ProductosInventario("1234", NOMBREPRODUCTO2, EMPRESA, 20, 19, 2300, 40, TIPO, 2500);
+		a = new ProductosInventario(new Producto("1234", NOMBREPRODUCTO2, EMPRESA, 20, 19, 2300, 2500), 40, TIPO);
 		c.agregarProductos(a, 2);
-		a = new ProductosInventario("234", NOMBREPRODUCTO3, EMPRESA2, 20, 0, 1000, 40, TIPO2, 1500);
+		a = new ProductosInventario(new Producto("234", NOMBREPRODUCTO3, EMPRESA2, 20, 0, 1000, 1500), 40, TIPO2);
 		c.agregarProductos(a, 5);
 		b.add(c);
 		InformeFiscal d = new InformeFiscal(123, b);
@@ -66,15 +69,16 @@ public class InformeFiscalTest {
 	public void totalDeGananciaIF() {
 		ArrayList<Recibo> b = new ArrayList<Recibo>();
 		Recibo c = new Recibo(false);
-		ProductosInventario a = new ProductosInventario("123", NOMBREPRODUCTO1, EMPRESA, 20, 19, 800, 40, TIPO, 1000);
+		ProductosInventario a = new ProductosInventario(
+				new Producto("123", NOMBREPRODUCTO1, EMPRESA, 20, 19, 800, 1000), 40, TIPO);
 		c.agregarProductos(a, 5);
-		a = new ProductosInventario("346", NOMBREPRODUCTO4, EMPRESA3, 20, 5, 800, 40, TIPO2, 1100);
+		a = new ProductosInventario(new Producto("346", NOMBREPRODUCTO4, EMPRESA3, 20, 5, 800, 1100), 40, TIPO2);
 		c.agregarProductos(a, 5);
 		b.add(c);
 		c = new Recibo(false);
-		a = new ProductosInventario("1234", NOMBREPRODUCTO2, EMPRESA, 20, 19, 2300, 40, TIPO, 2500);
+		a = new ProductosInventario(new Producto("1234", NOMBREPRODUCTO2, EMPRESA, 20, 19, 2300, 2500), 40, TIPO);
 		c.agregarProductos(a, 2);
-		a = new ProductosInventario("234", NOMBREPRODUCTO3, EMPRESA2, 20, 0, 1000, 40, TIPO2, 1500);
+		a = new ProductosInventario(new Producto("234", NOMBREPRODUCTO3, EMPRESA2, 20, 0, 1000, 1500), 40, TIPO2);
 		c.agregarProductos(a, 5);
 		b.add(c);
 		InformeFiscal d = new InformeFiscal(123, b);

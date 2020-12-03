@@ -133,14 +133,14 @@
    <bottom>
       <ButtonBar prefHeight="40.0" prefWidth="595.0" BorderPane.alignment="CENTER">
         <buttons>
-          <Button fx:id="btn_agregar" mnemonicParsing="false" onAction="#agregarProducto" text="Agregar Producto">
+          <Button fx:id="btnAgregar" mnemonicParsing="false" onAction="#agregarProducto" text="Agregar Producto">
                <font>
                   <Font size="14.0" />
                </font>
                <effect>
                   <DropShadow color="#544f4f" />
                </effect></Button>
-            <Button fx:id="btn_cancelar" mnemonicParsing="false" onAction="#cancelar" text="Cancelar">
+            <Button fx:id="btnCancelar" mnemonicParsing="false" onAction="#cancelar" text="Cancelar">
                <font>
                   <Font size="14.0" />
                </font>

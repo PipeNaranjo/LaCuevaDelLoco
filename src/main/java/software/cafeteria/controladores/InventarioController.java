@@ -68,25 +68,26 @@ public class InventarioController {
 	private TextField busquedaProducto;
 
 	@FXML
-	private Button btn_agregar;
+	private Button btnAgregar;
 
 	@FXML
-	private Button btn_regresar;
+	private Button btnRegresar;
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@FXML
 	public void initialize() {
 
-		producto.setCellValueFactory(new Callback<CellDataFeatures<ProductoObservable, String>, ObservableValue<String>>() {
-			public ObservableValue<String> call(CellDataFeatures<ProductoObservable, String> nomb) {
-				return nomb.getValue().getNombre();
-			}
-		});
-		tipoProducto.setCellValueFactory(new Callback<CellDataFeatures<ProductoObservable, String>, ObservableValue<String>>() {
-			public ObservableValue<String> call(CellDataFeatures<ProductoObservable, String> tipo) {
-				return tipo.getValue().getTipoProducto();
-			}
-		});
+		producto.setCellValueFactory(
+				new Callback<CellDataFeatures<ProductoObservable, String>, ObservableValue<String>>() {
+					public ObservableValue<String> call(CellDataFeatures<ProductoObservable, String> nomb) {
+						return nomb.getValue().getNombre();
+					}
+				});
+		tipoProducto.setCellValueFactory(
+				new Callback<CellDataFeatures<ProductoObservable, String>, ObservableValue<String>>() {
+					public ObservableValue<String> call(CellDataFeatures<ProductoObservable, String> tipo) {
+						return tipo.getValue().getTipoProducto();
+					}
+				});
 		iva.setCellValueFactory(new Callback<CellDataFeatures<ProductoObservable, String>, ObservableValue<String>>() {
 			public ObservableValue<String> call(CellDataFeatures<ProductoObservable, String> iva) {
 				return iva.getValue().getIva();
@@ -98,37 +99,42 @@ public class InventarioController {
 						return pre.getValue().getPrecio();
 					}
 				});
-		costo.setCellValueFactory(new Callback<CellDataFeatures<ProductoObservable, String>, ObservableValue<String>>() {
-			public ObservableValue<String> call(CellDataFeatures<ProductoObservable, String> cos) {
-				return cos.getValue().getCosto();
-			}
-		});
-		cantidad.setCellValueFactory(new Callback<CellDataFeatures<ProductoObservable, String>, ObservableValue<String>>() {
-			public ObservableValue<String> call(CellDataFeatures<ProductoObservable, String> can) {
-				return can.getValue().getCantidad();
-			}
-		});
-		codigoBarras.setCellValueFactory(new Callback<CellDataFeatures<ProductoObservable, String>, ObservableValue<String>>() {
-			public ObservableValue<String> call(CellDataFeatures<ProductoObservable, String> codig) {
-				return codig.getValue().getCodigoBarras();
-			}
-		});
-		presentacion.setCellValueFactory(new Callback<CellDataFeatures<ProductoObservable, String>, ObservableValue<String>>() {
-			public ObservableValue<String> call(CellDataFeatures<ProductoObservable, String> present) {
-				return present.getValue().getPresentacion();
-			}
-		});
-		empresa.setCellValueFactory(new Callback<CellDataFeatures<ProductoObservable, String>, ObservableValue<String>>() {
-			public ObservableValue<String> call(CellDataFeatures<ProductoObservable, String> present) {
-				return present.getValue().getEmpresa();
-			}
-		});
-		btnEliminar = new TableColumn("");
-		btnModificar = new TableColumn("");
+		costo.setCellValueFactory(
+				new Callback<CellDataFeatures<ProductoObservable, String>, ObservableValue<String>>() {
+					public ObservableValue<String> call(CellDataFeatures<ProductoObservable, String> cos) {
+						return cos.getValue().getCosto();
+					}
+				});
+		cantidad.setCellValueFactory(
+				new Callback<CellDataFeatures<ProductoObservable, String>, ObservableValue<String>>() {
+					public ObservableValue<String> call(CellDataFeatures<ProductoObservable, String> can) {
+						return can.getValue().getCantidad();
+					}
+				});
+		codigoBarras.setCellValueFactory(
+				new Callback<CellDataFeatures<ProductoObservable, String>, ObservableValue<String>>() {
+					public ObservableValue<String> call(CellDataFeatures<ProductoObservable, String> codig) {
+						return codig.getValue().getCodigoBarras();
+					}
+				});
+		presentacion.setCellValueFactory(
+				new Callback<CellDataFeatures<ProductoObservable, String>, ObservableValue<String>>() {
+					public ObservableValue<String> call(CellDataFeatures<ProductoObservable, String> present) {
+						return present.getValue().getPresentacion();
+					}
+				});
+		empresa.setCellValueFactory(
+				new Callback<CellDataFeatures<ProductoObservable, String>, ObservableValue<String>>() {
+					public ObservableValue<String> call(CellDataFeatures<ProductoObservable, String> present) {
+						return present.getValue().getEmpresa();
+					}
+				});
+		btnEliminar = new TableColumn<ProductoObservable, Void>("");
+		btnModificar = new TableColumn<ProductoObservable, Void>("");
 
 		ImageView image = new ImageView("file:src/main/java/software/cafeteria/images/agregarAlInventario.png");
-		btn_agregar.setGraphic(image);
-		btn_regresar.setGraphic(new ImageView("file:src/main/java/software/cafeteria/images/regresar.png"));
+		btnAgregar.setGraphic(image);
+		btnRegresar.setGraphic(new ImageView("file:src/main/java/software/cafeteria/images/regresar.png"));
 		botones();
 	}
 

@@ -18,6 +18,7 @@ public class ProductoObservable {
 	private StringProperty empresa;
 	private ProductosInventario productoInventario;
 	private Producto producto;
+	private String exento = "Exento";
 
 	public ProductoObservable() {
 
@@ -28,7 +29,7 @@ public class ProductoObservable {
 		this.precio = new SimpleStringProperty(producto.getPrecio() + "");
 		this.costo = new SimpleStringProperty(producto.getCosto() + "");
 		if (producto.getIva() == 0) {
-			this.iva = new SimpleStringProperty("Exento");
+			this.iva = new SimpleStringProperty(exento);
 		} else {
 			this.iva = new SimpleStringProperty(producto.getIva() + "");
 		}
@@ -46,7 +47,7 @@ public class ProductoObservable {
 		this.precio = new SimpleStringProperty(producto.getPrecio() + "");
 		this.costo = new SimpleStringProperty(producto.getCosto() + "");
 		if (producto.getIva() == 0) {
-			this.iva = new SimpleStringProperty("Exento");
+			this.iva = new SimpleStringProperty(exento);
 		} else {
 			this.iva = new SimpleStringProperty(producto.getIva() + "");
 		}
@@ -59,14 +60,13 @@ public class ProductoObservable {
 
 	}
 
-	public ProductoObservable(String nombre, String costo, String iva, String tipo, String cantidad, String precio,
-			String codigoBarras, String presentacion, String empresa, ProductosInventario productoInventario) {
+	public ProductoObservable(String cantidad, ProductosInventario productoInventario) {
 		super();
 		this.nombre = new SimpleStringProperty(productoInventario.getNombre());
 		this.precio = new SimpleStringProperty(productoInventario.getPrecio() + "");
 		this.costo = new SimpleStringProperty(productoInventario.getCosto() + "");
 		if (productoInventario.getIva() == 0) {
-			this.iva = new SimpleStringProperty("Exento");
+			this.iva = new SimpleStringProperty(exento);
 		} else {
 			this.iva = new SimpleStringProperty(productoInventario.getIva() + "");
 		}

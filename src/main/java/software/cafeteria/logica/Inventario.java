@@ -2,6 +2,7 @@ package main.java.software.cafeteria.logica;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import main.java.software.cafeteria.entidades.Empresa;
 import main.java.software.cafeteria.entidades.ProductosInventario;
@@ -20,9 +21,9 @@ public class Inventario implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	// variable donde se guarda la lista de productos del inventario
-	private ArrayList<ProductosInventario> productosI;
+	private List<ProductosInventario> productosI;
 	// variable donde se guarda la lista de empresas que proveen los productos
-	private ArrayList<Empresa> empresas;
+	private List<Empresa> empresas;
 
 	// -----------------------------------------------------------------------------------------
 	// //
@@ -37,42 +38,9 @@ public class Inventario implements Serializable {
 	public boolean agregarProducto(ProductosInventario productoI) {
 		if (!verficarExistenciaProducto(productoI.getCodigoDeBarras())) {
 			this.productosI.add(productoI);
-			// organizar();
 			return true;
 		}
 		return false;
-	}
-
-	/**
-	 * metodo que crea un objeto de tipo productoI y despues lo agrega a la
-	 * lista de productos
-	 * 
-	 * @param codigoDeBarras
-	 *            el codigo de barras del producto
-	 * @param nombre
-	 *            el nombre del producto
-	 * @param empresa
-	 *            empresa que trae el producto a la tienda
-	 * @param presentacion
-	 *            cantidad en la que viene el producto
-	 * @param iva
-	 *            el porcentaje de iva que trae el producto
-	 * @param costo
-	 *            cuanto le valio a la tienda el producto
-	 * @param cantidad
-	 *            cantidad de unidades que se tienen en el inventario de la
-	 *            tienda actualmente
-	 * @param tipo
-	 *            clasificacion interna que el tendero le pone al producto
-	 * @param precio
-	 *            precio de venta al cual se vende la tienda
-	 * @return regresa un booleano que indica si el elemento se ha a�adido a la
-	 *         lista
-	 */
-	public boolean agregarProducto(String codigoDeBarras, String nombre, Empresa empresa, int presentacion, int iva,
-			int costo, int cantidad, String tipo, int precio) {
-		return agregarProducto(new ProductosInventario(codigoDeBarras, nombre, empresa, presentacion, iva, costo,
-				cantidad, tipo, precio));
 	}
 
 	/**
@@ -85,10 +53,11 @@ public class Inventario implements Serializable {
 	 *         contrario
 	 */
 	public boolean verficarExistenciaProducto(String codigoDeBarras) {
+		boolean respuesta = false;
 		if (obtenerproductoI(codigoDeBarras) != null) {
-			return true;
+			respuesta = true;
 		}
-		return false;
+		return respuesta;
 	}
 
 	/**
@@ -113,41 +82,22 @@ public class Inventario implements Serializable {
 	 * 
 	 * @param producto
 	 *            el objeto antiguo que se quiere modificar
-	 * @param codigoDeBarras
-	 *            el nuevo codigo de barras del producto
-	 * @param nombre
-	 *            el nuevo nombre del producto
-	 * @param empresa
-	 *            nueva empresa que trae el producto a la tienda
-	 * @param presentacion
-	 *            nueva cantidad en la que viene el producto
-	 * @param iva
-	 *            el nuevo porcentaje de iva que trae el producto
-	 * @param costo
-	 *            cuanto le valio a la tienda el producto
-	 * @param cantidad
-	 *            nueva cantidad de unidades que se tienen en el inventario de
-	 *            la tienda actualmente
-	 * @param tipo
-	 *            clasificacion interna que el tendero le pone al producto
-	 * @param precio
-	 *            nuevo precio de venta al cual se vende la tienda
-	 * @return retorna un boolean que indica si el producto ha sido modificado o
-	 *         no
+	 * @param nuevoProductoMod
+	 *            un producto con los nuevos datos para modificar
 	 */
-	public boolean modificarProducto(ProductosInventario producto, String codigoDeBarras, String nombre,
-			Empresa empresa, int presentacion, int iva, int costo, int cantidad, String tipo, int precio) {
+	public boolean modificarProducto(ProductosInventario producto, ProductosInventario nuevoProductoMod) {
 		ProductosInventario a = obtenerproductoI(producto.getCodigoDeBarras());
-		if (a != null) {
-			a.setCodigoDeBarras(codigoDeBarras);
-			a.setNombre(nombre);
-			a.setEmpresa(empresa);
-			a.setPresentacion(presentacion);
-			a.setIva(iva);
-			a.setCosto(costo);
-			a.setCantidad(cantidad);
-			a.setTipo(tipo);
-			a.setPrecio(precio);
+		if (a != null && (!verficarExistenciaProducto(nuevoProductoMod.getCodigoDeBarras())
+				|| producto.getCodigoDeBarras().equals(nuevoProductoMod.getCodigoDeBarras()))) {
+			a.setCodigoDeBarras(nuevoProductoMod.getCodigoDeBarras());
+			a.setNombre(nuevoProductoMod.getNombre());
+			a.setEmpresa(nuevoProductoMod.getEmpresa());
+			a.setPresentacion(nuevoProductoMod.getPresentacion());
+			a.setIva(nuevoProductoMod.getIva());
+			a.setCosto(nuevoProductoMod.getCosto());
+			a.setCantidad(nuevoProductoMod.getCantidad());
+			a.setTipo(nuevoProductoMod.getTipo());
+			a.setPrecio(nuevoProductoMod.getPrecio());
 			return true;
 		}
 		return false;
@@ -219,7 +169,6 @@ public class Inventario implements Serializable {
 	public boolean agregarEmpresa(Empresa empresa) {
 		if (!verficarExistenciaEmpresa(empresa.getNombre())) {
 			this.empresas.add(empresa);
-			// organizar();
 			return true;
 		}
 		return false;
@@ -265,10 +214,11 @@ public class Inventario implements Serializable {
 	 *         contrario
 	 */
 	public boolean verficarExistenciaEmpresa(String nombre) {
+		boolean respuesta = false;
 		if (obtenerEmpresa(nombre) != null) {
-			return true;
+			respuesta = true;
 		}
-		return false;
+		return respuesta;
 	}
 
 	/**
@@ -318,7 +268,7 @@ public class Inventario implements Serializable {
 	 * 
 	 * @return regresa la lista de productos
 	 */
-	public ArrayList<ProductosInventario> getProductosI() {
+	public List<ProductosInventario> getProductosI() {
 		return productosI;
 	}
 
@@ -328,7 +278,7 @@ public class Inventario implements Serializable {
 	 * @param productosI
 	 *            la nueva lista de productos
 	 */
-	public void setProductosI(ArrayList<ProductosInventario> productosI) {
+	public void setProductosI(List<ProductosInventario> productosI) {
 		this.productosI = productosI;
 	}
 
@@ -337,7 +287,7 @@ public class Inventario implements Serializable {
 	 * 
 	 * @return regresa la lista de empresas
 	 */
-	public ArrayList<Empresa> getEmpresas() {
+	public List<Empresa> getEmpresas() {
 		return empresas;
 	}
 
@@ -347,62 +297,8 @@ public class Inventario implements Serializable {
 	 * @param empresas
 	 *            es la nueva lista de empresas
 	 */
-	public void setEmpresas(ArrayList<Empresa> empresas) {
+	public void setEmpresas(List<Empresa> empresas) {
 		this.empresas = empresas;
-	}
-
-	// -----------------------------------------------------------------------------------------
-	// //
-	/**
-	 * metodo que sirve para el ordenar por orden alfabetico la lista de
-	 * productos del inventario utilizando el nombre
-	 */
-	@SuppressWarnings("unused")
-	private void organizar() {
-		if (productosI.size() > 1)
-			quickSort(0, productosI.size() - 1);
-	}
-
-	/**
-	 * metodo de ordenamiento que se usa para ordenar la lista de productos por
-	 * nombres
-	 * 
-	 * @param limInferior
-	 *            limite inferior de la lista (0)
-	 * @param limSuperior
-	 *            limite superior de la lista (productosI.size() - 1)
-	 */
-	private void quickSort(int limInferior, int limSuperior) {
-		int i = limInferior, j = limSuperior;
-		ProductosInventario pivote = productosI.get((limInferior + limSuperior) / 2);
-		do {
-			while ((productosI.get(i).CompareTo(pivote)) < 0) {
-				i++;
-			}
-			while ((productosI.get(j).CompareTo(pivote)) > 0) {
-				j--;
-			}
-			if (i <= j) {
-				// Animation aux = animaciones[i];
-				// animaciones[i] = animaciones[j];
-				// animaciones[j] = aux;
-
-				ProductosInventario aux = productosI.get(i);
-				productosI.remove(i);
-				productosI.add(i, productosI.get(j));
-				productosI.remove(j);
-				productosI.add(j, aux);
-				i++;
-				j--;
-			}
-		} while (i <= j);
-
-		if (j > limInferior) {
-			quickSort(limInferior, j);
-		}
-		if (i < limSuperior) {
-			quickSort(i, limSuperior);
-		}
 	}
 
 }

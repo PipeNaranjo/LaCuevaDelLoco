@@ -12,18 +12,18 @@ public class Factura1Controller {
 	private Stage stage;
 
 	@FXML
-	private Button btn_factura;
+	private Button btnFactura;
 
 	@FXML
-	private Button btn_cancelar;
+	private Button btnCancelar;
 
 	@FXML
 	private Label valorTotal;
 
 	@FXML
 	public void initialize() {
-		btn_factura.setGraphic(new ImageView("file:src/main/java/software/cafeteria/images/factura.png"));
-		btn_cancelar.setGraphic(new ImageView("file:src/main/java/software/cafeteria/images/cancelar.png"));
+		btnFactura.setGraphic(new ImageView("file:src/main/java/software/cafeteria/images/factura.png"));
+		btnCancelar.setGraphic(new ImageView("file:src/main/java/software/cafeteria/images/cancelar.png"));
 	}
 
 	@FXML

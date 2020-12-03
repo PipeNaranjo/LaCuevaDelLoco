@@ -9,6 +9,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import main.java.software.cafeteria.entidades.Empresa;
+import main.java.software.cafeteria.entidades.Producto;
+import main.java.software.cafeteria.entidades.ProductosInventario;
 
 public class AgregarProductoController {
 
@@ -40,16 +43,16 @@ public class AgregarProductoController {
 	private ComboBox<String> tipoProducto;
 
 	@FXML
-	private Button btn_agregar;
+	private Button btnAgregar;
 
 	@FXML
-	private Button btn_cancelar;
+	private Button btnCancelar;
 
 	@FXML
 	public void initialize() {
 
-		btn_agregar.setGraphic(new ImageView("file:src/main/java/software/cafeteria/images/agregarProducto.png"));
-		btn_cancelar.setGraphic(new ImageView("file:src/main/java/software/cafeteria/images/cancelar.png"));
+		btnAgregar.setGraphic(new ImageView("file:src/main/java/software/cafeteria/images/agregarProducto.png"));
+		btnCancelar.setGraphic(new ImageView("file:src/main/java/software/cafeteria/images/cancelar.png"));
 
 	}
 
@@ -61,65 +64,63 @@ public class AgregarProductoController {
 				|| costoProducto.getText().equals("") || presentacionProducto.getText().equals("")
 				|| precioProducto.getText().equals("") || cantidad.getText().equals(""))) {
 
-			String codigo_Barras = codigoBarras.getText();
-			String nombre_Producto = nombreProducto.getText();
-			int costo_Producto = 0;
+			String codigoBarras1 = codigoBarras.getText();
+			String nombreProducto1 = nombreProducto.getText();
+			int costoProducto1 = 0;
 			try {
-				costo_Producto = Integer.parseInt(costoProducto.getText());
+				costoProducto1 = Integer.parseInt(costoProducto.getText());
 			} catch (NumberFormatException e) {
 				validar = false;
 				Alert alert = new Alert(AlertType.ERROR, "Valor no num�rico \nCampo costo del producto", ButtonType.OK);
 				alert.showAndWait();
 			}
-			int presentacion_Producto = 0;
-			if(validar){
+			int presentacionProducto1 = 0;
+			if (validar) {
 				try {
-					presentacion_Producto = Integer.parseInt(presentacionProducto.getText());
+					presentacionProducto1 = Integer.parseInt(presentacionProducto.getText());
 				} catch (NumberFormatException e) {
 					validar = false;
-					Alert alert = new Alert(AlertType.ERROR, "Valor no num�rico \nCampo presentaci�n del producto",
+					Alert alert = new Alert(AlertType.ERROR, "Valor no numérico \nCampo presentación del producto",
 							ButtonType.OK);
 					alert.showAndWait();
 
 				}
 			}
-			int precio_Producto = 0;
-			if(validar){
+			int precioProducto1 = 0;
+			if (validar) {
 				try {
-					precio_Producto = Integer.parseInt(precioProducto.getText());
+					precioProducto1 = Integer.parseInt(precioProducto.getText());
 				} catch (NumberFormatException e) {
 					validar = false;
-					Alert alert = new Alert(AlertType.ERROR, "Valor no num�rico \nCampo precio del producto",
+					Alert alert = new Alert(AlertType.ERROR, "Valor no numérico \nCampo precio del producto",
 							ButtonType.OK);
 					alert.showAndWait();
 
 				}
 			}
-			int iva_ = -1;
+			int iva1 = -1;
 			String seleccion = iva.getSelectionModel().getSelectedItem();
 			if (seleccion != null && validar) {
-				if (seleccion.equals("5")) {
-					iva_ = 5;
-				} else if (seleccion.equals("19")) {
-					iva_ = 19;
-				} else if (seleccion.equals("Exento")) {
-					iva_ = 0;
+				if (seleccion.equals("Exento")) {
+					iva1 = 0;
+				} else {
+					iva1 = Integer.parseInt(seleccion);
 				}
 			} else {
 				validar = false;
 				Alert alert = new Alert(AlertType.ERROR, "Seleccione un valor en Iva", ButtonType.OK);
 				alert.showAndWait();
 			}
-			String tipo_Producto = tipoProducto.getSelectionModel().getSelectedItem();
-			if (tipo_Producto == null && validar) {
+			String tipoProducto1 = tipoProducto.getSelectionModel().getSelectedItem();
+			if (tipoProducto1 == null && validar) {
 				validar = false;
 				Alert alert = new Alert(AlertType.ERROR, "Seleccione un valor en tipo Producto", ButtonType.OK);
 				alert.showAndWait();
 			}
-			int cantidad_ = 0;
-			if(validar){
+			int cantidad1 = 0;
+			if (validar) {
 				try {
-					cantidad_ = Integer.parseInt(cantidad.getText());
+					cantidad1 = Integer.parseInt(cantidad.getText());
 				} catch (NumberFormatException e) {
 					validar = false;
 					Alert alert = new Alert(AlertType.ERROR, "Valor no num�rico \nCampo cantidad del producto",
@@ -137,18 +138,25 @@ public class AgregarProductoController {
 			boolean res = false;
 
 			if (validar) {
-				res = manejador.agregarProducto(codigo_Barras, nombre_Producto, costo_Producto, presentacion_Producto,
-						precio_Producto, iva_, tipo_Producto, cantidad_, empresa);
+				res = manejador
+						.agregarProducto(new ProductosInventario(
+								new Producto(codigoBarras1, nombreProducto1, new Empresa(empresa),
+										presentacionProducto1, iva1, costoProducto1, precioProducto1),
+								cantidad1, tipoProducto1));
 			}
 
 			if (res) {
-				Alert alert = new Alert(AlertType.INFORMATION, "Se agreg� con exito el Producto", ButtonType.OK);
+				Alert alert = new Alert(AlertType.INFORMATION, "Se agregó con exito el Producto", ButtonType.OK);
 				alert.showAndWait();
 				agregar.close();
-			} else if(res == false && validar == true){
-				Alert alert = new Alert(AlertType.ERROR,
-						"El producto con el c�digo " + codigo_Barras + " ya se encuentra registrado.", ButtonType.OK);
-				alert.showAndWait();
+			} else {
+				if (validar) {
+
+					Alert alert = new Alert(AlertType.ERROR,
+							"El producto con el c�digo " + codigoBarras1 + " ya se encuentra registrado.",
+							ButtonType.OK);
+					alert.showAndWait();
+				}
 			}
 		} else {
 			Alert alert = new Alert(AlertType.ERROR, "Ingrese valores en todos los campos", ButtonType.OK);
@@ -167,25 +175,24 @@ public class AgregarProductoController {
 	@FXML
 	public void verificarEmpresa() {
 		String empresa = empresaDistri.getSelectionModel().getSelectedItem();
-		if (empresa != null) {
-			if (empresa.equals("Otra empresa")) {
-				manejador.ventanaAgregarEmpresa();
+		if (empresa != null && empresa.equals("Otra empresa")) {
 
-				empresaDistri.setItems(manejador.listarEmpresas());
+			manejador.ventanaAgregarEmpresa();
 
-			}
+			empresaDistri.setItems(manejador.listarEmpresas());
+
 		}
 	}
 
 	@FXML
 	public void verificarIva() {
-		String iva_ = iva.getSelectionModel().getSelectedItem();
-		if (iva_ != null) {
-			if (iva_.equals("Otro Iva")) {
-				manejador.abrirAgregarIva();
+		String iva1 = iva.getSelectionModel().getSelectedItem();
+		if (iva1 != null && iva1.equals("Otro Iva")) {
 
-				iva.setItems(manejador.listarIva());
-			}
+			manejador.abrirAgregarIva();
+
+			iva.setItems(manejador.listarIva());
+
 		}
 	}
 
@@ -193,11 +200,11 @@ public class AgregarProductoController {
 	public void verificarTipo() {
 
 		String tipo = tipoProducto.getSelectionModel().getSelectedItem();
-		if (tipo != null) {
-			if (tipo.equals("Otro tipo")) {
-				manejador.ventanaAgregarTipo();
-				tipoProducto.setItems(manejador.listarTipos());
-			}
+		if (tipo != null && tipo.equals("Otro tipo")) {
+
+			manejador.ventanaAgregarTipo();
+			tipoProducto.setItems(manejador.listarTipos());
+
 		}
 	}
 
@@ -222,6 +229,30 @@ public class AgregarProductoController {
 
 	public void setStage(Stage agregar) {
 		this.agregar = agregar;
+	}
+
+	public ComboBox<String> getEmpresaDistri() {
+		return empresaDistri;
+	}
+
+	public void setEmpresaDistri(ComboBox<String> empresaDistri) {
+		this.empresaDistri = empresaDistri;
+	}
+
+	public ComboBox<String> getIva() {
+		return iva;
+	}
+
+	public void setIva(ComboBox<String> iva) {
+		this.iva = iva;
+	}
+
+	public ComboBox<String> getTipoProducto() {
+		return tipoProducto;
+	}
+
+	public void setTipoProducto(ComboBox<String> tipoProducto) {
+		this.tipoProducto = tipoProducto;
 	}
 
 }
