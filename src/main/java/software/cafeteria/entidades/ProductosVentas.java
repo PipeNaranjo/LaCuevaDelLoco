@@ -30,7 +30,7 @@ public class ProductosVentas implements Serializable {
 	 *            cantidad a la que se vende el producto
 	 */
 	public ProductosVentas(ProductosInventario productoI, int cantidad) {
-		this.producto = productoI.getProducto().clone();
+		this.producto = productoI.getProducto().clonar();
 		this.cantidad = 1;
 		setCantidad(cantidad);
 	}

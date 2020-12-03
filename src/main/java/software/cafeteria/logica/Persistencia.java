@@ -11,6 +11,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Clase para representar un archivo
@@ -19,6 +22,14 @@ import java.util.ArrayList;
  *
  */
 public class Persistencia {
+
+	private Persistencia() {
+
+	}
+
+	private static final Logger LOGGER = Logger
+			.getLogger(Persistencia.class.getPackage().getName() + "." + Persistencia.class.getName());
+	private static String error = "Error";
 
 	/**
 	 * Permite escribir un archivo
@@ -29,20 +40,22 @@ public class Persistencia {
 	 *            Lineas a escribir
 	 * @throws IOException
 	 */
-	public static void escribirArchivo(String rutaArchivo, ArrayList<String> miTexto) throws IOException {
+	public static void escribirArchivo(String rutaArchivo, List<String> miTexto) throws IOException {
 
 		OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(rutaArchivo), "utf-8");
 
-		// File miArchivo = new File(rutaArchivo);
-		//
-		// FileWriter miFileWriter = new FileWriter(miArchivo, adicionar);
 		BufferedWriter miBufferWriter = new BufferedWriter(osw);
+		try {
 
-		for (String miLinea : miTexto) {
-			miBufferWriter.write(miLinea + "\n");
+			for (String miLinea : miTexto) {
+				miBufferWriter.write(miLinea + "\n");
+			}
+
+		} catch (Exception e) {
+			LOGGER.log(Level.WARNING, error, e);
+		} finally {
+			miBufferWriter.close();
 		}
-
-		miBufferWriter.close();
 
 	}
 
@@ -54,19 +67,25 @@ public class Persistencia {
 	 * @throws IOException
 	 */
 
-	public static ArrayList<String> cargarArchivoTexto(String ruta) throws IOException {
+	public static List<String> cargarArchivoTexto(String ruta) throws IOException {
 
 		File miArchivo = new File(ruta);
 		FileReader miFileReader = new FileReader(miArchivo);
 		BufferedReader miBufferReader = new BufferedReader(miFileReader);
 		String linea;
 		ArrayList<String> misLineas = new ArrayList<String>();
-		while ((linea = miBufferReader.readLine()) != null) {
-			misLineas.add(linea);
+		try {
+			while ((linea = miBufferReader.readLine()) != null) {
+				misLineas.add(linea);
+			}
+
+		} catch (IOException e) {
+			LOGGER.log(Level.WARNING, error, e);
+		} finally {
+			miBufferReader.close();
+			miFileReader.close();
 		}
 
-		miBufferReader.close();
-		miFileReader.close();
 		return misLineas;
 	}
 
@@ -80,19 +99,18 @@ public class Persistencia {
 	 *         archivo
 	 * @throws Exception
 	 */
-	public static ArrayList<ArrayList<String>> cargarArchivos(File directorio, ArrayList<String> nombres)
-			throws Exception {
-		ArrayList<String> archivosRuta = new ArrayList<String>();
+	public static List<List<String>> cargarArchivos(File directorio, List<String> nombres) throws IOException {
+		List<String> archivosRuta = new ArrayList<String>();
 		listarRecursivamenteArchivos(directorio, archivosRuta);
 
-		ArrayList<ArrayList<String>> misArchivos = new ArrayList<ArrayList<String>>();
-		// System.out.println("archivosRuta.get(i) " +archivosRuta.size());
+		List<List<String>> misArchivos = new ArrayList<List<String>>();
 
 		for (int i = 0; i < archivosRuta.size(); i++) {
 			misArchivos.add(cargarArchivoTexto(archivosRuta.get(i)));
 			nombres.add(archivosRuta.get(i).substring(archivosRuta.get(i).lastIndexOf("\\") + 1));
 
 		}
+
 		return misArchivos;
 
 	}
@@ -107,9 +125,9 @@ public class Persistencia {
 	 * @throws IOException
 	 */
 
-	public static void listarRecursivamenteArchivos(File directorio, ArrayList<String> array) throws IOException {
+	public static void listarRecursivamenteArchivos(File directorio, List<String> array) throws IOException {
 
-		File archivos[] = directorio.listFiles();
+		File[] archivos = directorio.listFiles();
 
 		for (int i = 0; i < archivos.length; i++) {
 
@@ -137,16 +155,16 @@ public class Persistencia {
 	 *         archivo
 	 * @throws IOException
 	 */
-	public static ArrayList<ArrayList<String>> cargarRutas(File directorio) throws IOException {
-		ArrayList<String> archivosRuta = new ArrayList<String>();
+	public static List<List<String>> cargarRutas(File directorio) throws IOException {
+		List<String> archivosRuta = new ArrayList<String>();
 		listarRecursivamenteArchivos(directorio, archivosRuta);
 
-		ArrayList<ArrayList<String>> misArchivos = new ArrayList<ArrayList<String>>();
+		List<List<String>> misArchivos = new ArrayList<List<String>>();
 
 		for (int i = 0; i < archivosRuta.size(); i++) {
 			ArrayList<String> miR = new ArrayList<String>();
 			miR.add(archivosRuta.get(i));
-			// System.out.println(archivosRuta.get(i));
+
 			misArchivos.add(miR);
 
 		}
@@ -157,26 +175,39 @@ public class Persistencia {
 
 	public static void guardarObjetos(Object objeto, String ruta) throws IOException {
 		FileOutputStream fos = new FileOutputStream(ruta);
+		try {
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			try {
 
-		ObjectOutputStream oos = new ObjectOutputStream(fos);
+				oos.writeObject(objeto);
 
-		oos.writeObject(objeto);
+			} finally {
+				oos.close();
+			}
 
-		fos.close();
-		oos.close();
+		} finally {
+			fos.close();
+
+		}
 
 	}
 
 	public static Object cargarObjeto(String ruta) throws IOException, ClassNotFoundException {
 
+		Object objeto = null;
 		FileInputStream fis = new FileInputStream(ruta);
+		try {
+			ObjectInputStream ois = new ObjectInputStream(fis);
+			try {
 
-		ObjectInputStream ois = new ObjectInputStream(fis);
+				objeto = ois.readObject();
+			} finally {
+				ois.close();
+			}
 
-		Object objeto = ois.readObject();
-
-		fis.close();
-		ois.close();
+		} finally {
+			fis.close();
+		}
 
 		return objeto;
 	}

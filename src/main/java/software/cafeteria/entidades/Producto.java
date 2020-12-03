@@ -213,7 +213,8 @@ public class Producto implements Serializable {
 	/**
 	 * metodo que sirve para duplicar los datos del productos
 	 */
-	public Producto clone() {
+	public Producto clonar() {
+
 		return new Producto(codigoDeBarras, nombre, empresa, presentacion, iva, costo, precio);
 	}
 
