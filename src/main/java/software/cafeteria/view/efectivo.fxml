@@ -12,7 +12,7 @@
    <center>
       <AnchorPane prefHeight="231.0" prefWidth="537.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="btn_factura" layoutX="105.0" layoutY="173.0" mnemonicParsing="false" onAction="#generarFactura" text="Generar Factura">
+            <Button fx:id="btnFactura" layoutX="105.0" layoutY="173.0" mnemonicParsing="false" onAction="#generarFactura" text="Generar Factura">
                <font>
                   <Font size="14.0" />
                </font>
@@ -20,7 +20,7 @@
                   <DropShadow color="#544f4f" />
                </effect>
             </Button>
-            <Button fx:id="btn_cancelar" layoutX="313.0" layoutY="173.0" mnemonicParsing="false" onAction="#cancelar" text="Cancelar">
+            <Button fx:id="btnCancelar" layoutX="313.0" layoutY="173.0" mnemonicParsing="false" onAction="#cancelar" text="Cancelar">
                <font>
                   <Font size="14.0" />
                </font>

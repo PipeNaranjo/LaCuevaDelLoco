@@ -21,7 +21,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -347,7 +346,7 @@ public class ReciboController {
 									}
 								}
 								int valor = numeroBolsas * 50;
-								calcularValor(valor, productos);
+								valor = calcularValor(valor, productos);
 
 								carrito.getItems().removeAll(carrito.getItems());
 								carrito.getItems().addAll(productos);
@@ -437,35 +436,40 @@ public class ReciboController {
 	@FXML
 	void cambiarTotal(KeyEvent event) {
 
-		if (event.getCode() == KeyCode.MINUS) {
-			event.consume();
-			if (cantidadBolsas.getText().contains(KeyCode.MINUS.getChar())) {
-				cantidadBolsas.getText().replace(KeyCode.MINUS.getChar(), "");
-			}
-
-		}
 		cambiar();
 	}
 
 	private void cambiar() {
-		try {
-			if (!(valorTotal.getText().equals("0"))) {
+		if (!cantidadBolsas.getText().equals("") && !cantidadBolsas.getText().equals("-")) {
 
-				int valor = Integer.parseInt(valorTotal.getText()) - (numeroBolsas * 50);
+			int valor1 = Integer.parseInt(cantidadBolsas.getText());
+			if (valor1 >= 0) {
+				try {
+					if (!(valorTotal.getText().equals("0"))) {
+						int valor = Integer.parseInt(valorTotal.getText()) - (numeroBolsas * 50);
 
-				if (cantidadBolsas.getText().equals("")) {
-					numeroBolsas = 0;
-				} else {
-					numeroBolsas = Integer.parseInt(cantidadBolsas.getText());
+						if (cantidadBolsas.getText().equals("")) {
+							numeroBolsas = 0;
+						} else {
+							numeroBolsas = Integer.parseInt(cantidadBolsas.getText());
+						}
+						int bolsas = numeroBolsas * 50;
+						int valortotal = (valor + bolsas);
+						valorTotal.setText(valortotal + "");
+
+					}
+				} catch (NumberFormatException e) {
+					Alert alert = new Alert(AlertType.WARNING, "Valor de bolsa inválido", ButtonType.OK);
+					alert.show();
 				}
-				int bolsas = numeroBolsas * 50;
-				int valortotal = (valor + bolsas);
-				valorTotal.setText(valortotal + "");
-
+			} else {
+				String cantidad = cantidadBolsas.getText();
+				cantidad = cantidad.replace("-", "");
+				cantidadBolsas.setText(cantidad);
+				Alert alert = new Alert(AlertType.WARNING, "Valor de bolsa negativo", ButtonType.OK);
+				alert.show();
 			}
-		} catch (NumberFormatException e) {
-			Alert alert = new Alert(AlertType.WARNING, "Valor de bolsa inválido", ButtonType.OK);
-			alert.show();
+
 		}
 	}
 
@@ -565,7 +569,7 @@ public class ReciboController {
 		carrito.getItems().addAll(productos);
 		valorTotal.setText("0");
 		manejador.setReciboTemp(null);
-		cantidadBolsas.setText("");
+		cantidadBolsas.setText("0");
 
 	}
 

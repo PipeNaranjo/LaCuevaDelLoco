@@ -72,7 +72,7 @@ public class ManejadorEscenarios {
 
 				LOGGER.log(Level.WARNING, "Error Clase No Encontrada");
 			} catch (IOException e) {
-				LOGGER.log(Level.WARNING, errorDir);
+				LOGGER.log(Level.WARNING, errorDir,e);
 			}
 		} else {
 			tienda = new Tienda();
@@ -127,7 +127,7 @@ public class ManejadorEscenarios {
 								Persistencia.guardarObjetos(tienda, archivo);
 								stage.close();
 							} catch (IOException e) {
-								LOGGER.log(Level.WARNING, errorDir);
+								LOGGER.log(Level.WARNING, errorDir,e);
 							}
 						} else if (action.get() == ButtonType.NO) {
 							event.consume();
@@ -153,7 +153,7 @@ public class ManejadorEscenarios {
 			stage.show();
 
 		} catch (IOException e) {
-			LOGGER.log(Level.WARNING, errorDir);
+			LOGGER.log(Level.WARNING, errorDir,e);
 		}
 
 	}
@@ -200,7 +200,7 @@ public class ManejadorEscenarios {
 			escenario.show();
 
 		} catch (IOException e) {
-			LOGGER.log(Level.WARNING, errorDir);
+			LOGGER.log(Level.WARNING, errorDir,e);
 		}
 
 	}
@@ -249,7 +249,7 @@ public class ManejadorEscenarios {
 			escenario.show();
 
 		} catch (IOException e) {
-			LOGGER.log(Level.WARNING, errorDir);
+			LOGGER.log(Level.WARNING, errorDir,e);
 		}
 
 	}
@@ -285,7 +285,7 @@ public class ManejadorEscenarios {
 			escenario.show();
 
 		} catch (IOException e) {
-			LOGGER.log(Level.WARNING, errorDir);
+			LOGGER.log(Level.WARNING, errorDir,e);
 		}
 	}
 
@@ -314,7 +314,7 @@ public class ManejadorEscenarios {
 			escenario.show();
 
 		} catch (IOException e) {
-			LOGGER.log(Level.WARNING, errorDir);
+			LOGGER.log(Level.WARNING, errorDir,e);
 		}
 	}
 
@@ -343,7 +343,7 @@ public class ManejadorEscenarios {
 			escenario.show();
 
 		} catch (IOException e) {
-			LOGGER.log(Level.WARNING, errorDir);
+			LOGGER.log(Level.WARNING, errorDir,e);
 		}
 	}
 
@@ -372,7 +372,7 @@ public class ManejadorEscenarios {
 			agregar.show();
 
 		} catch (IOException e) {
-			LOGGER.log(Level.WARNING, errorDir);
+			LOGGER.log(Level.WARNING, errorDir,e);
 		}
 	}
 
@@ -402,7 +402,7 @@ public class ManejadorEscenarios {
 			escenario.show();
 
 		} catch (IOException e) {
-			LOGGER.log(Level.WARNING, errorDir);
+			LOGGER.log(Level.WARNING, errorDir,e);
 		}
 	}
 
@@ -431,7 +431,7 @@ public class ManejadorEscenarios {
 			escenario.show();
 
 		} catch (IOException e) {
-			LOGGER.log(Level.WARNING, errorDir);
+			LOGGER.log(Level.WARNING, errorDir,e);
 		}
 	}
 
@@ -476,7 +476,7 @@ public class ManejadorEscenarios {
 			escenario.show();
 
 		} catch (IOException e) {
-			LOGGER.log(Level.WARNING, errorDir);
+			LOGGER.log(Level.WARNING, errorDir,e);
 		}
 	}
 
@@ -489,7 +489,7 @@ public class ManejadorEscenarios {
 				Persistencia.guardarObjetos(tienda, archivo);
 			} catch (IOException e) {
 
-				LOGGER.log(Level.WARNING, errorDir);
+				LOGGER.log(Level.WARNING, errorDir,e);
 			}
 
 		}
@@ -615,7 +615,7 @@ public class ManejadorEscenarios {
 		try {
 			Persistencia.guardarObjetos(tienda, archivo);
 		} catch (IOException e) {
-			LOGGER.log(Level.WARNING, errorDir);
+			LOGGER.log(Level.WARNING, errorDir,e);
 		}
 		return res;
 
@@ -710,7 +710,7 @@ public class ManejadorEscenarios {
 		try {
 			Persistencia.guardarObjetos(tienda, archivo);
 		} catch (IOException e) {
-			LOGGER.log(Level.WARNING, errorDir);
+			LOGGER.log(Level.WARNING, errorDir,e);
 		}
 		return res;
 
@@ -724,7 +724,7 @@ public class ManejadorEscenarios {
 			Persistencia.guardarObjetos(tienda, archivo);
 
 		} catch (IOException e) {
-			LOGGER.log(Level.WARNING, errorDir);
+			LOGGER.log(Level.WARNING, errorDir,e);
 		}
 		reciboTemp = null;
 	}
@@ -748,7 +748,7 @@ public class ManejadorEscenarios {
 				Persistencia.guardarObjetos(tienda, archivo);
 			} catch (IOException e) {
 
-				LOGGER.log(Level.WARNING, errorDir);
+				LOGGER.log(Level.WARNING, errorDir,e);
 			}
 
 		} else {
@@ -928,7 +928,7 @@ public class ManejadorEscenarios {
 			Persistencia.escribirArchivo(rutaInformesFiscales + nombreArchivo, renglones);
 			impressor.imprimirArchivo(rutaInformesFiscales + nombreArchivo);
 		} catch (IOException e) {
-			LOGGER.log(Level.WARNING, errorDir);
+			LOGGER.log(Level.WARNING, errorDir,e);
 		}
 
 	}
@@ -1019,7 +1019,7 @@ public class ManejadorEscenarios {
 			Persistencia.escribirArchivo(rutaRecibos + nombreArchivo, renglones);
 			impressor.imprimirArchivo(rutaRecibos + nombreArchivo);
 		} catch (IOException e) {
-			LOGGER.log(Level.WARNING, errorDir);
+			LOGGER.log(Level.WARNING, errorDir,e);
 		}
 
 	}
@@ -1169,7 +1169,7 @@ public class ManejadorEscenarios {
 			Persistencia.escribirArchivo(rutaInformesFiscales + nombreArchivo, renglones);
 			impressor.imprimirArchivo(rutaInformesFiscales + nombreArchivo);
 		} catch (IOException e) {
-			LOGGER.log(Level.WARNING, errorDir);
+			LOGGER.log(Level.WARNING, errorDir,e);
 		}
 
 	}
